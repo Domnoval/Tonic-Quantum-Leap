@@ -5,6 +5,7 @@ export enum View {
   Apothecary = 'APOTHECARY',
   Architect = 'ARCHITECT',
   Index = 'INDEX',
+  Void = 'VOID',
 }
 
 export type ThemeColor = 'sky' | 'violet' | 'amber';

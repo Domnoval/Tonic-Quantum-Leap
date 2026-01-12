@@ -44,6 +44,14 @@ const HUD: React.FC<HUDProps> = ({ currentView, setView, themeColor }) => {
             >
               [ 03_Apothecary ]
             </button>
+            <button
+              onClick={() => setView(View.Void)}
+              aria-label="View social feed"
+              aria-current={currentView === View.Void ? 'page' : undefined}
+              className={`mono text-[11px] uppercase tracking-[0.3em] transition-all ${currentView === View.Void ? 'text-white' : 'text-white/30 hover:text-white'}`}
+            >
+              [ 04_Void ]
+            </button>
           </div>
         </div>
         

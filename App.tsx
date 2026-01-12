@@ -7,6 +7,7 @@ import Apothecary from './components/Apothecary';
 import Architect from './components/Architect';
 import Oracle from './components/Oracle';
 import ManualIndex from './components/ManualIndex';
+import Void from './components/Void';
 import { fetchShopifyArtifacts } from './services/shopifyService';
 import { SACRED_GEOMETRY } from './constants';
 
@@ -269,6 +270,7 @@ const App: React.FC = () => {
           />
         )}
         {currentView === View.Architect && <Architect />}
+        {currentView === View.Void && <Void themeColor={themeColor} />}
       </div>
 
       <Oracle cartCount={cart.length} themeColor={themeColor} />
