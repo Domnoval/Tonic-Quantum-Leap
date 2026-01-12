@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+:root {
+  --color-absolute-black: #000000;
+  --color-violet: #6d28d9;
+  --color-gold: #fbbf24;
+  --color-pink: #ec4899;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-absolute-black);
+  color: #F5F5F5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.mono {
+  font-family: 'Inter', monospace;
+  font-weight: 300;
+}
+
+.serif {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Quantum Transition Classes */
+.quantum-exit-active {
+  animation: decohere 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards;
+  pointer-events: none;
+  transform-origin: center center;
+}
+
+.quantum-enter-active {
+  animation: rematerialize 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+  transform-origin: center center;
+}
+
+/* Spectral Backgrounds */
+.spectral-bg {
+  background: linear-gradient(90deg, var(--color-violet), var(--color-gold), var(--color-pink), var(--color-gold), var(--color-violet));
+  background-size: 300% auto;
+  animation: spectral-shift 12s linear infinite;
+}
+
+.hover-spectral:hover {
+  background: linear-gradient(90deg, var(--color-violet), var(--color-gold), var(--color-pink), var(--color-gold), var(--color-violet));
+  background-size: 300% auto;
+  animation: spectral-shift 6s linear infinite;
+}
+
+/* Utility Classes */
+.quantum-field {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+}
+
+/* Screen Reader Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Skip to Content Link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px 16px;
+  z-index: 1000;
+  font-family: 'Inter', monospace;
+  font-size: 12px;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
