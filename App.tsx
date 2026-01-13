@@ -8,6 +8,7 @@ import Architect from './components/Architect';
 import Oracle from './components/Oracle';
 import ManualIndex from './components/ManualIndex';
 import Void from './components/Void';
+import Forge from './components/Forge';
 import QuantumField from './components/QuantumField';
 import { fetchShopifyArtifacts } from './services/shopifyService';
 import { SACRED_GEOMETRY } from './constants';
@@ -235,16 +236,16 @@ const App: React.FC = () => {
                  </div>
               </div>
 
-              <div className="flex flex-col md:flex-row gap-8">
+              <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full max-w-md md:max-w-none md:w-auto">
                 <button
                   onClick={() => navigate(View.Index)}
-                  className="origin-btn mono text-[11px] uppercase tracking-[0.5em] border border-white/10 px-12 py-5 transition-all duration-500 bg-black/40 backdrop-blur"
+                  className="origin-btn mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] border border-white/10 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/40 backdrop-blur active:scale-95 w-full md:w-auto"
                 >
                   Initiate Scan
                 </button>
                 <button
                   onClick={() => navigate(View.Architect)}
-                  className="origin-btn mono text-[11px] uppercase tracking-[0.5em] border border-white/10 px-12 py-5 transition-all duration-500 bg-black/40 backdrop-blur"
+                  className="origin-btn mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] border border-white/10 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/40 backdrop-blur active:scale-95 w-full md:w-auto"
                 >
                   The Blueprint
                 </button>
@@ -273,11 +274,12 @@ const App: React.FC = () => {
         )}
         {currentView === View.Architect && <Architect />}
         {currentView === View.Void && <Void themeColor={themeColor} />}
+        {currentView === View.Forge && <Forge themeColor={themeColor} />}
       </div>
 
       <Oracle cartCount={cart.length} themeColor={themeColor} />
 
-      <footer className="fixed bottom-6 right-12 pointer-events-none z-50">
+      <footer className="hidden md:block fixed bottom-6 right-12 pointer-events-none z-50">
          <span className="mono text-[8px] uppercase tracking-widest opacity-20">SYSTEM_137 // BUILD_210724</span>
       </footer>
     </main>

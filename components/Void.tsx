@@ -202,21 +202,21 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
   return (
     <div
       ref={containerRef}
-      className="relative min-h-screen w-full bg-black overflow-hidden pt-28 pb-12"
+      className="relative min-h-screen w-full bg-black overflow-hidden pt-20 md:pt-28 pb-12"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onWheel={handleWheel}
     >
       {/* Header */}
-      <div className="fixed top-28 left-0 right-0 z-30 px-6 md:px-12 py-4 bg-gradient-to-b from-black via-black/80 to-transparent">
+      <div className="fixed top-16 md:top-24 left-0 right-0 z-30 px-4 md:px-12 py-3 md:py-4 bg-gradient-to-b from-black via-black/80 to-transparent">
         <div className="flex justify-between items-end">
           <div>
-            <h2 className="serif text-3xl md:text-4xl text-white italic">The Void</h2>
+            <h2 className="serif text-2xl md:text-4xl text-white italic">The Void</h2>
             <p
-              className="mono text-[10px] uppercase tracking-[0.3em] mt-2"
+              className="mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] mt-1 md:mt-2"
               style={{ color: 'rgba(var(--theme-rgb), 1)' }}
             >
-              Infinite Signal Stream // Social Transmissions
+              Infinite Signal Stream
             </p>
           </div>
           <div className="hidden md:flex items-center gap-4">
@@ -233,10 +233,10 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
 
       {/* Infinite Grid */}
       <div
-        className="relative pt-24 px-4 md:px-8"
+        className="relative pt-16 md:pt-24 px-2 md:px-8"
         style={{ transform: `translateY(-${scrollY}px)` }}
       >
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 auto-rows-[150px] md:auto-rows-[200px]">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-4 auto-rows-[120px] md:auto-rows-[200px]">
           {infiniteItems.map((item, index) => (
             <div
               key={`${item.id}-${index}`}
@@ -301,13 +301,13 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
       <div className="fixed inset-0 pointer-events-none z-20 bg-[radial-gradient(circle_at_50%_50%,transparent_30%,rgba(0,0,0,0.8)_100%)]" />
 
       {/* Social Links Footer */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 px-6 md:px-12 py-6 bg-gradient-to-t from-black via-black/80 to-transparent">
-        <div className="flex justify-center gap-8">
+      <div className="fixed bottom-0 left-0 right-0 z-30 px-4 md:px-12 py-4 md:py-6 bg-gradient-to-t from-black via-black/80 to-transparent">
+        <div className="flex justify-center gap-6 md:gap-8">
           <a
             href="https://instagram.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="void-link mono text-[10px] uppercase tracking-[0.3em] text-white/40 transition-colors"
+            className="void-link mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] text-white/40 transition-colors py-2"
           >
             Instagram
           </a>
@@ -315,7 +315,7 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
             href="https://twitter.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="void-link mono text-[10px] uppercase tracking-[0.3em] text-white/40 transition-colors"
+            className="void-link mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] text-white/40 transition-colors py-2"
           >
             Twitter
           </a>
@@ -323,7 +323,7 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
             href="https://tiktok.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="void-link mono text-[10px] uppercase tracking-[0.3em] text-white/40 transition-colors"
+            className="void-link mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] text-white/40 transition-colors py-2"
           >
             TikTok
           </a>
@@ -339,7 +339,7 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
           {/* Close button */}
           <button
             onClick={closeLightbox}
-            className="absolute top-6 right-6 mono text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-colors z-10"
+            className="absolute top-4 right-4 md:top-6 md:right-6 mono text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-colors z-10 p-2 -m-2"
           >
             [ CLOSE ]
           </button>

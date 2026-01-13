@@ -6,6 +6,7 @@ export enum View {
   Architect = 'ARCHITECT',
   Index = 'INDEX',
   Void = 'VOID',
+  Forge = 'FORGE',
 }
 
 export type ThemeColor = 'sky' | 'violet' | 'amber';
