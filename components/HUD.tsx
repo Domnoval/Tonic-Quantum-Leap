@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, ThemeColor } from '../types';
 import { SACRED_GEOMETRY } from '../constants';
+import { useAuth } from '../contexts/AuthContext';
 
 interface HUDProps {
   currentView: View;
@@ -18,6 +19,7 @@ const NAV_ITEMS = [
 
 const HUD: React.FC<HUDProps> = ({ currentView, setView, themeColor }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, setShowAuthModal } = useAuth();
 
   const handleNavClick = (view: View) => {
     setView(view);
@@ -92,6 +94,15 @@ const HUD: React.FC<HUDProps> = ({ currentView, setView, themeColor }) => {
 
         {/* Right Side */}
         <div className="flex items-center gap-4 md:gap-6">
+          {/* Auth Button */}
+          <button
+            onClick={() => setShowAuthModal(true)}
+            className="pointer-events-auto mono text-[9px] md:text-[10px] uppercase tracking-widest transition-all px-3 py-1.5 border border-white/10 hover:border-white/30"
+            style={{ color: user ? 'rgba(var(--theme-rgb), 1)' : 'rgba(255,255,255,0.5)' }}
+          >
+            {user ? '[ Connected ]' : '[ Connect ]'}
+          </button>
+
           {/* Gematria - Hidden on mobile */}
           <div className="hidden md:block text-right">
             <span className="mono text-[10px] text-white/40 block tracking-widest uppercase">Gematria_Load</span>

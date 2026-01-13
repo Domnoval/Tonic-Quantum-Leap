@@ -10,6 +10,8 @@ import ManualIndex from './components/ManualIndex';
 import Void from './components/Void';
 import Forge from './components/Forge';
 import QuantumField from './components/QuantumField';
+import AuthModal from './components/AuthModal';
+import { AuthProvider } from './contexts/AuthContext';
 import { fetchShopifyArtifacts } from './services/shopifyService';
 import { SACRED_GEOMETRY } from './constants';
 
@@ -159,7 +161,11 @@ const App: React.FC = () => {
   };
 
   if (!isCalibrated) {
-    return <FrequencyGate onEnter={() => setIsCalibrated(true)} themeColor={themeColor} />;
+    return (
+      <AuthProvider>
+        <FrequencyGate onEnter={() => setIsCalibrated(true)} themeColor={themeColor} />
+      </AuthProvider>
+    );
   }
 
   // Determine container classes based on transition state
@@ -168,8 +174,10 @@ const App: React.FC = () => {
   if (transitionState === 'LEAPING') containerClasses += " quantum-enter-active";
 
   return (
+    <AuthProvider>
     <main id="main-content" className="relative min-h-screen bg-black overflow-hidden">
       <HUD currentView={currentView} setView={navigate} themeColor={themeColor} />
+      <AuthModal />
       
       {/* 
          Quantum Transition Container 
@@ -283,6 +291,7 @@ const App: React.FC = () => {
          <span className="mono text-[8px] uppercase tracking-widest opacity-20">SYSTEM_137 // BUILD_210724</span>
       </footer>
     </main>
+    </AuthProvider>
   );
 };
 
