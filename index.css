@@ -110,3 +110,10 @@ canvas {
 ::-webkit-scrollbar-thumb:hover {
   background: #333;
 }
+
+/* Theme-aware hover styles */
+.origin-btn:hover {
+  border-color: rgba(var(--theme-rgb), 1);
+  color: rgba(var(--theme-rgb), 1);
+  box-shadow: 0 0 20px rgba(var(--theme-rgb), 0.4);
+}

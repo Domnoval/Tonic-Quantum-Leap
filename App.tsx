@@ -8,6 +8,7 @@ import Architect from './components/Architect';
 import Oracle from './components/Oracle';
 import ManualIndex from './components/ManualIndex';
 import Void from './components/Void';
+import QuantumField from './components/QuantumField';
 import { fetchShopifyArtifacts } from './services/shopifyService';
 import { SACRED_GEOMETRY } from './constants';
 
@@ -176,18 +177,19 @@ const App: React.FC = () => {
       <div className={containerClasses}>
         {currentView === View.Origin && (
           <div className="flex flex-col items-center justify-center min-h-screen relative px-6 overflow-hidden">
+            <QuantumField particleCount={60} connectionDistance={120} />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[60vh] bg-[#111] border border-white/5 opacity-40 z-0" />
             
             <div className="relative z-10 flex flex-col items-center">
               <div className="flex flex-col items-center gap-6 mb-12 text-center">
                 {/* Master Sigil Display */}
-                <div className={`w-16 h-16 text-${themeColor}-400 opacity-80 animate-pulse`}>
+                <div className="w-16 h-16 opacity-80 animate-pulse" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
                   {SACRED_GEOMETRY.masterSigil}
                 </div>
-                
+
                 <div className="flex flex-col gap-2">
-                  <span className={`mono text-[10px] uppercase tracking-[1.5em] text-${themeColor}-400 font-bold transition-colors duration-500`}>Mainframe_Access</span>
-                  <div className={`w-full h-px bg-${themeColor}-400/30 transition-colors duration-500`} />
+                  <span className="mono text-[10px] uppercase tracking-[1.5em] font-bold transition-colors duration-500" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>Mainframe_Access</span>
+                  <div className="w-full h-px transition-colors duration-500" style={{ backgroundColor: 'rgba(var(--theme-rgb), 0.3)' }} />
                   {isLoadingInventory && <span className="mono text-[8px] animate-pulse text-white/40 mt-2 uppercase tracking-widest">Scanning Shopify Nexus...</span>}
                 </div>
               </div>
@@ -205,7 +207,7 @@ const App: React.FC = () => {
                  <div className="flex flex-col items-center gap-2">
                      <span className="mono text-[8px] uppercase tracking-[0.6em] opacity-30">Live Lunar Sync</span>
                      {lunarPhase && (
-                         <span className={`mono text-[9px] uppercase tracking-[0.2em] text-${themeColor}-400 opacity-80 animate-pulse`}>
+                         <span className="mono text-[9px] uppercase tracking-[0.2em] opacity-80 animate-pulse" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
                              [ {lunarPhase} ]
                          </span>
                      )}
@@ -213,16 +215,16 @@ const App: React.FC = () => {
                  
                  <div className="relative w-full h-[1px] bg-white/10 mt-2 flex items-center">
                     {/* Progress Bar */}
-                    <div 
-                        className={`absolute top-0 left-0 h-full bg-${themeColor}-400 transition-all duration-1000 ease-out`}
-                        style={{ width: `${lunarProgress}%` }}
+                    <div
+                        className="absolute top-0 left-0 h-full transition-all duration-1000 ease-out"
+                        style={{ width: `${lunarProgress}%`, backgroundColor: 'rgba(var(--theme-rgb), 1)' }}
                     />
                     {/* Current Position Marker */}
-                    <div 
-                        className={`absolute w-3 h-3 border border-${themeColor}-400 rounded-full bg-black flex items-center justify-center transition-all duration-1000 ease-out`}
-                        style={{ left: `${lunarProgress}%`, transform: 'translateX(-50%)', boxShadow: `0 0 10px rgba(var(--theme-rgb), 0.5)` }}
+                    <div
+                        className="absolute w-3 h-3 rounded-full bg-black flex items-center justify-center transition-all duration-1000 ease-out"
+                        style={{ left: `${lunarProgress}%`, transform: 'translateX(-50%)', border: '1px solid rgba(var(--theme-rgb), 1)', boxShadow: '0 0 10px rgba(var(--theme-rgb), 0.5)' }}
                     >
-                         <div className={`w-1 h-1 bg-${themeColor}-400 rounded-full`} />
+                         <div className="w-1 h-1 rounded-full" style={{ backgroundColor: 'rgba(var(--theme-rgb), 1)' }} />
                     </div>
                  </div>
 
@@ -234,15 +236,15 @@ const App: React.FC = () => {
               </div>
 
               <div className="flex flex-col md:flex-row gap-8">
-                <button 
+                <button
                   onClick={() => navigate(View.Index)}
-                  className={`mono text-[11px] uppercase tracking-[0.5em] border border-white/10 px-12 py-5 transition-all duration-500 bg-black/40 backdrop-blur hover:border-${themeColor}-400 hover:text-${themeColor}-400 hover:shadow-[0_0_20px_rgba(var(--theme-rgb),0.4)]`}
+                  className="origin-btn mono text-[11px] uppercase tracking-[0.5em] border border-white/10 px-12 py-5 transition-all duration-500 bg-black/40 backdrop-blur"
                 >
                   Initiate Scan
                 </button>
-                <button 
+                <button
                   onClick={() => navigate(View.Architect)}
-                  className={`mono text-[11px] uppercase tracking-[0.5em] border border-white/10 px-12 py-5 transition-all duration-500 bg-black/40 backdrop-blur hover:border-${themeColor}-400 hover:text-${themeColor}-400 hover:shadow-[0_0_20px_rgba(var(--theme-rgb),0.4)]`}
+                  className="origin-btn mono text-[11px] uppercase tracking-[0.5em] border border-white/10 px-12 py-5 transition-all duration-500 bg-black/40 backdrop-blur"
                 >
                   The Blueprint
                 </button>

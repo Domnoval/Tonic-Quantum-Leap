@@ -130,8 +130,28 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
   const [scrollY, setScrollY] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
   const autoScrollRef = useRef<number | null>(null);
+  const [lightboxImage, setLightboxImage] = useState<VoidItem | null>(null);
 
   const items = useMemo(() => generateVoidContent(), []);
+
+  // Close lightbox on escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxImage(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const openLightbox = (item: VoidItem) => {
+    setIsAutoScrolling(false);
+    setLightboxImage(item);
+  };
+
+  const closeLightbox = () => {
+    setLightboxImage(null);
+    setTimeout(() => setIsAutoScrolling(true), 500);
+  };
 
   // Duplicate items for seamless infinite scroll
   const infiniteItems = useMemo(() => [...items, ...items, ...items], [items]);
@@ -220,6 +240,7 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
           {infiniteItems.map((item, index) => (
             <div
               key={`${item.id}-${index}`}
+              onClick={() => openLightbox(item)}
               className={`
                 ${getSizeClasses(item.size)}
                 void-item group relative overflow-hidden
@@ -309,6 +330,65 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
         </div>
       </div>
 
+      {/* Lightbox Modal */}
+      {lightboxImage && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm cursor-zoom-out"
+          onClick={closeLightbox}
+        >
+          {/* Close button */}
+          <button
+            onClick={closeLightbox}
+            className="absolute top-6 right-6 mono text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-colors z-10"
+          >
+            [ CLOSE ]
+          </button>
+
+          {/* Image container */}
+          <div
+            className="relative max-w-[90vw] max-h-[85vh] animate-lightbox-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={lightboxImage.content}
+              alt=""
+              className="max-w-full max-h-[85vh] object-contain"
+              style={{ boxShadow: '0 0 60px rgba(var(--theme-rgb), 0.3)' }}
+            />
+
+            {/* Caption */}
+            {lightboxImage.caption && (
+              <div className="absolute -bottom-12 left-0 right-0 text-center">
+                <span
+                  className="mono text-[10px] uppercase tracking-widest"
+                  style={{ color: 'rgba(var(--theme-rgb), 1)' }}
+                >
+                  {lightboxImage.caption}
+                </span>
+              </div>
+            )}
+
+            {/* Corner decorations */}
+            <div
+              className="absolute -top-3 -left-3 w-6 h-6 border-t-2 border-l-2"
+              style={{ borderColor: 'rgba(var(--theme-rgb), 0.6)' }}
+            />
+            <div
+              className="absolute -bottom-3 -right-3 w-6 h-6 border-b-2 border-r-2"
+              style={{ borderColor: 'rgba(var(--theme-rgb), 0.6)' }}
+            />
+          </div>
+
+          {/* Scanlines on lightbox */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-[0.02]"
+            style={{
+              backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px)',
+            }}
+          />
+        </div>
+      )}
+
       {/* Theme-aware hover styles */}
       <style>{`
         .void-item:hover {
@@ -319,6 +399,19 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
         }
         .void-link:hover {
           color: rgba(var(--theme-rgb), 1);
+        }
+        @keyframes lightbox-in {
+          from {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        .animate-lightbox-in {
+          animation: lightbox-in 0.3s ease-out forwards;
         }
       `}</style>
     </div>
