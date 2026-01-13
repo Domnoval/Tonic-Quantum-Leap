@@ -13,46 +13,115 @@ interface VoidItem {
   caption?: string;
 }
 
-// Placeholder content - replace with Instagram API or your social content
+// Local void images
+const VOID_IMAGES = [
+  '20200622_080827.jpg', '20200627_172054.jpg', '20200828_171533.jpg', '20201219_160203.jpg',
+  '20210409_104713.jpg', '20210526_002930~2.jpg', '20210526_013054~2.jpg', '20210527_213252~2.jpg',
+  '20210614_125945.jpg', '20210614_125956.jpg', '20210614_130005.jpg', '20210614_131004.jpg',
+  '20210614_131034.jpg', '20210614_131133.jpg', '20210716_211711~2.jpg', '20210717_121754~2.jpg',
+  '20210725_003705~2.jpg', '20210725_004225~3.jpg', '20210726_022016~2.jpg', '20210808_040241~2.jpg',
+  '20211220_135625.jpg', '20211224_234341~2.jpg', '20220114_133722.jpg', '20220115_164435~3.jpg',
+  '20220115_164443~2.jpg', '20220115_232809~2.jpg', '20220120_210854~3.jpg', '20220204_210509~4.jpg',
+  '20220217_020700~3.jpg', '20220323_005215.jpg', '20220329_104327~3.jpg', '20220329_214711~2.jpg',
+  '20220329_214716~2.jpg', '20220329_214859~2.jpg', '20220329_215355~2.jpg', '20220329_220922~2.jpg',
+  '20220401_112733~3.jpg', '20220401_112825~2.jpg', '20220416_162905.jpg', '20220419_170454~2.jpg',
+  '20220419_183149~2.jpg', '20220611_184047.jpg', '20220620_170259.jpg', '20220620_170338~2.jpg',
+  '20220624_114738.jpg', '20220831_201254~2.jpg', '20220908_083747.jpg', '20220909_004341~3.jpg',
+  '20220917_182224~2.jpg', '20220917_182242~2.jpg', '20220917_184127~2.jpg', '20220918_155844.jpg',
+  '20220922_200457~2.jpg', '20220922_200609~2.jpg', '20220922_200627~2.jpg', '20221005_044503.jpg',
+  '20221005_190443~3.jpg', '20221102_125436~3.jpg', '20221108_170323.jpg', '20221113_082936.jpg',
+  '20221122_045426.jpg', '20221123_130453.jpg', '20221126_163428.jpg', '20221127_084651~2.jpg',
+  '20230103_064610~2.jpg', '20230110_025138~2.jpg', '20230110_025452~2.jpg', '20230110_025452~3.jpg',
+  '20230110_025523.jpg', '20230110_025533.jpg', '20230211_062929~2.jpg', '20230219_075317.jpg',
+  '20230311_131003.jpg', '20230311_131006.jpg', '20230316_063441.jpg', '20230430_132509~2.jpg',
+  '20230501_152944~2.jpg', '20230515_214324.jpg', '20230709_015948~2.jpg', '20230713_102744.jpg',
+  '20230720_232449.jpg', '20230720_232454.jpg', '20230720_232506.jpg', '20230820_113301~2.jpg',
+  '20230820_113323~2.jpg', '20230820_113332~2.jpg', '20230824_125040~2.jpg', '20230824_125216~2.jpg',
+  '20230826_004354~2.jpg', '20230826_005653~2.jpg', '20230910_140007~2.jpg', '20230915_132458.jpg',
+  '20231003_083845~2.jpg', '20231018_111557~3.jpg', '20240905_131338.jpg', '20241015_143030~4.jpg',
+  '20241024_160102~2.jpg', '20241119_140949.jpg', '20241119_141004.jpg', '20241119_141009.jpg',
+  '20241119_141538.jpg', '20241120_120937.jpg', '20241120_120946.jpg', '20241120_121329.jpg',
+  '20241120_121408.jpg', '20241120_121522.jpg', '20241120_121544.jpg', '20241120_121549.jpg',
+  '20241130_113308.jpg', '20241201_090017.jpg', '20241205_194047~2.jpg', '20241208_113707.jpg',
+  '20241208_130547.jpg', '20250114_211755.jpg', '20250310_100721.jpg', '20250310_100730.jpg',
+  '20250310_100750.jpg', '20250316_012316~3.jpg', '20250322_173418.jpg', '20250324_223305.jpg',
+  '20250402_151037~2.jpg', '20250407_135650~2.jpg', '20250423_154351.jpg', '20250423_154444.jpg',
+  '20250423_154459.jpg', '20250425_231610.jpg', '20250425_231625.jpg', '20250425_231628.jpg',
+  '20250502_115519.jpg', '20250520_121410~3.jpg', '20250621_141310.jpg', '20250621_141331.jpg',
+  '20250621_141346.jpg', '20250621_141350.jpg', '20250711_000407~3.jpg', '20250808_145926~3.jpg',
+  '20250820_221530.jpg', '20250820_225745.jpg', '20250820_225825.jpg', '20250914_103404~2.jpg',
+  '20251013_170519~2.jpg', '20251119_203015.jpg', '20260102_153416.jpg',
+  '4cbdea4d-2086-4daf-8037-4eead2a40742.jpg', '5fe56367-df91-4e59-b95a-b20a5f1e9d92.jpg',
+  '666.jpg', '68a6ceba-2eb4-44b8-b58a-fa6b160fedb3_progress_image_63.jpg',
+  '7a65adba-417f-4a86-b307-bc8435df1512~2.jpg', 'Big Boy 300 x.jpg', 'Big twin 102322 2.jpg',
+  'cassetteboy_s.jpg', 'cheeze.jpg', 'dd9bf423-4591-4c3c-98e8-722de17e5954_progress_image_34.jpg',
+  'Domnoval__3f9ff5b1-82f8-4282-a940-f16ad0925b0b.jpg', 'Domnoval__41ed0255-a072-41ef-a178-84de3acea361.jpg',
+  'Domnoval__abs5ract_painting_of_a_bee_hive_bea0de25-302a-4a3b-ba6d-250154cff3d7.jpg',
+  'Domnoval_A_scene_of_woman_wearing_a_pink_ski_mask_over_her_face_d1adf5a9-8ba5-4680-a47f-19a87ebe995a.jpg',
+  'Domnoval_Collodion_printed_collage_style_poster__dadaism__moder_10806745-4460-48bd-8934-8af98123d42b~2.jpg',
+  'Domnoval_None_9ebfcb0b-8a3f-4824-8afd-808841a7777f~3.jpg', 'Floral 3_s.jpg',
+  'FRAMED painting maze copy.jpg', 'Graf Moon X.jpg', 'IMG_20210620_205945_123.jpg',
+  'IMG_20210813_134736_052.jpg', 'IMG_20220115_010218_922.jpg', 'IMG_20220117_013211_045.jpg',
+  'IMG_20220216_204219_530.jpg', 'IMG_20220327_102820_130.jpg', 'IMG_20220606_205822_219.jpg',
+  'IMG_20220711_125207_811.jpg', 'IMG_20220729_202248_238.jpg', 'IMG_20220907_212327_846.jpg',
+  'IMG_20220907_212327_860.jpg', 'IMG_20220907_212327_871.jpg', 'IMG_20220907_212327_881.jpg',
+  'IMG_20230225_173629_101.jpg', 'IMG-20230106-WA0000.jpg', 'IMG-20241009-WA0005.jpg',
+  'IMG-20241222-WA0003.jpg', 'inverted 3_s.jpg', 'Manyfaceddog_s.jpg', 'My Lucky day.jpg',
+  'Neon Rabbit 102422 cropped copy.jpg', 'Neon Transendence.jpg', 'NH ROB FRI 28.jpeg',
+  'Notes_230107_151831_eef.jpg', 'Painting_3_image.jpg', 'Painting_SadRobotv2_image.jpg',
+  'PSX_20220203_142605.jpg', 'PSX_20220310_121650~3.jpg', 'PSX_20220406_054348.jpg',
+  'PSX_20220426_145213~2.jpg', 'PSX_20220731_171128.jpg', 'PSX_20221230_162556.jpg',
+  'Repent 300 2 x.jpg', 'Sadrobotv2_s copy.jpg', 'scary man copy.jpg',
+  'Screenshot 2022-07-14 100503.jpg', 'Screenshot 2023-03-182337885205141708692~2.jpg',
+  'Screenshot 2024-06-21 071753.jpg', 'Screenshot 2024-07-16 203539.jpg',
+  'Screenshot 2024-10-13 092752.jpg', 'Screenshot 2024-11-29 082718.jpg',
+  'Screenshot 2024-12-21 154808.jpg', 'Screenshot 2024-12-22 103235.jpg',
+  'Screenshot 2024-12-22 120716.jpg', 'Screenshot 2025-01-14 044337.jpg',
+  'Screenshot 2025-03-31 171659.jpg', 'Screenshot_20211130-171203_Photos.jpg',
+  'Screenshot_20230417_092033.jpg', 'Screenshot_20230422_100730.jpg',
+  'Screenshot_20230515_092921.jpg', 'Screenshot_20230515_093001.jpg',
+  'Screenshot_20230821_093449.jpg', 'Screenshot_20230825_011052.jpg',
+  'Screenshot_20231205_074452.jpg', 'Screenshot_20240217_081021_Creative Cloud.jpg',
+  'Screenshot_20240528_060716.jpg', 'shop poster 1 lil.jpg',
+  'SmartSelect_20200111-142651_Photos.jpg', 'THE MADNESS AND ARCITEXY (1).jpeg',
+  'THE MADNESS AND ARCITEXY.jpeg', 'Tophat 102422 cropped copy.jpg', 'Untitled-1.jpg', 'Untitled-3.jpg',
+];
+
+const CAPTIONS = [
+  '137 // SIGNAL RECEIVED',
+  'VOID TRANSMISSION',
+  'MERKABA ONLINE',
+  'FREQUENCY LOCKED',
+  'AETHER DRIFT',
+  'QUANTUM ENTANGLED',
+  'SOLAR PEAK',
+  'DENSITY PACKET',
+  'NEURAL BRIDGE',
+  'SIGNAL // NOISE',
+  'KABBALAH = 137',
+  'INFINITE RECEIVER',
+];
+
+// Shuffle array using Fisher-Yates
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
 const generateVoidContent = (): VoidItem[] => {
-  const placeholders = [
-    'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1507400492013-162706c8c05e?w=400&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=600&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=600&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1505506874110-6a7a69069a08?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1484589065579-248aad0d628b?w=400&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1465101162946-4377e57745c3?w=600&h=400&fit=crop',
-  ];
-
-  const captions = [
-    '137 // SIGNAL RECEIVED',
-    'VOID TRANSMISSION',
-    'MERKABA ONLINE',
-    'FREQUENCY LOCKED',
-    'AETHER DRIFT',
-    'QUANTUM ENTANGLED',
-    'SOLAR PEAK',
-    'DENSITY PACKET',
-    'NEURAL BRIDGE',
-    'SIGNAL // NOISE',
-    'KABBALAH = 137',
-    'INFINITE RECEIVER',
-  ];
-
+  const shuffledImages = shuffleArray(VOID_IMAGES);
   const sizes: ('small' | 'medium' | 'large')[] = ['small', 'small', 'medium', 'medium', 'large'];
 
-  return [...Array(50)].map((_, i) => ({
+  return shuffledImages.map((img, i) => ({
     id: `void-${i}`,
     type: 'image' as const,
-    content: placeholders[i % placeholders.length],
+    content: `/void/${img}`,
     size: sizes[Math.floor(Math.random() * sizes.length)],
-    caption: Math.random() > 0.5 ? captions[i % captions.length] : undefined,
+    caption: Math.random() > 0.5 ? CAPTIONS[i % CAPTIONS.length] : undefined,
   }));
 };
 
@@ -123,12 +192,18 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
         <div className="flex justify-between items-end">
           <div>
             <h2 className="serif text-3xl md:text-4xl text-white italic">The Void</h2>
-            <p className={`mono text-[10px] uppercase tracking-[0.3em] text-${themeColor}-400 mt-2`}>
+            <p
+              className="mono text-[10px] uppercase tracking-[0.3em] mt-2"
+              style={{ color: 'rgba(var(--theme-rgb), 1)' }}
+            >
               Infinite Signal Stream // Social Transmissions
             </p>
           </div>
           <div className="hidden md:flex items-center gap-4">
-            <div className={`w-2 h-2 rounded-full bg-${themeColor}-400 ${isAutoScrolling ? 'animate-pulse' : ''}`} />
+            <div
+              className={`w-2 h-2 rounded-full ${isAutoScrolling ? 'animate-pulse' : ''}`}
+              style={{ backgroundColor: 'rgba(var(--theme-rgb), 1)' }}
+            />
             <span className="mono text-[9px] uppercase tracking-widest text-white/40">
               {isAutoScrolling ? 'AUTO_DRIFT' : 'MANUAL_CONTROL'}
             </span>
@@ -147,10 +222,9 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
               key={`${item.id}-${index}`}
               className={`
                 ${getSizeClasses(item.size)}
-                group relative overflow-hidden
+                void-item group relative overflow-hidden
                 bg-white/5 backdrop-blur-sm
                 border border-white/5
-                hover:border-${themeColor}-400/50
                 transition-all duration-500
                 cursor-pointer
               `}
@@ -177,15 +251,18 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
               {/* Caption */}
               {item.caption && (
                 <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-y-2 group-hover:translate-y-0">
-                  <span className={`mono text-[8px] md:text-[9px] uppercase tracking-widest text-${themeColor}-400 drop-shadow-lg`}>
+                  <span
+                    className="mono text-[8px] md:text-[9px] uppercase tracking-widest drop-shadow-lg"
+                    style={{ color: 'rgba(var(--theme-rgb), 1)' }}
+                  >
                     {item.caption}
                   </span>
                 </div>
               )}
 
               {/* Corner Accents */}
-              <div className={`absolute top-2 left-2 w-3 h-3 border-t border-l border-${themeColor}-400/0 group-hover:border-${themeColor}-400/60 transition-all duration-300`} />
-              <div className={`absolute bottom-2 right-2 w-3 h-3 border-b border-r border-${themeColor}-400/0 group-hover:border-${themeColor}-400/60 transition-all duration-300`} />
+              <div className="void-corner absolute top-2 left-2 w-3 h-3 border-t border-l border-transparent transition-all duration-300" />
+              <div className="void-corner absolute bottom-2 right-2 w-3 h-3 border-b border-r border-transparent transition-all duration-300" />
             </div>
           ))}
         </div>
@@ -209,7 +286,7 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
             href="https://instagram.com"
             target="_blank"
             rel="noopener noreferrer"
-            className={`mono text-[10px] uppercase tracking-[0.3em] text-white/40 hover:text-${themeColor}-400 transition-colors`}
+            className="void-link mono text-[10px] uppercase tracking-[0.3em] text-white/40 transition-colors"
           >
             Instagram
           </a>
@@ -217,7 +294,7 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
             href="https://twitter.com"
             target="_blank"
             rel="noopener noreferrer"
-            className={`mono text-[10px] uppercase tracking-[0.3em] text-white/40 hover:text-${themeColor}-400 transition-colors`}
+            className="void-link mono text-[10px] uppercase tracking-[0.3em] text-white/40 transition-colors"
           >
             Twitter
           </a>
@@ -225,12 +302,25 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
             href="https://tiktok.com"
             target="_blank"
             rel="noopener noreferrer"
-            className={`mono text-[10px] uppercase tracking-[0.3em] text-white/40 hover:text-${themeColor}-400 transition-colors`}
+            className="void-link mono text-[10px] uppercase tracking-[0.3em] text-white/40 transition-colors"
           >
             TikTok
           </a>
         </div>
       </div>
+
+      {/* Theme-aware hover styles */}
+      <style>{`
+        .void-item:hover {
+          border-color: rgba(var(--theme-rgb), 0.5);
+        }
+        .void-item:hover .void-corner {
+          border-color: rgba(var(--theme-rgb), 0.6);
+        }
+        .void-link:hover {
+          color: rgba(var(--theme-rgb), 1);
+        }
+      `}</style>
     </div>
   );
 };
