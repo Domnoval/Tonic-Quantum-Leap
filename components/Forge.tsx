@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
+import PurchaseModal from './PurchaseModal';
 
 type ForgeMode = 'style' | 'remix' | 'inpaint' | 'mashup' | 'collage';
 
@@ -124,6 +125,7 @@ const Forge: React.FC<ForgeProps> = ({ themeColor }) => {
   const [transmissionNumber, setTransmissionNumber] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showVoidPicker, setShowVoidPicker] = useState(false);
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -561,6 +563,7 @@ const Forge: React.FC<ForgeProps> = ({ themeColor }) => {
                   Regenerate
                 </button>
                 <button
+                  onClick={() => setShowPurchaseModal(true)}
                   className="flex-1 py-3 mono text-[10px] uppercase tracking-widest transition-colors"
                   style={{
                     backgroundColor: 'rgba(var(--theme-rgb), 0.2)',
@@ -690,6 +693,16 @@ const Forge: React.FC<ForgeProps> = ({ themeColor }) => {
           scrollbar-width: none;
         }
       `}</style>
+
+      {/* Purchase Modal */}
+      {generatedImage && transmissionNumber && (
+        <PurchaseModal
+          isOpen={showPurchaseModal}
+          onClose={() => setShowPurchaseModal(false)}
+          imageUrl={generatedImage}
+          transmissionNumber={transmissionNumber}
+        />
+      )}
     </div>
   );
 };
