@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 import { createPrintfulOrder, confirmPrintfulOrder } from './printful';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-12-18.acacia',
+  apiVersion: '2025-12-15.clover',
 });
 
 // Stripe webhook secret - get this from Stripe Dashboard > Webhooks
@@ -88,8 +88,8 @@ async function handleSuccessfulPayment(session: Stripe.Checkout.Session) {
     return;
   }
 
-  // Get shipping details from session
-  const shippingDetails = session.shipping_details;
+  // Get shipping details from session (cast to any for API version compatibility)
+  const shippingDetails = (session as any).shipping_details || (session as any).shipping;
   if (!shippingDetails?.address) {
     console.error('No shipping address in session:', session.id);
     return;

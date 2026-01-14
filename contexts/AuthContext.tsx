@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
-import { supabase, signInWithEmail, signOut, getCurrentUser } from '../services/supabase';
+import { supabase, signInWithEmail, signOut, getCurrentUser, onAuthStateChange } from '../services/supabase';
 
 interface AuthContextType {
   user: User | null;
@@ -21,12 +21,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     // Check current session on mount
     getCurrentUser().then(({ user }) => {
-      setUser(user);
+      setUser(user ?? null);
       setLoading(false);
     });
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    // Listen for auth changes (handles null supabase gracefully)
+    const { data: { subscription } } = onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       setLoading(false);
 
