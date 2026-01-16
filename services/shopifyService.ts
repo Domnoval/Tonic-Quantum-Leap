@@ -1,37 +1,5 @@
 import { Artifact } from '../types';
 
-// Replace with your actual Shopify Storefront Access Token
-const SHOPIFY_DOMAIN = import.meta.env.VITE_SHOPIFY_DOMAIN || 'tonic-thought-studios.myshopify.com';
-const STOREFRONT_ACCESS_TOKEN = import.meta.env.VITE_SHOPIFY_ACCESS_TOKEN || '';
-
-const GRAPHQL_QUERY = `
-  query getProducts {
-    products(first: 20) {
-      nodes {
-        id
-        title
-        description
-        handle
-        tags
-        variants(first: 1) {
-          nodes {
-            id
-            price {
-              amount
-              currencyCode
-            }
-          }
-        }
-        images(first: 1) {
-          nodes {
-            url
-          }
-        }
-      }
-    }
-  }
-`;
-
 /**
  * Fallback Artifacts: Manifested when the Shopify Nexus is disconnected.
  * Populated with the 'Static Stack' and '333 Resonance' collection.
@@ -186,24 +154,12 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
 ];
 
 export const fetchShopifyArtifacts = async (): Promise<Artifact[]> => {
-  // 1. Check if token is still a placeholder to avoid useless network calls
-  if (STOREFRONT_ACCESS_TOKEN === 'your-access-token-here') {
-    // console.warn("Shopify Nexus: Credentials unset. Manifesting fallback protocols.");
-    return FALLBACK_ARTIFACTS;
-  }
-
   try {
-    const response = await fetch(`https://${SHOPIFY_DOMAIN}/api/2024-01/graphql.json`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Shopify-Storefront-Access-Token': STOREFRONT_ACCESS_TOKEN,
-      },
-      body: JSON.stringify({ query: GRAPHQL_QUERY }),
-    });
+    // Use our server-side proxy to avoid CORS issues
+    const response = await fetch('/api/shopify');
 
     if (!response.ok) {
-      throw new Error(`Shopify Network response was not ok: ${response.statusText}`);
+      throw new Error(`Shopify proxy error: ${response.statusText}`);
     }
 
     const json = await response.json();
