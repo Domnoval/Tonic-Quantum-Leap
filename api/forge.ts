@@ -139,7 +139,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.error('Forge error:', error);
     return res.status(500).json({
       error: 'Transmission failed',
-      message: error.message || 'Unknown error in the Forge'
+      message: error.message || 'Unknown error in the Forge',
+      debug: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 }
@@ -166,7 +167,8 @@ async function runReplicate(params: { version: string; input: Record<string, any
 
   if (!startResponse.ok) {
     const errorData = await startResponse.json();
-    throw new Error(errorData.detail || 'Failed to start generation');
+    console.error('Replicate API error:', JSON.stringify(errorData));
+    throw new Error(errorData.detail || errorData.error || `Replicate error: ${startResponse.status}`);
   }
 
   const prediction = await startResponse.json();
