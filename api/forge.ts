@@ -146,23 +146,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 }
 
 async function runReplicate(params: { version: string; input: Record<string, any> }) {
-  // Start the prediction
-  const startResponse = await fetch('https://api.replicate.com/v1/predictions', {
+  // Determine if this is a model name (owner/name) or a versioned model (owner/name:version)
+  const hasVersion = params.version.includes(':');
+  const [modelPath, versionId] = hasVersion
+    ? params.version.split(':')
+    : [params.version, null];
+
+  // Use the models endpoint for official models, predictions endpoint for versioned
+  const endpoint = hasVersion
+    ? 'https://api.replicate.com/v1/predictions'
+    : `https://api.replicate.com/v1/models/${modelPath}/predictions`;
+
+  const body = hasVersion
+    ? { version: versionId, input: params.input }
+    : { input: params.input };
+
+  const startResponse = await fetch(endpoint, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${REPLICATE_API_TOKEN}`,
       'Content-Type': 'application/json',
       'Prefer': 'wait', // Wait for the result synchronously (up to 60s)
     },
-    body: JSON.stringify({
-      version: params.version.includes(':')
-        ? params.version.split(':')[1]
-        : undefined,
-      model: params.version.includes(':')
-        ? undefined
-        : params.version,
-      input: params.input,
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!startResponse.ok) {
