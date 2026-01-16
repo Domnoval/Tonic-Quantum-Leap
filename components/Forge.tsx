@@ -213,6 +213,18 @@ const Forge: React.FC<ForgeProps> = ({ themeColor }) => {
     return canvasRef.current.toDataURL('image/png');
   };
 
+  // Convert image URL to base64 data URI
+  const imageToBase64 = async (src: string): Promise<string> => {
+    const response = await fetch(src);
+    const blob = await response.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
   // Generate image via Forge API
   const handleGenerate = async () => {
     if (selectedImages.length === 0) return;
@@ -222,11 +234,10 @@ const Forge: React.FC<ForgeProps> = ({ themeColor }) => {
     setError(null);
 
     try {
-      // Convert relative paths to absolute URLs for the API
-      const absoluteUrls = selectedImages.map(src => {
-        if (src.startsWith('http')) return src;
-        return `${window.location.origin}${src}`;
-      });
+      // Convert images to base64 so Replicate doesn't need to fetch from our server
+      const base64Images = await Promise.all(
+        selectedImages.map(src => imageToBase64(src))
+      );
 
       const response = await fetch('/api/forge', {
         method: 'POST',
@@ -235,7 +246,7 @@ const Forge: React.FC<ForgeProps> = ({ themeColor }) => {
         },
         body: JSON.stringify({
           mode,
-          sourceImages: absoluteUrls,
+          sourceImages: base64Images,
           prompt,
           creativity,
           chaos,
