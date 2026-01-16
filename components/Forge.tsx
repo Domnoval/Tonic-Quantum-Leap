@@ -244,9 +244,10 @@ const Forge: React.FC<ForgeProps> = ({ themeColor }) => {
       });
 
       const data = await response.json();
+      console.log('Forge API response:', data);
 
       if (!response.ok) {
-        throw new Error(data.error || data.message || 'Generation failed');
+        throw new Error(data.message || data.error || 'Generation failed');
       }
 
       setGeneratedImage(data.resultUrl);
