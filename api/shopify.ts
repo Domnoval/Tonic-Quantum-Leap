@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 // Server-side env vars (check both with and without VITE_ prefix for flexibility)
-const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN || process.env.VITE_SHOPIFY_DOMAIN || 'tonic-thought-studios.myshopify.com';
+const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN || process.env.VITE_SHOPIFY_DOMAIN || 'tonic-thought-studios-2.myshopify.com';
 const STOREFRONT_ACCESS_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN || process.env.VITE_SHOPIFY_ACCESS_TOKEN || '';
 
 const GRAPHQL_QUERY = `
