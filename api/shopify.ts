@@ -42,13 +42,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).end();
   }
 
-  console.log('Shopify API called, domain:', SHOPIFY_DOMAIN);
-  console.log('Token exists:', !!STOREFRONT_ACCESS_TOKEN, 'length:', STOREFRONT_ACCESS_TOKEN?.length);
+  const debugInfo = {
+    domain: SHOPIFY_DOMAIN,
+    tokenExists: !!STOREFRONT_ACCESS_TOKEN,
+    tokenLength: STOREFRONT_ACCESS_TOKEN?.length || 0,
+    tokenPreview: STOREFRONT_ACCESS_TOKEN ? `${STOREFRONT_ACCESS_TOKEN.slice(0, 4)}...` : 'none'
+  };
+
+  console.log('Shopify API called:', debugInfo);
 
   if (!STOREFRONT_ACCESS_TOKEN) {
     return res.status(500).json({
       error: 'Shopify not configured',
-      message: 'Add SHOPIFY_ACCESS_TOKEN to environment variables'
+      message: 'Add SHOPIFY_ACCESS_TOKEN to environment variables',
+      debug: debugInfo
     });
   }
 
@@ -63,8 +70,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       body: JSON.stringify({ query: GRAPHQL_QUERY }),
     });
 
+    console.log('Shopify response status:', response.status);
+
     if (!response.ok) {
-      throw new Error(`Shopify API error: ${response.statusText}`);
+      const errorText = await response.text();
+      return res.status(500).json({
+        error: 'Shopify API error',
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText,
+        debug: debugInfo
+      });
     }
 
     const data = await response.json();
@@ -74,7 +90,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.error('Shopify proxy error:', error);
     return res.status(500).json({
       error: 'Failed to fetch from Shopify',
-      message: error.message
+      message: error.message,
+      stack: error.stack,
+      debug: debugInfo
     });
   }
 }
