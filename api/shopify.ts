@@ -1,7 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const SHOPIFY_DOMAIN = process.env.VITE_SHOPIFY_DOMAIN || 'tonic-thought-studios.myshopify.com';
-const STOREFRONT_ACCESS_TOKEN = process.env.VITE_SHOPIFY_ACCESS_TOKEN || '';
+// Server-side env vars (check both with and without VITE_ prefix for flexibility)
+const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN || process.env.VITE_SHOPIFY_DOMAIN || 'tonic-thought-studios.myshopify.com';
+const STOREFRONT_ACCESS_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN || process.env.VITE_SHOPIFY_ACCESS_TOKEN || '';
 
 const GRAPHQL_QUERY = `
   query getProducts {
@@ -41,14 +42,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).end();
   }
 
+  console.log('Shopify API called, domain:', SHOPIFY_DOMAIN);
+  console.log('Token exists:', !!STOREFRONT_ACCESS_TOKEN, 'length:', STOREFRONT_ACCESS_TOKEN?.length);
+
   if (!STOREFRONT_ACCESS_TOKEN) {
     return res.status(500).json({
       error: 'Shopify not configured',
-      message: 'Add VITE_SHOPIFY_ACCESS_TOKEN to environment variables'
+      message: 'Add SHOPIFY_ACCESS_TOKEN to environment variables'
     });
   }
 
   try {
+    console.log('Fetching from Shopify...');
     const response = await fetch(`https://${SHOPIFY_DOMAIN}/api/2024-01/graphql.json`, {
       method: 'POST',
       headers: {

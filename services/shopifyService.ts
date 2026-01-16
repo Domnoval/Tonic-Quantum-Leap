@@ -156,13 +156,23 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
 export const fetchShopifyArtifacts = async (): Promise<Artifact[]> => {
   try {
     // Use our server-side proxy to avoid CORS issues
+    console.log('Fetching from /api/shopify...');
     const response = await fetch('/api/shopify');
+    console.log('Shopify proxy response status:', response.status);
 
     if (!response.ok) {
+      console.error('Shopify proxy not ok:', response.status, response.statusText);
       throw new Error(`Shopify proxy error: ${response.statusText}`);
     }
 
     const json = await response.json();
+    console.log('Shopify API response:', json);
+
+    // Check for API-level errors
+    if (json.error) {
+      console.error("Shopify API Error:", json.error, json.message);
+      return FALLBACK_ARTIFACTS;
+    }
 
     // Check for GraphQL errors
     if (json.errors) {
@@ -171,7 +181,10 @@ export const fetchShopifyArtifacts = async (): Promise<Artifact[]> => {
     }
 
     const products = json.data?.products?.nodes;
+    console.log('Products found:', products?.length || 0);
+
     if (!products || products.length === 0) {
+      console.log('No products, using fallback');
       return FALLBACK_ARTIFACTS;
     }
 
