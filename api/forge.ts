@@ -53,18 +53,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     switch (mode) {
       case 'style':
-        // Style transfer using IP-Adapter or img2img with style reference
+        // Style transfer using img2img - keep more of original's vibe
         prediction = await runReplicate({
-          version: MODELS.flux,
+          version: MODELS.sdxl,
           input: {
-            prompt: prompt || 'A surreal digital artwork in the style of the reference',
-            go_fast: true,
-            guidance: 3.5 + (creativity / 100) * 3, // 3.5-6.5 based on creativity
-            num_outputs: 1,
-            aspect_ratio: '1:1',
-            output_format: 'webp',
-            output_quality: 90,
-            num_inference_steps: 4,
+            image: sourceImages[0],
+            prompt: prompt || 'A surreal digital artwork maintaining the style and essence of the original',
+            negative_prompt: 'blurry, low quality, distorted, completely different style',
+            prompt_strength: 0.3 + (creativity / 100) * 0.4, // 0.3-0.7: lower = more original influence
+            num_inference_steps: 30,
+            guidance_scale: 7.5,
+            scheduler: 'K_EULER',
           }
         });
         break;
@@ -105,19 +104,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         break;
 
       case 'mashup':
-        // Multi-image fusion - use first as base with style from others
-        const mashupPrompt = `${prompt || 'A fusion of these images'}, surreal blend, digital art mashup`;
+        // Multi-image fusion - use first image as base, blend via img2img
+        const mashupPrompt = `${prompt || 'A surreal fusion and blend of artistic elements'}, dreamlike mashup, cohesive digital art`;
         prediction = await runReplicate({
-          version: MODELS.flux,
+          version: MODELS.sdxl,
           input: {
+            image: sourceImages[0], // Use first image as base
             prompt: mashupPrompt,
-            go_fast: true,
-            guidance: 4 + (chaos / 100) * 4,
-            num_outputs: 1,
-            aspect_ratio: '1:1',
-            output_format: 'webp',
-            output_quality: 90,
-            num_inference_steps: 4,
+            negative_prompt: 'blurry, low quality, incoherent, messy',
+            prompt_strength: 0.5 + (chaos / 100) * 0.4, // 0.5-0.9: higher chaos = more transformation
+            num_inference_steps: 35,
+            guidance_scale: 8 + (chaos / 100) * 4, // 8-12 based on chaos
+            scheduler: 'K_EULER',
           }
         });
         break;
