@@ -160,13 +160,13 @@ export const fetchShopifyArtifacts = async (): Promise<Artifact[]> => {
     const response = await fetch('/api/shopify');
     console.log('Shopify proxy response status:', response.status);
 
-    if (!response.ok) {
-      console.error('Shopify proxy not ok:', response.status, response.statusText);
-      throw new Error(`Shopify proxy error: ${response.statusText}`);
-    }
-
     const json = await response.json();
     console.log('Shopify API response:', json);
+
+    if (!response.ok) {
+      console.error('Shopify proxy not ok:', response.status, json);
+      throw new Error(`Shopify proxy error: ${json.message || json.error || response.statusText}`);
+    }
 
     // Check for API-level errors
     if (json.error) {
