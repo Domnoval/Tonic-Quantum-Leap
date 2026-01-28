@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Void Catalog Editor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0a0a0a; color: #fff; font-family: ui-monospace, monospace; }
+    .piece-card { transition: all 0.2s; }
+    .piece-card:hover { transform: scale(1.02); }
+    .tag { cursor: pointer; transition: all 0.15s; }
+    .tag:hover { opacity: 0.8; }
+    input, textarea, select { background: #1a1a1a; border: 1px solid #333; }
+    input:focus, textarea:focus, select:focus { border-color: #a78bfa; outline: none; }
+  </style>
+</head>
+<body class="min-h-screen p-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-purple-400">Void Catalog Editor</h1>
+        <p class="text-gray-500 text-sm mt-1">Edit titles, tags, and series for your artwork</p>
+      </div>
+      <div class="flex gap-4">
+        <button onclick="loadCatalog()" class="px-4 py-2 border border-gray-700 hover:border-purple-400 text-sm">
+          Load catalog.json
+        </button>
+        <button onclick="downloadCatalog()" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-sm">
+          Download Updated
+        </button>
+      </div>
+    </div>
+    
+    <!-- Stats Bar -->
+    <div id="stats" class="mb-6 p-4 border border-gray-800 bg-gray-900/50 flex gap-8 text-sm">
+      <span>Total: <strong id="totalCount">0</strong></span>
+      <span>Needs Review: <strong id="reviewCount" class="text-yellow-400">0</strong></span>
+      <span>Categorized: <strong id="catCount" class="text-green-400">0</strong></span>
+    </div>
+    
+    <!-- Filters -->
+    <div class="mb-6 flex gap-4 flex-wrap">
+      <input type="text" id="searchInput" placeholder="Search titles..." 
+        class="px-3 py-2 text-sm w-64" oninput="filterPieces()">
+      <select id="seriesFilter" class="px-3 py-2 text-sm" onchange="filterPieces()">
+        <option value="">All Series</option>
+      </select>
+      <select id="tagFilter" class="px-3 py-2 text-sm" onchange="filterPieces()">
+        <option value="">All Tags</option>
+      </select>
+      <label class="flex items-center gap-2 text-sm">
+        <input type="checkbox" id="needsReviewOnly" onchange="filterPieces()">
+        Needs Review Only
+      </label>
+    </div>
+    
+    <!-- Grid -->
+    <div id="grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <div class="col-span-full text-center text-gray-500 py-20">
+        Load catalog.json to begin editing
+      </div>
+    </div>
+    
+    <!-- Edit Modal -->
+    <div id="editModal" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-gray-900 border border-gray-700 max-w-2xl w-full max-h-[90vh] overflow-auto p-6">
+        <div class="flex justify-between items-start mb-6">
+          <h2 class="text-xl font-bold text-purple-400">Edit Piece</h2>
+          <button onclick="closeModal()" class="text-gray-500 hover:text-white text-2xl">&times;</button>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-6">
+          <!-- Preview -->
+          <div>
+            <img id="modalImage" src="" class="w-full aspect-square object-cover border border-gray-700">
+            <p id="modalFilename" class="text-xs text-gray-500 mt-2 truncate"></p>
+          </div>
+          
+          <!-- Form -->
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Title</label>
+              <input type="text" id="editTitle" class="w-full px-3 py-2 text-sm">
+            </div>
+            
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Series</label>
+              <select id="editSeries" class="w-full px-3 py-2 text-sm"></select>
+            </div>
+            
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Year</label>
+              <input type="number" id="editYear" class="w-full px-3 py-2 text-sm" min="2000" max="2030">
+            </div>
+            
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Tags (click to add/remove)</label>
+              <div id="editTags" class="flex flex-wrap gap-1 mb-2"></div>
+              <div id="availableTags" class="flex flex-wrap gap-1 border-t border-gray-700 pt-2 mt-2"></div>
+            </div>
+            
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Description</label>
+              <textarea id="editDescription" class="w-full px-3 py-2 text-sm h-20"></textarea>
+            </div>
+            
+            <div class="flex gap-2">
+              <label class="flex items-center gap-2 text-sm">
+                <input type="checkbox" id="editFeatured"> Featured
+              </label>
+              <label class="flex items-center gap-2 text-sm">
+                <input type="checkbox" id="editForge"> Forge Enabled
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-4 mt-6 pt-4 border-t border-gray-700">
+          <button onclick="closeModal()" class="px-4 py-2 border border-gray-700 text-sm">Cancel</button>
+          <button onclick="savePiece()" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-sm">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let catalog = null;
+    let currentPieceIndex = null;
+    
+    // Load catalog from file input
+    function loadCatalog() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = async (e) => {
+        const file = e.target.files[0];
+        const text = await file.text();
+        catalog = JSON.parse(text);
+        renderCatalog();
+        populateFilters();
+        updateStats();
+      };
+      input.click();
+    }
+    
+    // Download updated catalog
+    function downloadCatalog() {
+      if (!catalog) return alert('No catalog loaded');
+      
+      catalog.lastUpdated = new Date().toISOString();
+      const blob = new Blob([JSON.stringify(catalog, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'catalog.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+    
+    // Render the grid
+    function renderCatalog() {
+      const grid = document.getElementById('grid');
+      const pieces = getFilteredPieces();
+      
+      grid.innerHTML = pieces.map((piece, index) => {
+        const actualIndex = catalog.pieces.indexOf(piece);
+        const needsReview = piece.tags.includes('needs-review');
+        const thumbUrl = piece.files.thumbnail 
+          ? `../public/void/${piece.files.thumbnail}`
+          : `../public/void/${piece.files.original}`;
+        
+        return `
+          <div class="piece-card cursor-pointer border ${needsReview ? 'border-yellow-500/50' : 'border-gray-800'} bg-gray-900/50"
+               onclick="editPiece(${actualIndex})">
+            <img src="${thumbUrl}" 
+                 class="w-full aspect-square object-cover"
+                 onerror="this.src='../public/void/${piece.files.original}'">
+            <div class="p-2">
+              <p class="text-xs truncate">${piece.title}</p>
+              <p class="text-[10px] text-gray-500">${catalog.series[piece.series]?.name || piece.series}</p>
+              <div class="flex flex-wrap gap-1 mt-1">
+                ${piece.tags.slice(0, 3).map(t => 
+                  `<span class="text-[9px] px-1 bg-gray-800 text-gray-400">${t}</span>`
+                ).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // Filter logic
+    function getFilteredPieces() {
+      if (!catalog) return [];
+      
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const series = document.getElementById('seriesFilter').value;
+      const tag = document.getElementById('tagFilter').value;
+      const needsReviewOnly = document.getElementById('needsReviewOnly').checked;
+      
+      return catalog.pieces.filter(p => {
+        if (search && !p.title.toLowerCase().includes(search)) return false;
+        if (series && p.series !== series) return false;
+        if (tag && !p.tags.includes(tag)) return false;
+        if (needsReviewOnly && !p.tags.includes('needs-review')) return false;
+        return true;
+      });
+    }
+    
+    function filterPieces() {
+      renderCatalog();
+    }
+    
+    // Populate filter dropdowns
+    function populateFilters() {
+      const seriesSelect = document.getElementById('seriesFilter');
+      const tagSelect = document.getElementById('tagFilter');
+      
+      seriesSelect.innerHTML = '<option value="">All Series</option>' +
+        Object.entries(catalog.series).map(([key, val]) => 
+          `<option value="${key}">${val.name}</option>`
+        ).join('');
+      
+      const allTags = [...new Set(catalog.pieces.flatMap(p => p.tags))].sort();
+      tagSelect.innerHTML = '<option value="">All Tags</option>' +
+        allTags.map(t => `<option value="${t}">${t}</option>`).join('');
+    }
+    
+    // Update stats
+    function updateStats() {
+      const total = catalog.pieces.length;
+      const needsReview = catalog.pieces.filter(p => p.tags.includes('needs-review')).length;
+      const categorized = catalog.pieces.filter(p => p.series !== 'uncategorized').length;
+      
+      document.getElementById('totalCount').textContent = total;
+      document.getElementById('reviewCount').textContent = needsReview;
+      document.getElementById('catCount').textContent = categorized;
+    }
+    
+    // Edit modal
+    function editPiece(index) {
+      currentPieceIndex = index;
+      const piece = catalog.pieces[index];
+      
+      const thumbUrl = piece.files.thumbnail 
+        ? `../public/void/${piece.files.thumbnail}`
+        : `../public/void/${piece.files.original}`;
+      
+      document.getElementById('modalImage').src = thumbUrl;
+      document.getElementById('modalImage').onerror = function() {
+        this.src = `../public/void/${piece.files.original}`;
+      };
+      document.getElementById('modalFilename').textContent = piece.files.original;
+      document.getElementById('editTitle').value = piece.title;
+      document.getElementById('editYear').value = piece.year;
+      document.getElementById('editDescription').value = piece.description || '';
+      document.getElementById('editFeatured').checked = piece.featured;
+      document.getElementById('editForge').checked = piece.forgeEnabled;
+      
+      // Series dropdown
+      const seriesSelect = document.getElementById('editSeries');
+      seriesSelect.innerHTML = Object.entries(catalog.series).map(([key, val]) => 
+        `<option value="${key}" ${piece.series === key ? 'selected' : ''}>${val.name}</option>`
+      ).join('');
+      
+      // Tags
+      renderEditTags(piece.tags);
+      
+      document.getElementById('editModal').classList.remove('hidden');
+    }
+    
+    function renderEditTags(currentTags) {
+      const editTags = document.getElementById('editTags');
+      const availableTags = document.getElementById('availableTags');
+      
+      editTags.innerHTML = currentTags.map(t => 
+        `<span class="tag text-[10px] px-2 py-1 bg-purple-600 text-white" onclick="removeTag('${t}')">${t} ×</span>`
+      ).join('');
+      
+      const allTags = Object.keys(catalog.tags).filter(t => !currentTags.includes(t));
+      availableTags.innerHTML = allTags.map(t =>
+        `<span class="tag text-[10px] px-2 py-1 bg-gray-700 text-gray-300" onclick="addTag('${t}')">${t} +</span>`
+      ).join('');
+    }
+    
+    function addTag(tag) {
+      const piece = catalog.pieces[currentPieceIndex];
+      if (!piece.tags.includes(tag)) {
+        piece.tags.push(tag);
+        // Remove needs-review if adding other tags
+        if (tag !== 'needs-review' && piece.tags.includes('needs-review')) {
+          piece.tags = piece.tags.filter(t => t !== 'needs-review');
+        }
+        renderEditTags(piece.tags);
+      }
+    }
+    
+    function removeTag(tag) {
+      const piece = catalog.pieces[currentPieceIndex];
+      piece.tags = piece.tags.filter(t => t !== tag);
+      renderEditTags(piece.tags);
+    }
+    
+    function closeModal() {
+      document.getElementById('editModal').classList.add('hidden');
+      currentPieceIndex = null;
+    }
+    
+    function savePiece() {
+      const piece = catalog.pieces[currentPieceIndex];
+      
+      piece.title = document.getElementById('editTitle').value;
+      piece.series = document.getElementById('editSeries').value;
+      piece.year = parseInt(document.getElementById('editYear').value);
+      piece.description = document.getElementById('editDescription').value || null;
+      piece.featured = document.getElementById('editFeatured').checked;
+      piece.forgeEnabled = document.getElementById('editForge').checked;
+      piece.updatedAt = new Date().toISOString();
+      
+      // Remove notes about auto-generation if edited
+      if (piece.notes?.includes('AUTO-GENERATED')) {
+        piece.notes = null;
+      }
+      
+      closeModal();
+      renderCatalog();
+      updateStats();
+    }
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+</body>
+</html>
