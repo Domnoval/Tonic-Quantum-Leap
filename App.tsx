@@ -41,6 +41,12 @@ const App: React.FC = () => {
   const [selectedArtifact, setSelectedArtifact] = useState<Artifact | null>(null);
   const [isLoadingInventory, setIsLoadingInventory] = useState(true);
   
+  // Forge preselection state
+  const [forgePreselection, setForgePreselection] = useState<{
+    image?: string;
+    mode?: 'style' | 'remix' | 'inpaint' | 'mashup';
+  } | null>(null);
+  
   // Perspective Awareness State (Default: Aether/Sky)
   const [themeColor, setThemeColor] = useState<ThemeColor>('sky');
   const [lunarPhase, setLunarPhase] = useState<string>('');
@@ -158,6 +164,17 @@ const App: React.FC = () => {
   const handleIndexSelection = (artifact: Artifact) => {
     setSelectedArtifact(artifact);
     navigate(View.Apothecary);
+  };
+
+  // Handle navigation with data (e.g., Void → Forge with preselected image)
+  const handleNavigateWithData = (section: string, data?: any) => {
+    if (section === 'forge') {
+      setForgePreselection({
+        image: data?.preselectedImage,
+        mode: data?.preselectedMode,
+      });
+      navigate(View.Forge);
+    }
   };
 
   if (!isCalibrated) {
@@ -281,8 +298,8 @@ const App: React.FC = () => {
           />
         )}
         {currentView === View.Architect && <Architect />}
-        {currentView === View.Void && <Void themeColor={themeColor} />}
-        {currentView === View.Forge && <Forge themeColor={themeColor} />}
+        {currentView === View.Void && <Void themeColor={themeColor} onNavigate={handleNavigateWithData} />}
+        {currentView === View.Forge && <Forge themeColor={themeColor} preselection={forgePreselection} onClearPreselection={() => setForgePreselection(null)} />}
       </div>
 
       <Oracle cartCount={cart.length} themeColor={themeColor} />

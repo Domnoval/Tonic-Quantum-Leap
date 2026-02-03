@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ThemeColor } from '../types';
+import VoidItemCard from './VoidItemCard';
+
+type ForgeMode = 'style' | 'remix' | 'inpaint' | 'mashup';
 
 interface VoidProps {
   themeColor: ThemeColor;
+  onNavigate?: (section: string, data?: any) => void;
 }
 
 interface VoidItem {
@@ -125,7 +129,7 @@ const generateVoidContent = (): VoidItem[] => {
   }));
 };
 
-const Void: React.FC<VoidProps> = ({ themeColor }) => {
+const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
@@ -151,6 +155,16 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
   const closeLightbox = () => {
     setLightboxImage(null);
     setTimeout(() => setIsAutoScrolling(true), 500);
+  };
+
+  // Handle Forge navigation with pre-selected image and mode
+  const handleForge = (imageSrc: string, mode: ForgeMode) => {
+    if (onNavigate) {
+      onNavigate('forge', { 
+        preselectedImage: imageSrc,
+        preselectedMode: mode 
+      });
+    }
   };
 
   // Duplicate items for seamless infinite scroll
@@ -238,53 +252,15 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
       >
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-4 auto-rows-[120px] md:auto-rows-[200px]">
           {infiniteItems.map((item, index) => (
-            <div
+            <VoidItemCard
               key={`${item.id}-${index}`}
-              onClick={() => openLightbox(item)}
-              className={`
-                ${getSizeClasses(item.size)}
-                void-item group relative overflow-hidden
-                bg-white/5 backdrop-blur-sm
-                border border-white/5
-                transition-all duration-500
-                cursor-pointer
-              `}
-            >
-              {/* Image */}
-              <img
-                src={item.content}
-                alt=""
-                loading="lazy"
-                className="w-full h-full object-cover opacity-70 grayscale group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105"
-              />
-
-              {/* Glitch Overlay */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <div
-                  className="absolute inset-0 mix-blend-overlay"
-                  style={{
-                    backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.4\'/%3E%3C/svg%3E")',
-                  }}
-                />
-              </div>
-
-              {/* Caption */}
-              {item.caption && (
-                <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-y-2 group-hover:translate-y-0">
-                  <span
-                    className="mono text-[8px] md:text-[9px] uppercase tracking-widest drop-shadow-lg"
-                    style={{ color: 'rgba(var(--theme-rgb), 1)' }}
-                  >
-                    {item.caption}
-                  </span>
-                </div>
-              )}
-
-              {/* Corner Accents */}
-              <div className="void-corner absolute top-2 left-2 w-3 h-3 border-t border-l border-transparent transition-all duration-300" />
-              <div className="void-corner absolute bottom-2 right-2 w-3 h-3 border-b border-r border-transparent transition-all duration-300" />
-            </div>
+              id={item.id}
+              content={item.content}
+              size={item.size}
+              caption={item.caption}
+              onView={() => openLightbox(item)}
+              onForge={(mode) => handleForge(item.content, mode)}
+            />
           ))}
         </div>
       </div>
@@ -391,12 +367,6 @@ const Void: React.FC<VoidProps> = ({ themeColor }) => {
 
       {/* Theme-aware hover styles */}
       <style>{`
-        .void-item:hover {
-          border-color: rgba(var(--theme-rgb), 0.5);
-        }
-        .void-item:hover .void-corner {
-          border-color: rgba(var(--theme-rgb), 0.6);
-        }
         .void-link:hover {
           color: rgba(var(--theme-rgb), 1);
         }

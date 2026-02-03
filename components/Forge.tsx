@@ -1,10 +1,17 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PurchaseModal from './PurchaseModal';
 
 type ForgeMode = 'style' | 'remix' | 'inpaint' | 'mashup' | 'collage';
 
+interface ForgePreselection {
+  image?: string;
+  mode?: 'style' | 'remix' | 'inpaint' | 'mashup';
+}
+
 interface ForgeProps {
   themeColor: string;
+  preselection?: ForgePreselection | null;
+  onClearPreselection?: () => void;
 }
 
 interface VoidImage {
@@ -114,7 +121,7 @@ const MODE_INFO: Record<ForgeMode, { name: string; description: string }> = {
   },
 };
 
-const Forge: React.FC<ForgeProps> = ({ themeColor }) => {
+const Forge: React.FC<ForgeProps> = ({ themeColor, preselection, onClearPreselection }) => {
   const [mode, setMode] = useState<ForgeMode>('style');
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [prompt, setPrompt] = useState('');
@@ -126,10 +133,26 @@ const Forge: React.FC<ForgeProps> = ({ themeColor }) => {
   const [error, setError] = useState<string | null>(null);
   const [showVoidPicker, setShowVoidPicker] = useState(false);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+  const [showPreselectionToast, setShowPreselectionToast] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [brushSize, setBrushSize] = useState(30);
+
+  // Handle preselection from Void
+  useEffect(() => {
+    if (preselection?.image) {
+      setSelectedImages([preselection.image]);
+      if (preselection.mode) {
+        setMode(preselection.mode);
+      }
+      setShowPreselectionToast(true);
+      // Clear the preselection after applying
+      onClearPreselection?.();
+      // Auto-hide toast after 3 seconds
+      setTimeout(() => setShowPreselectionToast(false), 3000);
+    }
+  }, [preselection, onClearPreselection]);
 
   // Handle image selection
   const toggleImageSelection = (src: string) => {
@@ -715,6 +738,43 @@ const Forge: React.FC<ForgeProps> = ({ themeColor }) => {
           transmissionNumber={transmissionNumber}
         />
       )}
+
+      {/* Preselection Toast */}
+      {showPreselectionToast && (
+        <div 
+          className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-black/90 border animate-fade-in-up"
+          style={{ borderColor: 'rgba(var(--theme-rgb), 0.6)' }}
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-lg">⚡</span>
+            <div>
+              <p className="mono text-[10px] uppercase tracking-wider" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
+                Image Loaded from Void
+              </p>
+              <p className="mono text-[8px] uppercase tracking-wider text-white/50 mt-0.5">
+                Ready to transmute
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Animation */}
+      <style>{`
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translate(-50%, 20px);
+          }
+          to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+          }
+        }
+        .animate-fade-in-up {
+          animation: fade-in-up 0.3s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 };
