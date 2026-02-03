@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-01-26T12:55:22.562Z",
+  "lastUpdated": "2026-02-03T02:46:11.743Z",
   "totalPieces": 225,
   "series": {
     "void-transmissions": {
@@ -219,7 +219,7 @@
         "width": 1200,
         "height": 527
       },
-      "fileSize": 72936,
+      "fileSize": 52183,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -254,7 +254,7 @@
         "width": 1200,
         "height": 936
       },
-      "fileSize": 192559,
+      "fileSize": 132677,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -289,7 +289,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 274447,
+      "fileSize": 184001,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -324,7 +324,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 253382,
+      "fileSize": 172063,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -359,7 +359,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 243132,
+      "fileSize": 164749,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -394,7 +394,7 @@
         "width": 1200,
         "height": 578
       },
-      "fileSize": 133349,
+      "fileSize": 97984,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -429,7 +429,7 @@
         "width": 1200,
         "height": 1176
       },
-      "fileSize": 292664,
+      "fileSize": 202999,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -464,7 +464,7 @@
         "width": 957,
         "height": 1200
       },
-      "fileSize": 270388,
+      "fileSize": 181569,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -499,7 +499,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 75679,
+      "fileSize": 53418,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -534,7 +534,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 147156,
+      "fileSize": 104892,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -569,7 +569,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 136451,
+      "fileSize": 96831,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -604,7 +604,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 102231,
+      "fileSize": 72540,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -639,7 +639,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 66879,
+      "fileSize": 46431,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -674,7 +674,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 104794,
+      "fileSize": 76981,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -709,7 +709,7 @@
         "width": 1200,
         "height": 603
       },
-      "fileSize": 116574,
+      "fileSize": 80520,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -744,7 +744,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 179257,
+      "fileSize": 127411,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -779,7 +779,7 @@
         "width": 1200,
         "height": 783
       },
-      "fileSize": 161440,
+      "fileSize": 112431,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -814,7 +814,7 @@
         "width": 346,
         "height": 1200
       },
-      "fileSize": 97559,
+      "fileSize": 68656,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -849,7 +849,7 @@
         "width": 922,
         "height": 1200
       },
-      "fileSize": 184221,
+      "fileSize": 137594,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -884,7 +884,7 @@
         "width": 900,
         "height": 1200
       },
-      "fileSize": 233103,
+      "fileSize": 161423,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -919,7 +919,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 207958,
+      "fileSize": 145416,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -954,7 +954,7 @@
         "width": 901,
         "height": 1200
       },
-      "fileSize": 215449,
+      "fileSize": 153579,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -989,7 +989,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 229490,
+      "fileSize": 157181,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1024,7 +1024,7 @@
         "width": 900,
         "height": 1200
       },
-      "fileSize": 267920,
+      "fileSize": 187784,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1059,7 +1059,7 @@
         "width": 900,
         "height": 1200
       },
-      "fileSize": 281554,
+      "fileSize": 190017,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1094,7 +1094,7 @@
         "width": 898,
         "height": 1200
       },
-      "fileSize": 313418,
+      "fileSize": 227336,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1129,7 +1129,7 @@
         "width": 793,
         "height": 1200
       },
-      "fileSize": 121502,
+      "fileSize": 87880,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1164,7 +1164,7 @@
         "width": 1200,
         "height": 512
       },
-      "fileSize": 85954,
+      "fileSize": 63145,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1199,7 +1199,7 @@
         "width": 886,
         "height": 1200
       },
-      "fileSize": 174212,
+      "fileSize": 123858,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1234,7 +1234,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 153993,
+      "fileSize": 114651,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1269,7 +1269,7 @@
         "width": 850,
         "height": 1200
       },
-      "fileSize": 202626,
+      "fileSize": 137283,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1304,7 +1304,7 @@
         "width": 949,
         "height": 1200
       },
-      "fileSize": 187862,
+      "fileSize": 145721,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1339,7 +1339,7 @@
         "width": 975,
         "height": 1200
       },
-      "fileSize": 279921,
+      "fileSize": 200808,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1374,7 +1374,7 @@
         "width": 1200,
         "height": 674
       },
-      "fileSize": 132474,
+      "fileSize": 90941,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1409,7 +1409,7 @@
         "width": 427,
         "height": 1200
       },
-      "fileSize": 123336,
+      "fileSize": 86156,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1444,7 +1444,7 @@
         "width": 1005,
         "height": 1200
       },
-      "fileSize": 225336,
+      "fileSize": 160581,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1479,7 +1479,7 @@
         "width": 875,
         "height": 1200
       },
-      "fileSize": 149833,
+      "fileSize": 105068,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1514,7 +1514,7 @@
         "width": 963,
         "height": 1200
       },
-      "fileSize": 141480,
+      "fileSize": 100234,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1549,7 +1549,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 226191,
+      "fileSize": 163413,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1584,7 +1584,7 @@
         "width": 921,
         "height": 1200
       },
-      "fileSize": 280298,
+      "fileSize": 190944,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1619,7 +1619,7 @@
         "width": 1200,
         "height": 444
       },
-      "fileSize": 70381,
+      "fileSize": 48207,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1654,7 +1654,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 198740,
+      "fileSize": 137651,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1689,7 +1689,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 242379,
+      "fileSize": 172774,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1724,7 +1724,7 @@
         "width": 802,
         "height": 1200
       },
-      "fileSize": 236015,
+      "fileSize": 156816,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1759,7 +1759,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 146625,
+      "fileSize": 106230,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1794,7 +1794,7 @@
         "width": 900,
         "height": 1200
       },
-      "fileSize": 170650,
+      "fileSize": 126547,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1829,7 +1829,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 208676,
+      "fileSize": 145265,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1864,7 +1864,7 @@
         "width": 477,
         "height": 1200
       },
-      "fileSize": 156658,
+      "fileSize": 111170,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1899,7 +1899,7 @@
         "width": 871,
         "height": 1200
       },
-      "fileSize": 274159,
+      "fileSize": 185005,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1934,7 +1934,7 @@
         "width": 1200,
         "height": 602
       },
-      "fileSize": 208364,
+      "fileSize": 141623,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -1969,7 +1969,7 @@
         "width": 918,
         "height": 1200
       },
-      "fileSize": 274458,
+      "fileSize": 192858,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2004,7 +2004,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 147398,
+      "fileSize": 101814,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2039,7 +2039,7 @@
         "width": 977,
         "height": 1200
       },
-      "fileSize": 220380,
+      "fileSize": 165097,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2074,7 +2074,7 @@
         "width": 954,
         "height": 1200
       },
-      "fileSize": 249653,
+      "fileSize": 176287,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2109,7 +2109,7 @@
         "width": 943,
         "height": 1200
       },
-      "fileSize": 312871,
+      "fileSize": 217294,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2144,7 +2144,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 146169,
+      "fileSize": 100079,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2179,7 +2179,7 @@
         "width": 595,
         "height": 1200
       },
-      "fileSize": 189248,
+      "fileSize": 130789,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2214,7 +2214,7 @@
         "width": 998,
         "height": 1200
       },
-      "fileSize": 260043,
+      "fileSize": 178811,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2249,7 +2249,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 234579,
+      "fileSize": 171624,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2284,7 +2284,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 180890,
+      "fileSize": 133011,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2319,7 +2319,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 166523,
+      "fileSize": 122496,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2354,7 +2354,7 @@
         "width": 900,
         "height": 1200
       },
-      "fileSize": 227465,
+      "fileSize": 164174,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2389,7 +2389,7 @@
         "width": 779,
         "height": 1200
       },
-      "fileSize": 266468,
+      "fileSize": 182906,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2424,7 +2424,7 @@
         "width": 795,
         "height": 1200
       },
-      "fileSize": 199031,
+      "fileSize": 141985,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2459,7 +2459,7 @@
         "width": 900,
         "height": 1200
       },
-      "fileSize": 276169,
+      "fileSize": 202729,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2494,7 +2494,7 @@
         "width": 914,
         "height": 1200
       },
-      "fileSize": 141741,
+      "fileSize": 97354,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2529,7 +2529,7 @@
         "width": 1200,
         "height": 1177
       },
-      "fileSize": 234705,
+      "fileSize": 172159,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2564,7 +2564,7 @@
         "width": 1200,
         "height": 1177
       },
-      "fileSize": 273778,
+      "fileSize": 192732,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2599,7 +2599,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 135303,
+      "fileSize": 98109,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2634,7 +2634,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 140170,
+      "fileSize": 99726,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2669,7 +2669,7 @@
         "width": 1200,
         "height": 807
       },
-      "fileSize": 109858,
+      "fileSize": 82065,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2704,7 +2704,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 75635,
+      "fileSize": 57814,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2739,7 +2739,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 178844,
+      "fileSize": 130905,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2774,7 +2774,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 220870,
+      "fileSize": 164367,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2809,7 +2809,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 193413,
+      "fileSize": 137151,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2844,7 +2844,7 @@
         "width": 882,
         "height": 1200
       },
-      "fileSize": 108212,
+      "fileSize": 77614,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2879,7 +2879,7 @@
         "width": 828,
         "height": 1200
       },
-      "fileSize": 123687,
+      "fileSize": 89075,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2914,7 +2914,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 188943,
+      "fileSize": 138064,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2949,7 +2949,7 @@
         "width": 577,
         "height": 1200
       },
-      "fileSize": 168219,
+      "fileSize": 113207,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -2984,7 +2984,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 121839,
+      "fileSize": 87676,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3019,7 +3019,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 164437,
+      "fileSize": 118878,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3054,7 +3054,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 212546,
+      "fileSize": 156557,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3089,7 +3089,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 202808,
+      "fileSize": 151375,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3124,7 +3124,7 @@
         "width": 739,
         "height": 1200
       },
-      "fileSize": 231552,
+      "fileSize": 158895,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3159,7 +3159,7 @@
         "width": 739,
         "height": 1200
       },
-      "fileSize": 247004,
+      "fileSize": 167005,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3194,7 +3194,7 @@
         "width": 760,
         "height": 1200
       },
-      "fileSize": 245404,
+      "fileSize": 171804,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3229,7 +3229,7 @@
         "width": 573,
         "height": 1200
       },
-      "fileSize": 65062,
+      "fileSize": 42503,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3264,7 +3264,7 @@
         "width": 940,
         "height": 1200
       },
-      "fileSize": 148556,
+      "fileSize": 103006,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3299,7 +3299,7 @@
         "width": 903,
         "height": 1200
       },
-      "fileSize": 229468,
+      "fileSize": 153692,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3334,7 +3334,7 @@
         "width": 879,
         "height": 1200
       },
-      "fileSize": 263519,
+      "fileSize": 184818,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3369,7 +3369,7 @@
         "width": 809,
         "height": 1200
       },
-      "fileSize": 283204,
+      "fileSize": 198454,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3404,7 +3404,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 238422,
+      "fileSize": 171302,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3439,7 +3439,7 @@
         "width": 1200,
         "height": 792
       },
-      "fileSize": 190866,
+      "fileSize": 137802,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3474,7 +3474,7 @@
         "width": 902,
         "height": 1200
       },
-      "fileSize": 243015,
+      "fileSize": 163121,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3509,7 +3509,7 @@
         "width": 720,
         "height": 1200
       },
-      "fileSize": 140822,
+      "fileSize": 99590,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3544,7 +3544,7 @@
         "width": 1200,
         "height": 400
       },
-      "fileSize": 148526,
+      "fileSize": 102446,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3579,7 +3579,7 @@
         "width": 1200,
         "height": 896
       },
-      "fileSize": 246193,
+      "fileSize": 180575,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3614,7 +3614,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 223255,
+      "fileSize": 150143,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3649,7 +3649,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 181715,
+      "fileSize": 121781,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3684,7 +3684,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 213644,
+      "fileSize": 147352,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3719,7 +3719,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 156720,
+      "fileSize": 114615,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3754,7 +3754,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 213451,
+      "fileSize": 150089,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3789,7 +3789,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 158157,
+      "fileSize": 113268,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3824,7 +3824,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 288329,
+      "fileSize": 202387,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3859,7 +3859,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 242941,
+      "fileSize": 173889,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3894,7 +3894,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 211478,
+      "fileSize": 152518,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3929,7 +3929,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 224943,
+      "fileSize": 161665,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3964,7 +3964,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 231711,
+      "fileSize": 160394,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -3999,7 +3999,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 179861,
+      "fileSize": 139311,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4034,7 +4034,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 256447,
+      "fileSize": 182003,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4069,7 +4069,7 @@
         "width": 1200,
         "height": 1103
       },
-      "fileSize": 277000,
+      "fileSize": 187546,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4104,7 +4104,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 184870,
+      "fileSize": 132268,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4139,7 +4139,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 225898,
+      "fileSize": 157030,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4174,7 +4174,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 255606,
+      "fileSize": 166781,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4209,7 +4209,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 456535,
+      "fileSize": 314525,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4244,7 +4244,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 364243,
+      "fileSize": 246761,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4279,7 +4279,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 317281,
+      "fileSize": 212707,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4314,7 +4314,7 @@
         "width": 904,
         "height": 1200
       },
-      "fileSize": 246505,
+      "fileSize": 196899,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4349,7 +4349,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 170320,
+      "fileSize": 132829,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4384,7 +4384,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 306640,
+      "fileSize": 214357,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4419,7 +4419,7 @@
         "width": 905,
         "height": 1200
       },
-      "fileSize": 283843,
+      "fileSize": 210116,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4454,7 +4454,7 @@
         "width": 686,
         "height": 1200
       },
-      "fileSize": 159996,
+      "fileSize": 119566,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4489,7 +4489,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 302926,
+      "fileSize": 225935,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4524,7 +4524,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 173773,
+      "fileSize": 133041,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4559,7 +4559,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 241888,
+      "fileSize": 177449,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4594,7 +4594,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 240258,
+      "fileSize": 178465,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4629,7 +4629,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 193028,
+      "fileSize": 143556,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4664,7 +4664,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 101810,
+      "fileSize": 76815,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4699,7 +4699,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 209010,
+      "fileSize": 157106,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4734,7 +4734,7 @@
         "width": 889,
         "height": 1200
       },
-      "fileSize": 332116,
+      "fileSize": 227015,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4769,7 +4769,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 182307,
+      "fileSize": 128206,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4804,7 +4804,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 228259,
+      "fileSize": 156434,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4839,7 +4839,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 185054,
+      "fileSize": 132736,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4874,7 +4874,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 204525,
+      "fileSize": 147303,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4909,7 +4909,7 @@
         "width": 647,
         "height": 1200
       },
-      "fileSize": 149985,
+      "fileSize": 113165,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4944,7 +4944,7 @@
         "width": 714,
         "height": 1200
       },
-      "fileSize": 215012,
+      "fileSize": 140516,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -4979,7 +4979,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 133096,
+      "fileSize": 99538,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5014,7 +5014,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 196565,
+      "fileSize": 148818,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5049,7 +5049,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 251029,
+      "fileSize": 186016,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5084,7 +5084,7 @@
         "width": 435,
         "height": 1200
       },
-      "fileSize": 142751,
+      "fileSize": 98552,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5119,7 +5119,7 @@
         "width": 455,
         "height": 1200
       },
-      "fileSize": 78467,
+      "fileSize": 57019,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5154,7 +5154,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 261083,
+      "fileSize": 184194,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5189,7 +5189,7 @@
         "width": 1200,
         "height": 900
       },
-      "fileSize": 192864,
+      "fileSize": 126091,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5224,7 +5224,7 @@
         "width": 975,
         "height": 1200
       },
-      "fileSize": 231616,
+      "fileSize": 161198,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5259,7 +5259,7 @@
         "width": 821,
         "height": 1200
       },
-      "fileSize": 179367,
+      "fileSize": 125614,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5294,7 +5294,7 @@
         "width": 900,
         "height": 1200
       },
-      "fileSize": 169938,
+      "fileSize": 119739,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5329,7 +5329,7 @@
         "width": 800,
         "height": 1200
       },
-      "fileSize": 97367,
+      "fileSize": 71196,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5364,7 +5364,7 @@
         "width": 1200,
         "height": 527
       },
-      "fileSize": 125025,
+      "fileSize": 86415,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5399,7 +5399,7 @@
         "width": 927,
         "height": 1200
       },
-      "fileSize": 301398,
+      "fileSize": 200172,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5434,7 +5434,7 @@
         "width": 1200,
         "height": 837
       },
-      "fileSize": 309480,
+      "fileSize": 210779,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5470,7 +5470,7 @@
         "width": 1024,
         "height": 1024
       },
-      "fileSize": 105272,
+      "fileSize": 78643,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5506,7 +5506,7 @@
         "width": 1200,
         "height": 1200
       },
-      "fileSize": 371080,
+      "fileSize": 266392,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5541,7 +5541,7 @@
         "width": 632,
         "height": 984
       },
-      "fileSize": 92575,
+      "fileSize": 64045,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5576,7 +5576,7 @@
         "width": 1024,
         "height": 1024
       },
-      "fileSize": 81211,
+      "fileSize": 63823,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5611,7 +5611,7 @@
         "width": 1024,
         "height": 1024
       },
-      "fileSize": 116976,
+      "fileSize": 83921,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5647,7 +5647,7 @@
         "width": 1024,
         "height": 1024
       },
-      "fileSize": 135038,
+      "fileSize": 93146,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5682,7 +5682,7 @@
         "width": 631,
         "height": 1200
       },
-      "fileSize": 200464,
+      "fileSize": 141335,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5717,7 +5717,7 @@
         "width": 896,
         "height": 1200
       },
-      "fileSize": 334428,
+      "fileSize": 227579,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5752,7 +5752,7 @@
         "width": 1200,
         "height": 402
       },
-      "fileSize": 134902,
+      "fileSize": 94588,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5787,7 +5787,7 @@
         "width": 1024,
         "height": 1024
       },
-      "fileSize": 138635,
+      "fileSize": 94907,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5822,7 +5822,7 @@
         "width": 1200,
         "height": 524
       },
-      "fileSize": 154373,
+      "fileSize": 108272,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5857,7 +5857,7 @@
         "width": 619,
         "height": 1200
       },
-      "fileSize": 126090,
+      "fileSize": 93326,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5892,7 +5892,7 @@
         "width": 1121,
         "height": 1200
       },
-      "fileSize": 323397,
+      "fileSize": 221431,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5927,7 +5927,7 @@
         "width": 960,
         "height": 1200
       },
-      "fileSize": 314455,
+      "fileSize": 201112,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5962,7 +5962,7 @@
         "width": 960,
         "height": 1200
       },
-      "fileSize": 216047,
+      "fileSize": 149296,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -5997,7 +5997,7 @@
         "width": 960,
         "height": 1200
       },
-      "fileSize": 249729,
+      "fileSize": 177908,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6032,7 +6032,7 @@
         "width": 661,
         "height": 661
       },
-      "fileSize": 123830,
+      "fileSize": 88670,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6067,7 +6067,7 @@
         "width": 1000,
         "height": 1000
       },
-      "fileSize": 195886,
+      "fileSize": 137842,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6102,7 +6102,7 @@
         "width": 1074,
         "height": 1200
       },
-      "fileSize": 201346,
+      "fileSize": 154327,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6137,7 +6137,7 @@
         "width": 337,
         "height": 337
       },
-      "fileSize": 20063,
+      "fileSize": 14638,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6172,7 +6172,7 @@
         "width": 960,
         "height": 1200
       },
-      "fileSize": 194035,
+      "fileSize": 128617,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6207,7 +6207,7 @@
         "width": 963,
         "height": 1200
       },
-      "fileSize": 307187,
+      "fileSize": 209360,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6242,7 +6242,7 @@
         "width": 962,
         "height": 1200
       },
-      "fileSize": 175490,
+      "fileSize": 127877,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6277,7 +6277,7 @@
         "width": 963,
         "height": 1200
       },
-      "fileSize": 90888,
+      "fileSize": 64300,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6312,7 +6312,7 @@
         "width": 963,
         "height": 1200
       },
-      "fileSize": 172946,
+      "fileSize": 129303,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6347,7 +6347,7 @@
         "width": 1200,
         "height": 1200
       },
-      "fileSize": 311797,
+      "fileSize": 237138,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6383,7 +6383,7 @@
         "width": 896,
         "height": 1200
       },
-      "fileSize": 235511,
+      "fileSize": 162098,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6418,7 +6418,7 @@
         "width": 800,
         "height": 1200
       },
-      "fileSize": 239557,
+      "fileSize": 169970,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6453,7 +6453,7 @@
         "width": 686,
         "height": 1200
       },
-      "fileSize": 141609,
+      "fileSize": 94194,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6489,7 +6489,7 @@
         "width": 800,
         "height": 1200
       },
-      "fileSize": 184802,
+      "fileSize": 127444,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6524,7 +6524,7 @@
         "width": 927,
         "height": 1200
       },
-      "fileSize": 175514,
+      "fileSize": 123988,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6559,7 +6559,7 @@
         "width": 1050,
         "height": 1074
       },
-      "fileSize": 78562,
+      "fileSize": 54720,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6594,7 +6594,7 @@
         "width": 849,
         "height": 1200
       },
-      "fileSize": 256512,
+      "fileSize": 168667,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6629,7 +6629,7 @@
         "width": 838,
         "height": 1084
       },
-      "fileSize": 222280,
+      "fileSize": 150384,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6664,7 +6664,7 @@
         "width": 945,
         "height": 1200
       },
-      "fileSize": 216257,
+      "fileSize": 149540,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6699,7 +6699,7 @@
         "width": 1200,
         "height": 814
       },
-      "fileSize": 344561,
+      "fileSize": 238922,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6734,7 +6734,7 @@
         "width": 900,
         "height": 1200
       },
-      "fileSize": 206864,
+      "fileSize": 140067,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6769,7 +6769,7 @@
         "width": 899,
         "height": 1200
       },
-      "fileSize": 271944,
+      "fileSize": 186257,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6804,7 +6804,7 @@
         "width": 944,
         "height": 1200
       },
-      "fileSize": 157942,
+      "fileSize": 116959,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6840,7 +6840,7 @@
         "width": 855,
         "height": 1200
       },
-      "fileSize": 219895,
+      "fileSize": 151114,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6875,7 +6875,7 @@
         "width": 927,
         "height": 1200
       },
-      "fileSize": 290014,
+      "fileSize": 188418,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6910,7 +6910,7 @@
         "width": 896,
         "height": 1200
       },
-      "fileSize": 245083,
+      "fileSize": 165992,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6945,7 +6945,7 @@
         "width": 439,
         "height": 579
       },
-      "fileSize": 51257,
+      "fileSize": 35931,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -6980,7 +6980,7 @@
         "width": 1200,
         "height": 1014
       },
-      "fileSize": 251063,
+      "fileSize": 181841,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7015,7 +7015,7 @@
         "width": 561,
         "height": 813
       },
-      "fileSize": 69045,
+      "fileSize": 44372,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7050,7 +7050,7 @@
         "width": 511,
         "height": 659
       },
-      "fileSize": 46734,
+      "fileSize": 30581,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7085,7 +7085,7 @@
         "width": 1027,
         "height": 373
       },
-      "fileSize": 56224,
+      "fileSize": 38030,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7120,7 +7120,7 @@
         "width": 1200,
         "height": 495
       },
-      "fileSize": 90088,
+      "fileSize": 64953,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7155,7 +7155,7 @@
         "width": 1103,
         "height": 481
       },
-      "fileSize": 79334,
+      "fileSize": 55064,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7190,7 +7190,7 @@
         "width": 1160,
         "height": 567
       },
-      "fileSize": 84568,
+      "fileSize": 61463,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7225,7 +7225,7 @@
         "width": 1200,
         "height": 616
       },
-      "fileSize": 77210,
+      "fileSize": 53301,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7260,7 +7260,7 @@
         "width": 1200,
         "height": 531
       },
-      "fileSize": 66162,
+      "fileSize": 46357,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7295,7 +7295,7 @@
         "width": 1200,
         "height": 491
       },
-      "fileSize": 77887,
+      "fileSize": 52311,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7330,7 +7330,7 @@
         "width": 849,
         "height": 1200
       },
-      "fileSize": 219324,
+      "fileSize": 159949,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7365,7 +7365,7 @@
         "width": 614,
         "height": 610
       },
-      "fileSize": 58657,
+      "fileSize": 43282,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7400,7 +7400,7 @@
         "width": 747,
         "height": 913
       },
-      "fileSize": 183476,
+      "fileSize": 130287,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7435,7 +7435,7 @@
         "width": 799,
         "height": 1200
       },
-      "fileSize": 186029,
+      "fileSize": 133950,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7470,7 +7470,7 @@
         "width": 797,
         "height": 1200
       },
-      "fileSize": 223895,
+      "fileSize": 154345,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7505,7 +7505,7 @@
         "width": 726,
         "height": 892
       },
-      "fileSize": 136535,
+      "fileSize": 94431,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7540,7 +7540,7 @@
         "width": 811,
         "height": 1200
       },
-      "fileSize": 163543,
+      "fileSize": 114900,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7575,7 +7575,7 @@
         "width": 1002,
         "height": 354
       },
-      "fileSize": 53374,
+      "fileSize": 37401,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7610,7 +7610,7 @@
         "width": 915,
         "height": 1200
       },
-      "fileSize": 124783,
+      "fileSize": 87342,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7645,7 +7645,7 @@
         "width": 813,
         "height": 1175
       },
-      "fileSize": 92419,
+      "fileSize": 65995,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7680,7 +7680,7 @@
         "width": 1052,
         "height": 346
       },
-      "fileSize": 65005,
+      "fileSize": 45180,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7715,7 +7715,7 @@
         "width": 970,
         "height": 1200
       },
-      "fileSize": 215141,
+      "fileSize": 145683,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7750,7 +7750,7 @@
         "width": 970,
         "height": 1200
       },
-      "fileSize": 182711,
+      "fileSize": 126382,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7785,7 +7785,7 @@
         "width": 800,
         "height": 1200
       },
-      "fileSize": 229508,
+      "fileSize": 157521,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7820,7 +7820,7 @@
         "width": 1062,
         "height": 800
       },
-      "fileSize": 178899,
+      "fileSize": 124253,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7855,7 +7855,7 @@
         "width": 1200,
         "height": 800
       },
-      "fileSize": 255770,
+      "fileSize": 173312,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7890,7 +7890,7 @@
         "width": 896,
         "height": 1200
       },
-      "fileSize": 230698,
+      "fileSize": 156221,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7925,7 +7925,7 @@
         "width": 848,
         "height": 1200
       },
-      "fileSize": 92264,
+      "fileSize": 67355,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7960,7 +7960,7 @@
         "width": 800,
         "height": 1200
       },
-      "fileSize": 92823,
+      "fileSize": 68875,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -7995,7 +7995,7 @@
         "width": 690,
         "height": 1200
       },
-      "fileSize": 270178,
+      "fileSize": 173951,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -8030,7 +8030,7 @@
         "width": 900,
         "height": 1200
       },
-      "fileSize": 160494,
+      "fileSize": 117115,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
@@ -8065,7 +8065,7 @@
         "width": 900,
         "height": 1200
       },
-      "fileSize": 224026,
+      "fileSize": 154522,
       "dominantColors": null,
       "forgeEnabled": true,
       "forgeWeight": 5,
