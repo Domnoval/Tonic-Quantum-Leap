@@ -98,26 +98,79 @@ const VOID_IMAGES: VoidImage[] = VOID_IMAGE_NAMES.map((name, i) => ({
   name: `Transmission ${String(i + 1).padStart(3, '0')}`,
 }));
 
-const MODE_INFO: Record<ForgeMode, { name: string; description: string }> = {
+const MODE_INFO: Record<ForgeMode, { name: string; description: string; icon: string }> = {
   style: {
     name: 'Style Alchemy',
     description: 'Use Void art as style reference + your prompt = new creation',
+    icon: '⚗️',
   },
   remix: {
     name: 'Corruption',
     description: 'Mutate and transform a Void piece with AI guidance',
+    icon: '🌀',
   },
   inpaint: {
     name: 'The Surgeon',
     description: 'Paint a mask, prompt what fills it',
+    icon: '🔪',
   },
   mashup: {
     name: 'Fusion',
     description: 'Blend multiple Void pieces into one',
+    icon: '⚡',
   },
   collage: {
     name: 'Manual Collage',
     description: 'Layer and compose without AI',
+    icon: '🎨',
+  },
+};
+
+const MODE_GUIDANCE: Record<ForgeMode, { steps: string[]; tip: string }> = {
+  style: {
+    steps: [
+      'Select 1-3 Void pieces as style references',
+      'Describe what you want to create',
+      'Adjust creativity level (higher = more deviation)',
+      'Hit Forge to generate your creation',
+    ],
+    tip: 'The AI extracts visual essence from your selections and applies it to your prompt. Try mixing contrasting styles!',
+  },
+  remix: {
+    steps: [
+      'Select a single Void piece to transform',
+      'Describe how you want it changed',
+      'Use creativity slider to control mutation intensity',
+      'Forge it into something new',
+    ],
+    tip: 'Lower creativity keeps more of the original. Higher creativity allows wilder mutations.',
+  },
+  inpaint: {
+    steps: [
+      'Select an image to edit',
+      'Paint over the area you want to change',
+      'Describe what should fill that space',
+      'Forge to seamlessly replace the masked area',
+    ],
+    tip: 'Use a larger brush for big areas, smaller for details. The AI blends edges automatically.',
+  },
+  mashup: {
+    steps: [
+      'Select 2-4 Void pieces to blend',
+      'Optionally add a guiding prompt',
+      'Adjust chaos level for blend intensity',
+      'Forge to fuse them into one piece',
+    ],
+    tip: 'The chaos slider controls how wildly the images blend. Low = subtle merge, High = fever dream.',
+  },
+  collage: {
+    steps: [
+      'Select images to add to your canvas',
+      'Drag, resize, and layer them',
+      'No AI involved — pure manual composition',
+      'Export when satisfied',
+    ],
+    tip: 'This mode is for hands-on creators who want full control without AI intervention.',
   },
 };
 
@@ -134,6 +187,7 @@ const Forge: React.FC<ForgeProps> = ({ themeColor, preselection, onClearPreselec
   const [showVoidPicker, setShowVoidPicker] = useState(false);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [showPreselectionToast, setShowPreselectionToast] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -311,13 +365,53 @@ const Forge: React.FC<ForgeProps> = ({ themeColor, preselection, onClearPreselec
     <div className="min-h-screen bg-black pt-20 md:pt-28 pb-20 px-4 md:px-8">
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-6 md:mb-8">
-        <h1 className="serif text-3xl md:text-5xl text-white italic mb-1 md:mb-2">The Forge</h1>
-        <p
-          className="mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em]"
-          style={{ color: 'rgba(var(--theme-rgb), 1)' }}
-        >
-          Transmute the void into your vision
-        </p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="serif text-3xl md:text-5xl text-white italic mb-1 md:mb-2">The Forge</h1>
+            <p
+              className="mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em]"
+              style={{ color: 'rgba(var(--theme-rgb), 1)' }}
+            >
+              Transmute Void artifacts into new creations
+            </p>
+          </div>
+          <button
+            onClick={() => setShowHelpModal(true)}
+            className="mono text-[10px] uppercase tracking-wider px-3 py-2 border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all flex items-center gap-2"
+          >
+            <span>?</span>
+            <span className="hidden md:inline">How It Works</span>
+          </button>
+        </div>
+
+        {/* Quick Process Overview */}
+        <div className="mt-4 md:mt-6 p-4 border border-white/10 bg-black/30">
+          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center mono text-xs">1</div>
+              <div>
+                <p className="mono text-[10px] uppercase tracking-wider text-white/80">Choose Mode</p>
+                <p className="mono text-[8px] text-white/40">Select your transmutation type</p>
+              </div>
+            </div>
+            <div className="hidden md:block text-white/20">→</div>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center mono text-xs">2</div>
+              <div>
+                <p className="mono text-[10px] uppercase tracking-wider text-white/80">Select Source</p>
+                <p className="mono text-[8px] text-white/40">Pick Void pieces to work with</p>
+              </div>
+            </div>
+            <div className="hidden md:block text-white/20">→</div>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center mono text-xs">3</div>
+              <div>
+                <p className="mono text-[10px] uppercase tracking-wider text-white/80">Forge</p>
+                <p className="mono text-[8px] text-white/40">Transmute into new creation</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -340,20 +434,65 @@ const Forge: React.FC<ForgeProps> = ({ themeColor, preselection, onClearPreselec
                   className={`flex-shrink-0 w-[140px] lg:w-full text-left p-3 md:p-4 border transition-all snap-start active:scale-95 ${
                     mode === m
                       ? 'border-white/40 bg-white/5'
-                      : 'border-white/10'
+                      : 'border-white/10 hover:border-white/20'
                   }`}
                 >
-                  <span
-                    className="mono text-[11px] md:text-xs uppercase tracking-wider block"
-                    style={{ color: mode === m ? 'rgba(var(--theme-rgb), 1)' : 'white' }}
-                  >
-                    {MODE_INFO[m].name}
-                  </span>
-                  <p className="text-white/40 text-[9px] md:text-[10px] mt-1 line-clamp-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm">{MODE_INFO[m].icon}</span>
+                    <span
+                      className="mono text-[11px] md:text-xs uppercase tracking-wider"
+                      style={{ color: mode === m ? 'rgba(var(--theme-rgb), 1)' : 'white' }}
+                    >
+                      {MODE_INFO[m].name}
+                    </span>
+                  </div>
+                  <p className="text-white/40 text-[9px] md:text-[10px] mt-1 line-clamp-2 pl-6">
                     {MODE_INFO[m].description}
                   </p>
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* Contextual Mode Guidance */}
+          <div 
+            className="border p-4 bg-black/30 transition-all duration-300"
+            style={{ borderColor: 'rgba(var(--theme-rgb), 0.3)' }}
+          >
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-lg">{MODE_INFO[mode].icon}</span>
+              <h3 
+                className="mono text-[11px] uppercase tracking-wider"
+                style={{ color: 'rgba(var(--theme-rgb), 1)' }}
+              >
+                {MODE_INFO[mode].name}
+              </h3>
+            </div>
+            
+            <div className="space-y-2 mb-4">
+              {MODE_GUIDANCE[mode].steps.map((step, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <span 
+                    className="mono text-[9px] w-4 h-4 rounded-full border flex items-center justify-center flex-shrink-0 mt-0.5"
+                    style={{ 
+                      borderColor: 'rgba(var(--theme-rgb), 0.5)',
+                      color: 'rgba(var(--theme-rgb), 1)'
+                    }}
+                  >
+                    {i + 1}
+                  </span>
+                  <span className="mono text-[10px] text-white/70">{step}</span>
+                </div>
+              ))}
+            </div>
+
+            <div 
+              className="p-3 border-l-2 bg-white/5"
+              style={{ borderColor: 'rgba(var(--theme-rgb), 0.5)' }}
+            >
+              <p className="mono text-[9px] text-white/50 leading-relaxed">
+                <span style={{ color: 'rgba(var(--theme-rgb), 1)' }}>💡 TIP:</span> {MODE_GUIDANCE[mode].tip}
+              </p>
             </div>
           </div>
 
@@ -737,6 +876,101 @@ const Forge: React.FC<ForgeProps> = ({ themeColor, preselection, onClearPreselec
           imageUrl={generatedImage}
           transmissionNumber={transmissionNumber}
         />
+      )}
+
+      {/* Help Modal */}
+      {showHelpModal && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
+          onClick={() => setShowHelpModal(false)}
+        >
+          <div 
+            className="relative max-w-2xl w-full max-h-[85vh] overflow-y-auto bg-black border border-white/20 p-6 md:p-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setShowHelpModal(false)}
+              className="absolute top-4 right-4 mono text-[10px] uppercase tracking-wider text-white/40 hover:text-white transition-colors"
+            >
+              [ CLOSE ]
+            </button>
+
+            {/* Header */}
+            <div className="mb-8">
+              <h2 className="serif text-3xl text-white italic mb-2">How The Forge Works</h2>
+              <p className="mono text-[10px] uppercase tracking-wider text-white/50">
+                Transform Void artifacts into new creations using AI
+              </p>
+            </div>
+
+            {/* Overview */}
+            <div className="mb-8 p-4 border border-white/10 bg-white/5">
+              <h3 className="mono text-xs uppercase tracking-wider mb-3" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
+                The Concept
+              </h3>
+              <p className="text-white/70 text-sm leading-relaxed">
+                The Forge is your portal to transmutation. Take any piece from The Void — paintings, 
+                photographs, digital experiments — and transform it into something new. Use AI to 
+                extract styles, mutate imagery, blend multiple pieces, or surgically edit specific areas.
+              </p>
+            </div>
+
+            {/* Modes Detailed */}
+            <div className="space-y-6">
+              <h3 className="mono text-xs uppercase tracking-wider text-white/40 mb-4">
+                Transmutation Modes
+              </h3>
+
+              {(Object.keys(MODE_INFO) as ForgeMode[]).map((m) => (
+                <div key={m} className="border border-white/10 p-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-xl">{MODE_INFO[m].icon}</span>
+                    <div>
+                      <h4 className="mono text-sm uppercase tracking-wider text-white">{MODE_INFO[m].name}</h4>
+                      <p className="mono text-[10px] text-white/50">{MODE_INFO[m].description}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    {MODE_GUIDANCE[m].steps.map((step, i) => (
+                      <div key={i} className="flex items-start gap-2">
+                        <span className="mono text-[8px] text-white/30">{i + 1}.</span>
+                        <span className="mono text-[10px] text-white/60">{step}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <p className="mono text-[9px] text-white/40 italic">
+                    💡 {MODE_GUIDANCE[m].tip}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Tips Section */}
+            <div className="mt-8 p-4 border-l-2" style={{ borderColor: 'rgba(var(--theme-rgb), 0.5)' }}>
+              <h3 className="mono text-xs uppercase tracking-wider mb-3" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
+                Pro Tips
+              </h3>
+              <ul className="space-y-2 mono text-[10px] text-white/60">
+                <li>• Start from The Void — hover any image and click "Forge This" to jump here with it pre-loaded</li>
+                <li>• Experiment with the chaos slider — sometimes the wildest results are the most interesting</li>
+                <li>• Be specific in your prompts — "a robot in a neon-lit alley" beats "something cool"</li>
+                <li>• Try Style Alchemy with contrasting pieces — mix organic with geometric, dark with bright</li>
+                <li>• Your creations can be purchased as prints once generated</li>
+              </ul>
+            </div>
+
+            {/* Close CTA */}
+            <button
+              onClick={() => setShowHelpModal(false)}
+              className="w-full mt-8 py-3 border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all mono text-[11px] uppercase tracking-wider"
+            >
+              Got It — Let's Forge
+            </button>
+          </div>
+        </div>
       )}
 
       {/* Preselection Toast */}
