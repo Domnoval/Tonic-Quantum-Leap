@@ -114,20 +114,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).end();
   }
 
-  const debugInfo = {
-    domain: SHOPIFY_DOMAIN,
-    tokenExists: !!ACCESS_TOKEN,
-    tokenType: isAdminToken ? 'Admin API' : 'Storefront API',
-    tokenPreview: ACCESS_TOKEN ? `${ACCESS_TOKEN.slice(0, 8)}...` : 'none'
-  };
-
-  console.log('Shopify API called:', debugInfo);
+  // Debug mode - return config info
+  if (req.query.debug === 'true') {
+    return res.status(200).json({
+      domain: SHOPIFY_DOMAIN,
+      tokenExists: !!ACCESS_TOKEN,
+      tokenType: isAdminToken ? 'Admin API' : 'Storefront API',
+      tokenPreview: ACCESS_TOKEN ? `${ACCESS_TOKEN.slice(0, 10)}...${ACCESS_TOKEN.slice(-4)}` : 'none',
+      tokenLength: ACCESS_TOKEN?.length || 0
+    });
+  }
 
   if (!ACCESS_TOKEN) {
-    return res.status(500).json({
+    return res.status(200).json({
       error: 'Shopify not configured',
-      message: 'Add SHOPIFY_ACCESS_TOKEN to environment variables',
-      debug: debugInfo
+      message: 'Add SHOPIFY_ACCESS_TOKEN to environment variables'
     });
   }
 
@@ -148,8 +149,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const query = isAdminToken ? ADMIN_GRAPHQL_QUERY : STOREFRONT_GRAPHQL_QUERY;
-
-    console.log('Fetching from Shopify...', { endpoint, isAdminToken });
     
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -157,34 +156,42 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       body: JSON.stringify({ query }),
     });
 
-    console.log('Shopify response status:', response.status);
-
     if (!response.ok) {
       const errorText = await response.text();
-      return res.status(500).json({
+      return res.status(200).json({
         error: 'Shopify API error',
         status: response.status,
         statusText: response.statusText,
-        body: errorText,
-        debug: debugInfo
+        body: errorText.slice(0, 500),
+        endpoint,
+        tokenType: isAdminToken ? 'Admin' : 'Storefront'
       });
     }
 
     let data = await response.json();
     
+    // Check for GraphQL errors
+    if (data.errors) {
+      return res.status(200).json({
+        error: 'GraphQL errors',
+        errors: data.errors,
+        endpoint,
+        tokenType: isAdminToken ? 'Admin' : 'Storefront'
+      });
+    }
+    
     // Transform Admin API response to match expected format
-    if (isAdminToken) {
+    if (isAdminToken && data.data?.products?.edges) {
       data = transformAdminResponse(data);
     }
     
     return res.status(200).json(data);
 
   } catch (error: any) {
-    console.error('Shopify proxy error:', error);
-    return res.status(500).json({
-      error: 'Failed to fetch from Shopify',
+    return res.status(200).json({
+      error: 'Exception occurred',
       message: error.message,
-      debug: debugInfo
+      stack: error.stack?.split('\n').slice(0, 3)
     });
   }
 }
