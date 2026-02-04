@@ -188,6 +188,8 @@ const Forge: React.FC<ForgeProps> = ({ themeColor, preselection, onClearPreselec
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [showPreselectionToast, setShowPreselectionToast] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
+  const [rateLimitInfo, setRateLimitInfo] = useState<{ remaining: number; limit: number } | null>(null);
+  const [showRateLimitWarning, setShowRateLimitWarning] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -331,15 +333,37 @@ const Forge: React.FC<ForgeProps> = ({ themeColor, preselection, onClearPreselec
         }),
       });
 
-      const data = await response.json();
-      console.log('Forge API response:', data);
+      // Safely parse JSON with error handling
+      let data;
+      const responseText = await response.text();
+      try {
+        data = responseText ? JSON.parse(responseText) : {};
+        console.log('Forge API response:', data);
+      } catch (parseError) {
+        console.error('JSON parse error:', parseError, 'Raw response:', responseText.substring(0, 500));
+        throw new Error('Server returned invalid response. Please try again.');
+      }
 
       if (!response.ok) {
+        // Handle rate limit specifically
+        if (response.status === 429) {
+          setShowRateLimitWarning(true);
+          throw new Error(data.message || 'Daily limit reached');
+        }
         throw new Error(data.message || data.error || 'Generation failed');
       }
 
       setGeneratedImage(data.resultUrl);
       setTransmissionNumber(data.transmissionNumber);
+      
+      // Update rate limit info
+      if (data.remaining !== undefined) {
+        setRateLimitInfo({ remaining: data.remaining, limit: data.limit });
+        if (data.remaining <= 2) {
+          setShowRateLimitWarning(true);
+          setTimeout(() => setShowRateLimitWarning(false), 5000);
+        }
+      }
     } catch (err: any) {
       console.error('Forge generation error:', err);
       setError(err.message || 'Transmission failed. Check your connection.');
@@ -375,13 +399,28 @@ const Forge: React.FC<ForgeProps> = ({ themeColor, preselection, onClearPreselec
               Transmute Void artifacts into new creations
             </p>
           </div>
-          <button
-            onClick={() => setShowHelpModal(true)}
-            className="mono text-[10px] uppercase tracking-wider px-3 py-2 border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all flex items-center gap-2"
-          >
-            <span>?</span>
-            <span className="hidden md:inline">How It Works</span>
-          </button>
+          <div className="flex items-center gap-3">
+            {rateLimitInfo && (
+              <div className="hidden md:flex items-center gap-2 px-3 py-2 border border-white/10 bg-black/30">
+                <span className="mono text-[9px] uppercase tracking-wider text-white/40">
+                  Transmissions:
+                </span>
+                <span 
+                  className="mono text-[10px] font-bold"
+                  style={{ color: rateLimitInfo.remaining <= 2 ? '#ff6b6b' : 'rgba(var(--theme-rgb), 1)' }}
+                >
+                  {rateLimitInfo.remaining}/{rateLimitInfo.limit}
+                </span>
+              </div>
+            )}
+            <button
+              onClick={() => setShowHelpModal(true)}
+              className="mono text-[10px] uppercase tracking-wider px-3 py-2 border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all flex items-center gap-2"
+            >
+              <span>?</span>
+              <span className="hidden md:inline">How It Works</span>
+            </button>
+          </div>
         </div>
 
         {/* Quick Process Overview */}
@@ -740,12 +779,12 @@ const Forge: React.FC<ForgeProps> = ({ themeColor, preselection, onClearPreselec
                   onClick={() => setShowPurchaseModal(true)}
                   className="flex-1 py-3 mono text-[10px] uppercase tracking-widest transition-colors"
                   style={{
-                    backgroundColor: 'rgba(var(--theme-rgb), 0.2)',
-                    border: '1px solid rgba(var(--theme-rgb), 0.5)',
-                    color: 'rgba(var(--theme-rgb), 1)',
+                    backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                    border: '1px solid rgba(245, 158, 11, 0.5)',
+                    color: 'rgb(251, 191, 36)',
                   }}
                 >
-                  Purchase Print
+                  🖼️ Order Print
                 </button>
               </div>
             )}
@@ -989,6 +1028,46 @@ const Forge: React.FC<ForgeProps> = ({ themeColor, preselection, onClearPreselec
                 Ready to transmute
               </p>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rate Limit Warning */}
+      {showRateLimitWarning && (
+        <div 
+          className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-6 py-4 bg-black/95 border border-red-500/50 animate-fade-in-up max-w-md"
+        >
+          <div className="flex items-start gap-3">
+            <span className="text-xl">⚠️</span>
+            <div>
+              <p className="mono text-[11px] uppercase tracking-wider text-red-400 mb-1">
+                {rateLimitInfo?.remaining === 0 ? 'Daily Limit Reached' : 'Running Low on Transmissions'}
+              </p>
+              <p className="mono text-[9px] text-white/60 leading-relaxed">
+                {rateLimitInfo?.remaining === 0 
+                  ? "You've used all your free transmissions for today. Come back tomorrow or grab some credits to keep forging!"
+                  : `Only ${rateLimitInfo?.remaining} transmissions left today. Make them count!`
+                }
+              </p>
+              {rateLimitInfo?.remaining === 0 && (
+                <button
+                  onClick={() => {
+                    // Navigate to credits purchase - implement based on your routing
+                    window.location.href = '/apothecary?credits=true';
+                  }}
+                  className="mt-3 px-4 py-2 mono text-[9px] uppercase tracking-wider bg-red-500/20 border border-red-500/50 hover:bg-red-500/30 transition-colors"
+                  style={{ color: '#ff6b6b' }}
+                >
+                  Get More Transmissions
+                </button>
+              )}
+            </div>
+            <button
+              onClick={() => setShowRateLimitWarning(false)}
+              className="mono text-[9px] text-white/40 hover:text-white"
+            >
+              ✕
+            </button>
           </div>
         </div>
       )}

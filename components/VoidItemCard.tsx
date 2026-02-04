@@ -9,6 +9,7 @@ interface VoidItemCardProps {
   caption?: string;
   onView: () => void;
   onForge: (mode: ForgeMode) => void;
+  onPrint?: () => void;
 }
 
 const FORGE_MODES: { mode: ForgeMode; icon: string; label: string; description: string }[] = [
@@ -25,10 +26,12 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
   caption,
   onView,
   onForge,
+  onPrint,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [scanPhase, setScanPhase] = useState(0);
   const [hoveredMode, setHoveredMode] = useState<ForgeMode | null>(null);
+  const [hoveredAction, setHoveredAction] = useState<string | null>(null);
 
   // Scanning animation
   useEffect(() => {
@@ -64,6 +67,11 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
   const handleViewClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onView();
+  };
+
+  const handlePrintClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onPrint?.();
   };
 
   return (
@@ -109,6 +117,23 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
             }
           `}
         />
+
+        {/* ✨ FEATURE 1: Print Available Badge (subtle, always visible) */}
+        <div
+          className={`
+            absolute top-2 right-2 z-10
+            flex items-center gap-1
+            px-1.5 py-0.5
+            bg-black/70 backdrop-blur-sm
+            border border-amber-500/30
+            transition-all duration-300
+            ${isHovered ? 'opacity-0 scale-90' : 'opacity-80 hover:opacity-100'}
+          `}
+        >
+          <span className="mono text-[7px] uppercase tracking-wider text-amber-400/80">
+            $65+
+          </span>
+        </div>
 
         {/* Scan Line Effect */}
         {isHovered && (
@@ -227,28 +252,53 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
             ${isHovered && scanPhase >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
           `}
         >
-          {/* Main Forge Button */}
-          <button
-            onClick={(e) => handleForgeClick(e, 'remix')}
-            className={`
-              w-full py-2 mb-2
-              bg-black/80 backdrop-blur-md
-              border border-[rgba(var(--theme-rgb),0.6)]
-              hover:border-[rgba(var(--theme-rgb),1)]
-              hover:bg-[rgba(var(--theme-rgb),0.15)]
-              transition-all duration-300
-              group/forge
-            `}
-          >
-            <span
-              className="mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2"
-              style={{ color: 'rgba(var(--theme-rgb), 1)' }}
+          {/* Two-button row: Forge + Materialize */}
+          <div className="grid grid-cols-2 gap-2 mb-2">
+            {/* Main Forge Button */}
+            <button
+              onClick={(e) => handleForgeClick(e, 'remix')}
+              className={`
+                py-2
+                bg-black/80 backdrop-blur-md
+                border border-[rgba(var(--theme-rgb),0.6)]
+                hover:border-[rgba(var(--theme-rgb),1)]
+                hover:bg-[rgba(var(--theme-rgb),0.15)]
+                transition-all duration-300
+                group/forge
+              `}
             >
-              <span className="text-sm">⚡</span>
-              FORGE THIS
-              <span className="opacity-0 group-hover/forge:opacity-100 transition-opacity">→</span>
-            </span>
-          </button>
+              <span
+                className="mono text-[9px] uppercase tracking-[0.15em] flex items-center justify-center gap-1.5"
+                style={{ color: 'rgba(var(--theme-rgb), 1)' }}
+              >
+                <span className="text-sm">⚡</span>
+                FORGE
+              </span>
+            </button>
+
+            {/* ✨ FEATURE 2: Get Print Button (hover action) */}
+            <button
+              onClick={handlePrintClick}
+              onMouseEnter={() => setHoveredAction('print')}
+              onMouseLeave={() => setHoveredAction(null)}
+              className={`
+                py-2
+                bg-black/80 backdrop-blur-md
+                border border-amber-500/40
+                hover:border-amber-400
+                hover:bg-amber-500/15
+                transition-all duration-300
+                group/print
+              `}
+            >
+              <span
+                className="mono text-[9px] uppercase tracking-[0.15em] flex items-center justify-center gap-1.5 text-amber-400/90 group-hover/print:text-amber-300"
+              >
+                <span className="text-sm">🖼️</span>
+                GET PRINT
+              </span>
+            </button>
+          </div>
 
           {/* Quick Mode Grid */}
           <div className="grid grid-cols-4 gap-1">
@@ -286,6 +336,17 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
             >
               <span className="mono text-[9px] uppercase tracking-wider" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
                 {FORGE_MODES.find(m => m.mode === hoveredMode)?.description}
+              </span>
+            </div>
+          )}
+
+          {/* Print Tooltip */}
+          {hoveredAction === 'print' && (
+            <div
+              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-black/90 border border-amber-500/40 whitespace-nowrap"
+            >
+              <span className="mono text-[9px] uppercase tracking-wider text-amber-400">
+                Order poster or canvas — ships worldwide
               </span>
             </div>
           )}

@@ -12,16 +12,22 @@ interface PurchaseModalProps {
   generationId?: string;
 }
 
-const PRINT_PRODUCTS = {
-  poster_12x18: { name: 'Poster 12×18"', price: 2900, description: 'Premium matte poster' },
-  poster_18x24: { name: 'Poster 18×24"', price: 3900, description: 'Premium matte poster' },
-  poster_24x36: { name: 'Poster 24×36"', price: 4900, description: 'Premium matte poster' },
-  canvas_12x12: { name: 'Canvas 12×12"', price: 5900, description: 'Gallery-wrapped canvas' },
-  canvas_16x20: { name: 'Canvas 16×20"', price: 7900, description: 'Gallery-wrapped canvas' },
-  canvas_24x30: { name: 'Canvas 24×30"', price: 9900, description: 'Gallery-wrapped canvas' },
-};
+type ProductType = 'poster' | 'canvas';
+type PosterSize = '12x18' | '18x24' | '24x36';
+type CanvasSize = '12x12' | '16x20' | '24x30';
 
-type ProductKey = keyof typeof PRINT_PRODUCTS;
+const PRODUCTS = {
+  poster: {
+    '12x18': { name: '12×18"', price: 6500, description: 'Perfect for desks & small spaces' },
+    '18x24': { name: '18×24"', price: 8000, description: 'Most popular size' },
+    '24x36': { name: '24×36"', price: 10500, description: 'Statement piece' },
+  },
+  canvas: {
+    '12x12': { name: '12×12"', price: 12500, description: 'Intimate square format' },
+    '16x20': { name: '16×20"', price: 17500, description: 'Classic gallery size' },
+    '24x30': { name: '24×30"', price: 27500, description: 'Commanding presence' },
+  },
+};
 
 const PurchaseModal: React.FC<PurchaseModalProps> = ({
   isOpen,
@@ -31,11 +37,17 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
   generationId,
 }) => {
   const { user } = useAuth();
-  const [selectedProduct, setSelectedProduct] = useState<ProductKey>('poster_18x24');
+  const [productType, setProductType] = useState<ProductType>('poster');
+  const [posterSize, setPosterSize] = useState<PosterSize>('18x24');
+  const [canvasSize, setCanvasSize] = useState<CanvasSize>('16x20');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   if (!isOpen) return null;
+
+  const currentSize = productType === 'poster' ? posterSize : canvasSize;
+  const currentProduct = PRODUCTS[productType][currentSize as keyof typeof PRODUCTS[typeof productType]];
+  const productKey = `${productType}_${currentSize}`;
 
   const handleCheckout = async () => {
     setIsLoading(true);
@@ -46,7 +58,7 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          productType: selectedProduct,
+          productType: productKey,
           imageUrl,
           generationId,
           transmissionNumber,
@@ -60,7 +72,6 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
         throw new Error(data.error || 'Checkout failed');
       }
 
-      // Redirect to Stripe Checkout
       if (data.url) {
         window.location.href = data.url;
       } else {
@@ -84,147 +95,240 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl border border-white/20 bg-black p-6 md:p-8 max-h-[90vh] overflow-auto"
+        className="w-full max-w-xl border border-white/20 bg-black max-h-[90vh] overflow-auto animate-modal-in"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <h2 className="serif text-2xl md:text-3xl text-white italic">Materialize</h2>
-            <p
-              className="mono text-[9px] uppercase tracking-widest mt-1"
-              style={{ color: 'rgba(var(--theme-rgb), 1)' }}
+        <div className="p-6 border-b border-white/10">
+          <div className="flex justify-between items-start">
+            <div>
+              <h2 className="serif text-2xl md:text-3xl text-white italic">Materialize</h2>
+              <p
+                className="mono text-[9px] uppercase tracking-widest mt-1"
+                style={{ color: 'rgba(var(--theme-rgb), 1)' }}
+              >
+                Transmission #{transmissionNumber}
+              </p>
+            </div>
+            <button
+              onClick={onClose}
+              className="mono text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-colors p-2 -m-2"
             >
-              Transmission #{transmissionNumber}
-            </p>
+              ✕
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="mono text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-colors"
-          >
-            [ Close ]
-          </button>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="p-6">
           {/* Preview */}
-          <div className="border border-white/10 p-2 bg-black/50">
+          <div className="mb-6 border border-white/10 bg-black/50 p-2">
             <img
               src={imageUrl}
               alt={`Transmission #${transmissionNumber}`}
-              className="w-full aspect-square object-contain"
+              className="w-full aspect-video object-contain"
             />
           </div>
 
-          {/* Product Selection */}
-          <div className="space-y-4">
-            <h3 className="mono text-[10px] uppercase tracking-widest text-white/40">
-              Select Format
-            </h3>
-
-            {/* Posters */}
-            <div className="space-y-2">
-              <span className="mono text-[9px] uppercase tracking-wider text-white/30">
-                Posters
-              </span>
-              {(['poster_12x18', 'poster_18x24', 'poster_24x36'] as ProductKey[]).map(key => (
-                <button
-                  key={key}
-                  onClick={() => setSelectedProduct(key)}
-                  className={`w-full text-left p-3 border transition-all ${
-                    selectedProduct === key
-                      ? 'border-white/40 bg-white/5'
-                      : 'border-white/10 hover:border-white/20'
-                  }`}
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="mono text-sm text-white">{PRINT_PRODUCTS[key].name}</span>
-                    <span
-                      className="mono text-sm"
-                      style={{ color: 'rgba(var(--theme-rgb), 1)' }}
-                    >
-                      {formatPrice(PRINT_PRODUCTS[key].price)}
-                    </span>
-                  </div>
-                  <span className="mono text-[9px] text-white/40">
-                    {PRINT_PRODUCTS[key].description}
-                  </span>
-                </button>
-              ))}
-            </div>
-
-            {/* Canvas */}
-            <div className="space-y-2">
-              <span className="mono text-[9px] uppercase tracking-wider text-white/30">
-                Canvas
-              </span>
-              {(['canvas_12x12', 'canvas_16x20', 'canvas_24x30'] as ProductKey[]).map(key => (
-                <button
-                  key={key}
-                  onClick={() => setSelectedProduct(key)}
-                  className={`w-full text-left p-3 border transition-all ${
-                    selectedProduct === key
-                      ? 'border-white/40 bg-white/5'
-                      : 'border-white/10 hover:border-white/20'
-                  }`}
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="mono text-sm text-white">{PRINT_PRODUCTS[key].name}</span>
-                    <span
-                      className="mono text-sm"
-                      style={{ color: 'rgba(var(--theme-rgb), 1)' }}
-                    >
-                      {formatPrice(PRINT_PRODUCTS[key].price)}
-                    </span>
-                  </div>
-                  <span className="mono text-[9px] text-white/40">
-                    {PRINT_PRODUCTS[key].description}
-                  </span>
-                </button>
-              ))}
-            </div>
-
-            {/* Error */}
-            {error && (
-              <div className="p-3 border border-red-500/30 bg-red-500/10">
-                <span className="mono text-[10px] uppercase tracking-wider text-red-400">
-                  {error}
+          {/* Product Type Tabs */}
+          <div className="grid grid-cols-2 gap-2 mb-6">
+            <button
+              onClick={() => setProductType('poster')}
+              className={`py-4 border transition-all ${
+                productType === 'poster'
+                  ? 'border-amber-500/60 bg-amber-500/10'
+                  : 'border-white/10 hover:border-white/20'
+              }`}
+            >
+              <div className="flex flex-col items-center gap-1">
+                <span className="text-2xl">🖼️</span>
+                <span className={`mono text-[11px] uppercase tracking-wider ${
+                  productType === 'poster' ? 'text-amber-400' : 'text-white/60'
+                }`}>
+                  Poster
+                </span>
+                <span className="mono text-[8px] text-white/30">
+                  Enhanced Matte Paper
                 </span>
               </div>
-            )}
-
-            {/* Checkout Button */}
-            <button
-              onClick={handleCheckout}
-              disabled={isLoading}
-              className="w-full py-4 mono text-[11px] uppercase tracking-widest transition-all disabled:opacity-50"
-              style={{
-                backgroundColor: 'rgba(var(--theme-rgb), 0.15)',
-                border: '1px solid rgba(var(--theme-rgb), 0.5)',
-                color: 'rgba(var(--theme-rgb), 1)',
-              }}
-            >
-              {isLoading ? (
-                <span className="animate-pulse">Processing...</span>
-              ) : (
-                `Purchase ${formatPrice(PRINT_PRODUCTS[selectedProduct].price)}`
-              )}
             </button>
-
-            <p className="mono text-[8px] text-white/30 text-center uppercase tracking-wider">
-              Secure checkout via Stripe. Ships worldwide.
-            </p>
+            <button
+              onClick={() => setProductType('canvas')}
+              className={`py-4 border transition-all ${
+                productType === 'canvas'
+                  ? 'border-amber-500/60 bg-amber-500/10'
+                  : 'border-white/10 hover:border-white/20'
+              }`}
+            >
+              <div className="flex flex-col items-center gap-1">
+                <span className="text-2xl">🎨</span>
+                <span className={`mono text-[11px] uppercase tracking-wider ${
+                  productType === 'canvas' ? 'text-amber-400' : 'text-white/60'
+                }`}>
+                  Canvas
+                </span>
+                <span className="mono text-[8px] text-white/30">
+                  Gallery-Wrapped
+                </span>
+              </div>
+            </button>
           </div>
+
+          {/* Size Selection */}
+          <div className="mb-6">
+            <span className="mono text-[9px] uppercase tracking-widest text-white/40 block mb-3">
+              Select Size
+            </span>
+            <div className="grid grid-cols-3 gap-2">
+              {productType === 'poster' ? (
+                <>
+                  {(['12x18', '18x24', '24x36'] as PosterSize[]).map(size => {
+                    const product = PRODUCTS.poster[size];
+                    const isSelected = posterSize === size;
+                    return (
+                      <button
+                        key={size}
+                        onClick={() => setPosterSize(size)}
+                        className={`p-4 border transition-all ${
+                          isSelected
+                            ? 'border-amber-500/60 bg-amber-500/10'
+                            : 'border-white/10 hover:border-white/20'
+                        }`}
+                      >
+                        <div className="flex flex-col items-center gap-2">
+                          <span className={`mono text-lg font-bold ${
+                            isSelected ? 'text-amber-400' : 'text-white'
+                          }`}>
+                            {product.name}
+                          </span>
+                          <span className={`mono text-sm ${
+                            isSelected ? 'text-amber-300' : 'text-white/60'
+                          }`}>
+                            {formatPrice(product.price)}
+                          </span>
+                          <span className="mono text-[7px] text-white/30 text-center">
+                            {product.description}
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </>
+              ) : (
+                <>
+                  {(['12x12', '16x20', '24x30'] as CanvasSize[]).map(size => {
+                    const product = PRODUCTS.canvas[size];
+                    const isSelected = canvasSize === size;
+                    return (
+                      <button
+                        key={size}
+                        onClick={() => setCanvasSize(size)}
+                        className={`p-4 border transition-all ${
+                          isSelected
+                            ? 'border-amber-500/60 bg-amber-500/10'
+                            : 'border-white/10 hover:border-white/20'
+                        }`}
+                      >
+                        <div className="flex flex-col items-center gap-2">
+                          <span className={`mono text-lg font-bold ${
+                            isSelected ? 'text-amber-400' : 'text-white'
+                          }`}>
+                            {product.name}
+                          </span>
+                          <span className={`mono text-sm ${
+                            isSelected ? 'text-amber-300' : 'text-white/60'
+                          }`}>
+                            {formatPrice(product.price)}
+                          </span>
+                          <span className="mono text-[7px] text-white/30 text-center">
+                            {product.description}
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Product Details */}
+          <div className="mb-6 p-4 border border-white/10 bg-white/[0.02]">
+            <div className="flex justify-between items-center mb-3">
+              <span className="mono text-white">
+                {productType === 'poster' ? 'Poster' : 'Canvas'} {currentProduct.name}
+              </span>
+              <span className="mono text-xl text-amber-400 font-bold">
+                {formatPrice(currentProduct.price)}
+              </span>
+            </div>
+            <div className="space-y-1">
+              {productType === 'poster' ? (
+                <>
+                  <p className="mono text-[9px] text-white/50">• Enhanced matte paper (189 gsm / 80 lb)</p>
+                  <p className="mono text-[9px] text-white/50">• Museum-quality giclée printing</p>
+                  <p className="mono text-[9px] text-white/50">• Acid-free, archival quality</p>
+                </>
+              ) : (
+                <>
+                  <p className="mono text-[9px] text-white/50">• Premium poly-cotton canvas</p>
+                  <p className="mono text-[9px] text-white/50">• Gallery-wrapped on 1.5" wooden frame</p>
+                  <p className="mono text-[9px] text-white/50">• Ready to hang, hardware included</p>
+                </>
+              )}
+              <p className="mono text-[9px] text-white/50">• Ships worldwide in 3-7 business days</p>
+            </div>
+          </div>
+
+          {/* Error */}
+          {error && (
+            <div className="mb-4 p-3 border border-red-500/30 bg-red-500/10">
+              <span className="mono text-[10px] uppercase tracking-wider text-red-400">
+                {error}
+              </span>
+            </div>
+          )}
+
+          {/* Checkout Button */}
+          <button
+            onClick={handleCheckout}
+            disabled={isLoading}
+            className="w-full py-4 mono text-[12px] uppercase tracking-widest transition-all disabled:opacity-50 bg-amber-500/20 border border-amber-500/60 text-amber-400 hover:bg-amber-500/30 hover:border-amber-400"
+          >
+            {isLoading ? (
+              <span className="animate-pulse">Processing...</span>
+            ) : (
+              <>Checkout • {formatPrice(currentProduct.price)}</>
+            )}
+          </button>
+
+          <p className="mono text-[8px] text-white/30 text-center mt-4 uppercase tracking-wider">
+            Secure checkout via Stripe • Free shipping on orders over $150
+          </p>
         </div>
 
-        {/* Info */}
-        <div className="mt-6 pt-6 border-t border-white/10">
-          <p className="mono text-[9px] text-white/40 text-center">
-            Purchase unlocks Hall of Transmissions submission.
-            Your creation could earn you 50% of future sales.
+        {/* Footer */}
+        <div className="p-4 border-t border-white/10 bg-white/[0.02]">
+          <p className="mono text-[8px] text-white/40 text-center">
+            Purchase unlocks Hall of Transmissions submission — your creation could earn you 50% of future sales.
           </p>
         </div>
       </div>
+
+      <style>{`
+        @keyframes modal-in {
+          from {
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+        .animate-modal-in {
+          animation: modal-in 0.25s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 };

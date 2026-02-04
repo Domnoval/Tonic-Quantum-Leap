@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ThemeColor } from '../types';
 import VoidItemCard from './VoidItemCard';
+import PurchaseModal from './PurchaseModal';
 
 type ForgeMode = 'style' | 'remix' | 'inpaint' | 'mashup';
 
@@ -135,13 +136,20 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
   const autoScrollRef = useRef<number | null>(null);
   const [lightboxImage, setLightboxImage] = useState<VoidItem | null>(null);
+  
+  // Purchase modal state
+  const [purchaseItem, setPurchaseItem] = useState<VoidItem | null>(null);
+  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
 
   const items = useMemo(() => generateVoidContent(), []);
 
   // Close lightbox on escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setLightboxImage(null);
+      if (e.key === 'Escape') {
+        setLightboxImage(null);
+        setIsPurchaseModalOpen(false);
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -155,6 +163,18 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
   const closeLightbox = () => {
     setLightboxImage(null);
     setTimeout(() => setIsAutoScrolling(true), 500);
+  };
+
+  // Handle opening purchase modal
+  const openPurchaseModal = (item: VoidItem) => {
+    setPurchaseItem(item);
+    setIsPurchaseModalOpen(true);
+    setLightboxImage(null); // Close lightbox if open
+  };
+
+  const closePurchaseModal = () => {
+    setIsPurchaseModalOpen(false);
+    setPurchaseItem(null);
   };
 
   // Handle Forge navigation with pre-selected image and mode
@@ -213,6 +233,12 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
     }
   };
 
+  // Extract transmission number from item id
+  const getTransmissionNumber = (item: VoidItem): number => {
+    const match = item.id.match(/\d+/);
+    return match ? parseInt(match[0], 10) : Math.floor(Math.random() * 1000);
+  };
+
   return (
     <div
       ref={containerRef}
@@ -230,7 +256,7 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
               className="mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] mt-1 md:mt-2"
               style={{ color: 'rgba(var(--theme-rgb), 1)' }}
             >
-              Infinite Signal Stream
+              Art Gallery • Hover any piece to order prints from $65
             </p>
           </div>
           <div className="hidden md:flex items-center gap-4">
@@ -260,6 +286,7 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
               caption={item.caption}
               onView={() => openLightbox(item)}
               onForge={(mode) => handleForge(item.content, mode)}
+              onPrint={() => openPurchaseModal(item)}
             />
           ))}
         </div>
@@ -322,19 +349,19 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
 
           {/* Image container */}
           <div
-            className="relative max-w-[90vw] max-h-[85vh] animate-lightbox-in"
+            className="relative max-w-[90vw] max-h-[75vh] animate-lightbox-in"
             onClick={(e) => e.stopPropagation()}
           >
             <img
               src={lightboxImage.content}
               alt=""
-              className="max-w-full max-h-[85vh] object-contain"
+              className="max-w-full max-h-[75vh] object-contain"
               style={{ boxShadow: '0 0 60px rgba(var(--theme-rgb), 0.3)' }}
             />
 
             {/* Caption */}
             {lightboxImage.caption && (
-              <div className="absolute -bottom-12 left-0 right-0 text-center">
+              <div className="absolute -bottom-8 left-0 right-0 text-center">
                 <span
                   className="mono text-[10px] uppercase tracking-widest"
                   style={{ color: 'rgba(var(--theme-rgb), 1)' }}
@@ -353,6 +380,55 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
               className="absolute -bottom-3 -right-3 w-6 h-6 border-b-2 border-r-2"
               style={{ borderColor: 'rgba(var(--theme-rgb), 0.6)' }}
             />
+
+            {/* ✨ FEATURE 3: Lightbox CTA buttons */}
+            <div className="absolute -bottom-20 left-0 right-0 flex justify-center gap-4">
+              {/* Get Print Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openPurchaseModal(lightboxImage);
+                }}
+                className="
+                  px-6 py-2.5
+                  bg-amber-500/20 backdrop-blur-md
+                  border border-amber-500/60
+                  hover:border-amber-400 hover:bg-amber-500/30
+                  transition-all duration-300
+                  group
+                "
+              >
+                <span className="mono text-[10px] uppercase tracking-[0.2em] text-amber-400 group-hover:text-amber-300 flex items-center gap-2">
+                  <span>🖼️</span>
+                  ORDER PRINT — FROM $65
+                </span>
+              </button>
+
+              {/* Forge Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  closeLightbox();
+                  handleForge(lightboxImage.content, 'remix');
+                }}
+                className="
+                  px-6 py-2.5
+                  bg-black/60 backdrop-blur-md
+                  border border-[rgba(var(--theme-rgb),0.6)]
+                  hover:border-[rgba(var(--theme-rgb),1)] hover:bg-[rgba(var(--theme-rgb),0.15)]
+                  transition-all duration-300
+                  group
+                "
+              >
+                <span 
+                  className="mono text-[10px] uppercase tracking-[0.2em] flex items-center gap-2"
+                  style={{ color: 'rgba(var(--theme-rgb), 1)' }}
+                >
+                  <span>⚡</span>
+                  FORGE THIS
+                </span>
+              </button>
+            </div>
           </div>
 
           {/* Scanlines on lightbox */}
@@ -363,6 +439,16 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
             }}
           />
         </div>
+      )}
+
+      {/* Purchase Modal */}
+      {purchaseItem && (
+        <PurchaseModal
+          isOpen={isPurchaseModalOpen}
+          onClose={closePurchaseModal}
+          imageUrl={purchaseItem.content}
+          transmissionNumber={getTransmissionNumber(purchaseItem)}
+        />
       )}
 
       {/* Theme-aware hover styles */}

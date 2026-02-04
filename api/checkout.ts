@@ -5,37 +5,37 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-12-15.clover',
 });
 
-// Print product options with pricing
+// Print product options with pricing (80% margin)
 const PRINT_PRODUCTS = {
   poster_12x18: {
     name: 'Poster 12×18"',
-    price: 2900, // $29.00
-    description: 'Premium matte poster print',
+    price: 6500, // $65.00 (cost ~$13)
+    description: 'Enhanced matte paper, museum-quality',
   },
   poster_18x24: {
     name: 'Poster 18×24"',
-    price: 3900, // $39.00
-    description: 'Premium matte poster print',
+    price: 8000, // $80.00 (cost ~$16)
+    description: 'Enhanced matte paper, museum-quality',
   },
   poster_24x36: {
     name: 'Poster 24×36"',
-    price: 4900, // $49.00
-    description: 'Premium matte poster print',
+    price: 10500, // $105.00 (cost ~$21)
+    description: 'Enhanced matte paper, museum-quality',
   },
   canvas_12x12: {
     name: 'Canvas 12×12"',
-    price: 5900, // $59.00
-    description: 'Gallery-wrapped canvas',
+    price: 12500, // $125.00 (cost ~$25)
+    description: 'Gallery-wrapped, 1.5" deep frame',
   },
   canvas_16x20: {
     name: 'Canvas 16×20"',
-    price: 7900, // $79.00
-    description: 'Gallery-wrapped canvas',
+    price: 17500, // $175.00 (cost ~$35)
+    description: 'Gallery-wrapped, 1.5" deep frame',
   },
   canvas_24x30: {
     name: 'Canvas 24×30"',
-    price: 9900, // $99.00
-    description: 'Gallery-wrapped canvas',
+    price: 27500, // $275.00 (cost ~$55)
+    description: 'Gallery-wrapped, 1.5" deep frame',
   },
 };
 

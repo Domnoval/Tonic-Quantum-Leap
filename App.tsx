@@ -261,18 +261,31 @@ const App: React.FC = () => {
                  </div>
               </div>
 
-              <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full max-w-md md:max-w-none md:w-auto">
+              <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full max-w-md md:max-w-none md:w-auto">
                 <button
-                  onClick={() => navigate(View.Index)}
-                  className="origin-btn mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] border border-white/10 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/40 backdrop-blur active:scale-95 w-full md:w-auto"
+                  onClick={() => navigate(View.Void)}
+                  className="origin-btn group mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.4em] border px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/40 backdrop-blur active:scale-95 w-full md:w-auto"
+                  style={{ 
+                    borderColor: 'rgba(var(--theme-rgb), 0.5)',
+                    boxShadow: '0 0 20px rgba(var(--theme-rgb), 0.1)'
+                  }}
                 >
-                  Initiate Scan
+                  <span className="block" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>Enter Gallery</span>
+                  <span className="block text-[8px] text-white/40 mt-1 group-hover:text-white/60 transition-colors">225+ Original Works</span>
                 </button>
                 <button
-                  onClick={() => navigate(View.Architect)}
-                  className="origin-btn mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] border border-white/10 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/40 backdrop-blur active:scale-95 w-full md:w-auto"
+                  onClick={() => navigate(View.Index)}
+                  className="origin-btn group mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.4em] border border-white/10 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/40 backdrop-blur active:scale-95 w-full md:w-auto hover:border-white/30"
                 >
-                  The Blueprint
+                  <span className="block">Shop Prints</span>
+                  <span className="block text-[8px] text-white/40 mt-1 group-hover:text-white/60 transition-colors">From $65</span>
+                </button>
+                <button
+                  onClick={() => navigate(View.Forge)}
+                  className="origin-btn group mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.4em] border border-white/10 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/40 backdrop-blur active:scale-95 w-full md:w-auto hover:border-white/30"
+                >
+                  <span className="block">The Forge</span>
+                  <span className="block text-[8px] text-white/40 mt-1 group-hover:text-white/60 transition-colors">Remix & Create</span>
                 </button>
               </div>
             </div>

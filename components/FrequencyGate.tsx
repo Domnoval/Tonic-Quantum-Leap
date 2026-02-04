@@ -153,20 +153,34 @@ const FrequencyGate: React.FC<FrequencyGateProps> = ({ onEnter, themeColor }) =>
 
       {/* CTA Button with subtle parallax */}
       <div 
-        className="mt-32 relative group pointer-events-auto transition-transform duration-700 ease-out z-[300]"
+        className="mt-24 relative group pointer-events-auto transition-transform duration-700 ease-out z-[300] flex flex-col items-center gap-6"
         style={{ transform: `translate3d(${mousePos.x * 15}px, ${mousePos.y * 15}px, 100px)` }}
       >
+        {/* What this is */}
+        <div className="flex flex-col items-center gap-2 text-center">
+          <span className="mono text-[10px] uppercase tracking-[0.4em] text-white/40">Digital Art Studio</span>
+          <span className="mono text-[9px] uppercase tracking-[0.2em] text-white/25">Gallery • Prints • AI Forge</span>
+        </div>
+        
         <div className={`absolute -inset-12 bg-${themeColor}-400/5 blur-[100px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000`} />
         <button
           onClick={handleEnter}
           aria-label="Enter the Tonic Thought Nexus"
           className="relative px-24 py-8 border border-white/20 mono text-[13px] uppercase tracking-[1.2em] hover-spectral hover:text-black transition-all duration-700 ease-in-out group overflow-hidden bg-black/40 backdrop-blur-md"
         >
-          <span className="relative z-10 font-black">Enter Nexus</span>
+          <span className="relative z-10 font-black">Enter Gallery</span>
           <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
           
           {/* Internal Button Glow */}
           <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-700 spectral-bg" />
+        </button>
+        
+        {/* Skip for returning visitors */}
+        <button
+          onClick={handleEnter}
+          className="mono text-[8px] uppercase tracking-widest text-white/20 hover:text-white/40 transition-colors"
+        >
+          Skip Intro →
         </button>
       </div>
 

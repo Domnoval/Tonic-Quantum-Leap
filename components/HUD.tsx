@@ -10,11 +10,11 @@ interface HUDProps {
 }
 
 const NAV_ITEMS = [
-  { view: View.Origin, label: '01_Origin', ariaLabel: 'Go to Origin home page' },
-  { view: View.Index, label: '02_Net', ariaLabel: 'Browse artifact catalog' },
-  { view: View.Apothecary, label: '03_Apothecary', ariaLabel: 'View cart and checkout' },
-  { view: View.Void, label: '04_Void', ariaLabel: 'View social feed' },
-  { view: View.Forge, label: '05_Forge', ariaLabel: 'Enter the Forge remix studio' },
+  { view: View.Origin, label: '01_Origin', subtitle: 'Home', ariaLabel: 'Go to Origin home page' },
+  { view: View.Void, label: '02_Void', subtitle: 'Gallery', ariaLabel: 'Browse the art gallery' },
+  { view: View.Forge, label: '03_Forge', subtitle: 'Create', ariaLabel: 'Enter the Forge remix studio' },
+  { view: View.Index, label: '04_Shop', subtitle: 'Prints', ariaLabel: 'Browse prints for sale' },
+  { view: View.Apothecary, label: '05_Cart', subtitle: 'Checkout', ariaLabel: 'View cart and checkout' },
 ];
 
 const HUD: React.FC<HUDProps> = ({ currentView, setView, themeColor }) => {
@@ -67,18 +67,25 @@ const HUD: React.FC<HUDProps> = ({ currentView, setView, themeColor }) => {
           </button>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex gap-8 pointer-events-auto">
-            {NAV_ITEMS.map(({ view, label, ariaLabel }) => (
+          <div className="hidden md:flex gap-6 pointer-events-auto">
+            {NAV_ITEMS.map(({ view, label, subtitle, ariaLabel }) => (
               <button
                 key={view}
                 onClick={() => handleNavClick(view)}
                 aria-label={ariaLabel}
                 aria-current={currentView === view ? 'page' : undefined}
-                className={`mono text-[11px] uppercase tracking-[0.3em] transition-all ${
+                className={`group flex flex-col items-center transition-all ${
                   currentView === view ? 'text-white' : 'text-white/30 hover:text-white'
                 }`}
               >
-                [ {label} ]
+                <span className="mono text-[10px] uppercase tracking-[0.2em]">[ {label} ]</span>
+                <span className={`mono text-[8px] uppercase tracking-widest transition-all ${
+                  currentView === view 
+                    ? 'opacity-60' 
+                    : 'opacity-0 group-hover:opacity-40'
+                }`} style={{ color: currentView === view ? 'rgba(var(--theme-rgb), 1)' : undefined }}>
+                  {subtitle}
+                </span>
               </button>
             ))}
           </div>
@@ -136,13 +143,13 @@ const HUD: React.FC<HUDProps> = ({ currentView, setView, themeColor }) => {
         }`}
       >
         <div className="flex flex-col p-4 gap-1">
-          {NAV_ITEMS.map(({ view, label, ariaLabel }) => (
+          {NAV_ITEMS.map(({ view, label, subtitle, ariaLabel }) => (
             <button
               key={view}
               onClick={() => handleNavClick(view)}
               aria-label={ariaLabel}
               aria-current={currentView === view ? 'page' : undefined}
-              className={`w-full text-left py-3 px-4 mono text-sm uppercase tracking-widest transition-all border-l-2 ${
+              className={`w-full text-left py-3 px-4 mono transition-all border-l-2 flex justify-between items-center ${
                 currentView === view
                   ? 'text-white bg-white/5'
                   : 'text-white/50 border-transparent'
@@ -151,7 +158,8 @@ const HUD: React.FC<HUDProps> = ({ currentView, setView, themeColor }) => {
                 borderColor: currentView === view ? 'rgba(var(--theme-rgb), 1)' : 'transparent',
               }}
             >
-              {label}
+              <span className="text-sm uppercase tracking-widest">{label}</span>
+              <span className="text-[10px] uppercase tracking-wider opacity-40">{subtitle}</span>
             </button>
           ))}
         </div>
