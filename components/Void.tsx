@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ThemeColor } from '../types';
 import VoidItemCard from './VoidItemCard';
-import PurchaseModal from './PurchaseModal';
+import PurchaseModal from './PurchaseModalPreview';
 
 type ForgeMode = 'style' | 'remix' | 'inpaint' | 'mashup';
 

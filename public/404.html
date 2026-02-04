@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Void Awaits | Tonic Thought Studios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --theme-rgb: 245, 158, 11;
+    }
+    
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      overflow: hidden;
+    }
+    
+    .serif {
+      font-family: 'Cormorant Garamond', serif;
+    }
+    
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    /* Animated background */
+    .void-bg {
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 20% 80%, rgba(var(--theme-rgb), 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 0%, #000 100%);
+      z-index: -2;
+    }
+    
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: rgba(var(--theme-rgb), 0.6);
+      border-radius: 50%;
+      animation: float 20s infinite ease-in-out;
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Main content */
+    .container {
+      text-align: center;
+      max-width: 600px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .glitch-number {
+      font-size: clamp(80px, 20vw, 200px);
+      font-weight: 400;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(var(--theme-rgb), 0.4);
+      position: relative;
+      animation: flicker 4s infinite;
+    }
+    
+    .glitch-number::before,
+    .glitch-number::after {
+      content: '404';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .glitch-number::before {
+      color: rgba(var(--theme-rgb), 0.15);
+      -webkit-text-stroke: none;
+      animation: glitch-1 3s infinite;
+    }
+    
+    .glitch-number::after {
+      color: rgba(139, 92, 246, 0.15);
+      -webkit-text-stroke: none;
+      animation: glitch-2 3s infinite;
+    }
+    
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      92% { opacity: 1; }
+      93% { opacity: 0.8; }
+      94% { opacity: 1; }
+      96% { opacity: 0.9; }
+      97% { opacity: 1; }
+    }
+    
+    @keyframes glitch-1 {
+      0%, 100% { transform: translate(0); }
+      20% { transform: translate(-3px, 3px); }
+      40% { transform: translate(3px, -3px); }
+      60% { transform: translate(-3px, -3px); }
+      80% { transform: translate(3px, 3px); }
+    }
+    
+    @keyframes glitch-2 {
+      0%, 100% { transform: translate(0); }
+      20% { transform: translate(3px, -3px); }
+      40% { transform: translate(-3px, 3px); }
+      60% { transform: translate(3px, 3px); }
+      80% { transform: translate(-3px, -3px); }
+    }
+    
+    .title {
+      font-size: clamp(24px, 5vw, 42px);
+      font-style: italic;
+      margin: 1.5rem 0 1rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .subtitle {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: rgba(var(--theme-rgb), 0.8);
+      margin-bottom: 2rem;
+    }
+    
+    .message {
+      font-size: 12px;
+      line-height: 2;
+      color: rgba(255, 255, 255, 0.5);
+      max-width: 400px;
+      margin: 0 auto 3rem;
+    }
+    
+    .message strong {
+      color: rgba(var(--theme-rgb), 0.9);
+    }
+    
+    /* Portal button */
+    .portal-btn {
+      display: inline-block;
+      padding: 16px 48px;
+      border: 1px solid rgba(var(--theme-rgb), 0.4);
+      background: rgba(var(--theme-rgb), 0.08);
+      color: rgb(var(--theme-rgb));
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .portal-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(var(--theme-rgb), 0.2), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
+    }
+    
+    .portal-btn:hover {
+      border-color: rgb(var(--theme-rgb));
+      background: rgba(var(--theme-rgb), 0.15);
+      box-shadow: 0 0 30px rgba(var(--theme-rgb), 0.2);
+    }
+    
+    .portal-btn:hover::before {
+      transform: translateX(100%);
+    }
+    
+    /* Coordinates */
+    .coords {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .coords span {
+      color: rgba(var(--theme-rgb), 0.5);
+    }
+    
+    /* Scanlines */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.1) 2px,
+        rgba(0, 0, 0, 0.1) 4px
+      );
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.3;
+    }
+  </style>
+</head>
+<body>
+  <div class="void-bg"></div>
+  <div class="particles" id="particles"></div>
+  <div class="scanlines"></div>
+  
+  <div class="container">
+    <div class="glitch-number serif">404</div>
+    <h1 class="title serif">The Void Whispers</h1>
+    <p class="subtitle mono">This portal has not yet materialized</p>
+    <p class="message mono">
+      You've discovered a frequency that exists between dimensions.
+      <strong>The path you seek is still being woven into reality.</strong>
+      Return to known coordinates, or wait for the portal to stabilize.
+    </p>
+    <a href="/" class="portal-btn">← Return to Origin</a>
+  </div>
+  
+  <div class="coords mono">
+    <span>COORDINATES:</span> UNDEFINED • <span>STATUS:</span> MANIFESTING • <span>ETA:</span> ∞
+  </div>
+  
+  <script>
+    // Create floating particles
+    const container = document.getElementById('particles');
+    const particleCount = 30;
+    
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.animationDelay = `${Math.random() * 20}s`;
+      particle.style.animationDuration = `${15 + Math.random() * 15}s`;
+      particle.style.opacity = Math.random() * 0.5 + 0.2;
+      container.appendChild(particle);
+    }
+    
+    // Add current path to coordinates
+    const path = window.location.pathname;
+    document.querySelector('.coords').innerHTML = 
+      `<span>COORDINATES:</span> ${path} • <span>STATUS:</span> MANIFESTING • <span>ETA:</span> ∞`;
+  </script>
+</body>
+</html>
