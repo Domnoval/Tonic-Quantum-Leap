@@ -9,6 +9,9 @@ import Oracle from './components/Oracle';
 import ManualIndex from './components/ManualIndex';
 import Void from './components/Void';
 import Forge from './components/Forge';
+import FeaturedCollection from './components/FeaturedCollection';
+import About from './components/About';
+import SimplifiedNav from './components/SimplifiedNav';
 import QuantumField from './components/QuantumField';
 import AuthModal from './components/AuthModal';
 import { AuthProvider } from './contexts/AuthContext';
@@ -176,7 +179,9 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
     <main id="main-content" className="relative min-h-screen bg-black overflow-hidden">
-      <HUD currentView={currentView} setView={navigate} themeColor={themeColor} />
+      {/* SimplifiedNav for cleaner UX — swap with HUD */}
+      <SimplifiedNav currentView={currentView} setView={navigate} cartCount={cart.length} themeColor={themeColor} />
+      {/* <HUD currentView={currentView} setView={navigate} themeColor={themeColor} /> */}
       <AuthModal />
       
       {/* 
@@ -281,8 +286,10 @@ const App: React.FC = () => {
           />
         )}
         {currentView === View.Architect && <Architect />}
+        {currentView === View.Featured && <FeaturedCollection themeColor={themeColor} onBuyClick={(piece) => { /* TODO: wire to cart/checkout */ console.log('Buy:', piece); }} />}
         {currentView === View.Void && <Void themeColor={themeColor} />}
         {currentView === View.Forge && <Forge themeColor={themeColor} />}
+        {currentView === View.About && <About themeColor={themeColor} />}
       </div>
 
       <Oracle cartCount={cart.length} themeColor={themeColor} />

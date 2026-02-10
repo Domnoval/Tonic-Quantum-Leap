@@ -7,6 +7,17 @@ export enum View {
   Index = 'INDEX',
   Void = 'VOID',
   Forge = 'FORGE',
+  Featured = 'FEATURED',
+  About = 'ABOUT',
+}
+
+export interface FeaturedPiece {
+  id: string;
+  title: string;
+  price: number;
+  imageUrl: string;
+  description: string;
+  medium: string;
 }
 
 export type ThemeColor = 'sky' | 'violet' | 'amber';
