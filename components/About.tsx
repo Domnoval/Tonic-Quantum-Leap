@@ -114,13 +114,13 @@ const About: React.FC<AboutProps> = ({ themeColor }) => {
               <h4 className="mono text-[10px] uppercase tracking-widest text-white/30 mb-4">
                 Connect
               </h4>
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-3">
                 {SOCIALS.map((social) => (
                   <a
                     key={social.label}
                     href={social.href}
                     aria-label={`Visit ${social.label}`}
-                    className="flex items-center gap-2 mono text-xs text-white/40 border border-white/10 px-4 py-2 rounded-sm transition-all duration-300 hover:text-white/70 hover:border-white/25 focus:outline-none focus:ring-1 focus:ring-white/30"
+                    className="flex items-center gap-2 mono text-xs text-white/40 border border-white/10 px-4 py-3 min-h-[44px] rounded-sm transition-all duration-300 hover:text-white/70 hover:border-white/25 focus:outline-none focus:ring-1 focus:ring-white/30"
                   >
                     <span>{social.icon}</span>
                     <span className="tracking-wider">{social.label}</span>

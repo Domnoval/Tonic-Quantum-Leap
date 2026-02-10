@@ -178,7 +178,7 @@ const App: React.FC = () => {
 
   return (
     <AuthProvider>
-    <main id="main-content" className="relative min-h-screen bg-black overflow-hidden">
+    <main id="main-content" className="relative min-h-screen bg-black overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)', paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right)' }}>
       {/* SimplifiedNav for cleaner UX — swap with HUD */}
       <SimplifiedNav currentView={currentView} setView={navigate} cartCount={cart.length} themeColor={themeColor} />
       {/* <HUD currentView={currentView} setView={navigate} themeColor={themeColor} /> */}
@@ -208,7 +208,7 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <h1 className="serif text-6xl md:text-[10rem] leading-none uppercase font-black tracking-tighter text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+              <h1 className="serif text-[clamp(3rem,12vw,10rem)] leading-none uppercase font-black tracking-tighter text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
                 TONIC<br/><span className="italic opacity-50">THOUGHT</span>
               </h1>
               

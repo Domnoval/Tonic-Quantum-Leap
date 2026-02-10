@@ -132,7 +132,7 @@ const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ themeColor, onB
                 <button
                   onClick={() => onBuyClick(piece)}
                   aria-label={`Buy ${piece.title} for $${piece.price}`}
-                  className="mono text-xs uppercase tracking-widest px-5 py-2.5 border border-white/20 text-white/70 rounded-sm transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/40 focus:outline-none focus:ring-1 focus:ring-white/30"
+                  className="mono text-xs uppercase tracking-widest px-5 py-3 min-h-[44px] min-w-[44px] border border-white/20 text-white/70 rounded-sm transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/40 focus:outline-none focus:ring-1 focus:ring-white/30 active:scale-95"
                 >
                   Buy Now
                 </button>

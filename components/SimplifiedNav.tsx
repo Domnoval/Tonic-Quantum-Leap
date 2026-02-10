@@ -66,7 +66,7 @@ const SimplifiedNav: React.FC<SimplifiedNavProps> = ({ currentView, setView, car
           {/* Cart */}
           <button
             onClick={() => handleNavClick(View.Apothecary)}
-            className="relative p-2 text-white/50 hover:text-white/80 transition-colors duration-300 focus:outline-none focus:ring-1 focus:ring-white/30 rounded-sm"
+            className="relative p-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-white/50 hover:text-white/80 transition-colors duration-300 focus:outline-none focus:ring-1 focus:ring-white/30 rounded-sm"
             aria-label={`Cart with ${cartCount} items`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -85,7 +85,7 @@ const SimplifiedNav: React.FC<SimplifiedNavProps> = ({ currentView, setView, car
           {/* Mobile Hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 -mr-2"
+            className="md:hidden p-3 -mr-3 min-w-[44px] min-h-[44px] flex items-center justify-center"
             aria-label="Toggle menu"
             aria-expanded={mobileMenuOpen}
           >
@@ -119,7 +119,7 @@ const SimplifiedNav: React.FC<SimplifiedNavProps> = ({ currentView, setView, car
               key={view}
               onClick={() => handleNavClick(view)}
               aria-current={currentView === view ? 'page' : undefined}
-              className={`w-full text-left py-3 px-6 mono text-sm uppercase tracking-widest transition-all duration-300 border-l-2 ${
+              className={`w-full text-left py-4 px-6 mono text-sm uppercase tracking-widest transition-all duration-300 border-l-2 min-h-[48px] ${
                 currentView === view
                   ? 'text-white bg-white/5'
                   : 'text-white/40 border-transparent hover:text-white/60 hover:bg-white/[0.02]'
