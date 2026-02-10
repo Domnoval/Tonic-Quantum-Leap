@@ -22,9 +22,10 @@ const GRAPHQL_QUERY = `
             }
           }
         }
-        images(first: 1) {
+        images(first: 3) {
           nodes {
             url
+            altText
           }
         }
       }
@@ -38,7 +39,7 @@ const GRAPHQL_QUERY = `
  */
 const FALLBACK_ARTIFACTS: Artifact[] = [
   {
-    id: 'gid://shopify/Product/static-monolith',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/static-monolith',
     version: '1.0.0',
     name: 'Static Monolith',
     category: 'VISION',
@@ -57,7 +58,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/333-resonance',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/333-resonance',
     version: '3.3.3',
     name: 'Trinity Protocol',
     category: 'ONENESS',
@@ -76,7 +77,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/tv-stack-variant-2',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/tv-stack-variant-2',
     version: '1.0.1',
     name: 'Cathode Ray Shrine',
     category: 'VISION',
@@ -94,7 +95,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/333-variant-2',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/333-variant-2',
     version: '3.3.4',
     name: 'Wisdom Glyph',
     category: 'ONENESS',
@@ -112,7 +113,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/static-variant-3',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/static-variant-3',
     version: '1.0.2',
     name: 'Blue Screen Void',
     category: 'GROUNDING',
@@ -130,7 +131,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/333-variant-3',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/333-variant-3',
     version: '3.3.5',
     name: 'Pink Noise Map',
     category: 'PROTOCOL',
@@ -148,7 +149,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/metatron-plate',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/metatron-plate',
     version: '1.3.7',
     name: 'Metatron Density Plate',
     category: 'GROUNDING',
@@ -166,7 +167,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/vision-lens',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/vision-lens',
     version: '2.0.1',
     name: 'Visionary Lens Overlay',
     category: 'VISION',
@@ -231,6 +232,7 @@ export const fetchShopifyArtifacts = async (): Promise<Artifact[]> => {
 
       return {
         id: product.id,
+        variantId: product.variants.nodes[0]?.id || product.id,
         version: versionTag.replace('v', ''),
         name: product.title,
         category: categoryTag.toUpperCase() as any,

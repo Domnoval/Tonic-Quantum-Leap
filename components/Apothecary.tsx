@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Artifact, CartItem, ThemeColor } from '../types';
+import { createCheckout } from '../services/shopifyCheckout';
 
 interface ApothecaryProps {
   artifacts: Artifact[];
@@ -315,7 +316,12 @@ const Apothecary: React.FC<ApothecaryProps> = ({ artifacts, cart, addToCart, rem
                             <span className="opacity-40">Total Density</span>
                             <span>${cartTotal.toFixed(2)}</span>
                         </div>
-                        <button onClick={() => { if(agreedToCovenant) window.location.href="https://tonic-thought-studios.myshopify.com/checkout"; else alert("Acknowledge responsibility."); }} className={`w-full py-5 mono text-xs uppercase tracking-[0.4em] transition-all duration-700 font-bold ${agreedToCovenant ? 'bg-white text-black hover-spectral hover:text-white' : 'bg-white/5 text-white/20 border border-white/5'}`}>CLOSE CIRCUIT</button>
+                        <button onClick={async () => { 
+                          if (!agreedToCovenant) { alert("Acknowledge responsibility."); return; }
+                          const url = await createCheckout(cart);
+                          if (url) { window.location.href = url; } 
+                          else { window.location.href = `https://${import.meta.env.VITE_SHOPIFY_DOMAIN || 'tonic-thought-studios-2.myshopify.com'}/cart`; }
+                        }} className={`w-full py-5 mono text-xs uppercase tracking-[0.4em] transition-all duration-700 font-bold ${agreedToCovenant ? 'bg-white text-black hover-spectral hover:text-white' : 'bg-white/5 text-white/20 border border-white/5'}`}>CLOSE CIRCUIT</button>
                         <label className="flex gap-4 items-start cursor-pointer group">
                             <input type="checkbox" checked={agreedToCovenant} onChange={(e) => setAgreedToCovenant(e.target.checked)} className={`mt-1 h-3 w-3 bg-transparent border border-white/20 group-hover:border-${themeColor}-500 transition-colors`} />
                             <span className="mono text-[9px] uppercase tracking-widest opacity-60 italic group-hover:opacity-100 transition-opacity">I acknowledge responsibility for this manifestation.</span>

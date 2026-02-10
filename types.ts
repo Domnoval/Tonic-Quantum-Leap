@@ -24,6 +24,7 @@ export type ThemeColor = 'sky' | 'violet' | 'amber';
 
 export interface Artifact {
   id: string;
+  variantId: string;
   version: string;
   name: string;
   category: 'GROUNDING' | 'VISION' | 'ONENESS' | 'PROTOCOL';
