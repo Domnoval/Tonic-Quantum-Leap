@@ -251,16 +251,17 @@ const App: React.FC = () => {
 
               <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full max-w-md md:max-w-none md:w-auto">
                 <button
-                  onClick={() => navigate(View.Index)}
-                  className="origin-btn mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] border border-white/10 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/40 backdrop-blur active:scale-95 w-full md:w-auto"
+                  onClick={() => navigate(View.Featured)}
+                  className="origin-btn mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] border px-8 md:px-12 py-4 md:py-5 transition-all duration-500 backdrop-blur active:scale-95 w-full md:w-auto"
+                  style={{ borderColor: 'rgba(var(--theme-rgb), 0.4)', color: 'rgba(var(--theme-rgb), 1)', backgroundColor: 'rgba(var(--theme-rgb), 0.08)' }}
                 >
-                  Initiate Scan
+                  View Featured Art
                 </button>
                 <button
-                  onClick={() => navigate(View.Architect)}
+                  onClick={() => navigate(View.Void)}
                   className="origin-btn mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] border border-white/10 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/40 backdrop-blur active:scale-95 w-full md:w-auto"
                 >
-                  The Blueprint
+                  Explore Gallery
                 </button>
               </div>
             </div>
