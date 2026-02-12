@@ -1,0 +1,555 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 3200" style="background:#2d3d3d">
+  <style>
+    text { font-family: 'Courier New', monospace; }
+    .label { fill: #ff69b4; font-size: 11px; opacity: 0.6; text-anchor: middle; }
+    .eq { fill: #ff69b4; font-size: 14px; font-weight: bold; text-anchor: middle; }
+    .category { fill: #ff69b4; font-size: 18px; font-weight: bold; letter-spacing: 4px; }
+  </style>
+
+  <!-- Title -->
+  <text x="1200" y="60" fill="#ff69b4" font-size="32" font-weight="bold" text-anchor="middle" letter-spacing="8" font-family="Courier New">TRANSMISSION GLYPHS v2</text>
+  <text x="1200" y="85" fill="#ff69b4" font-size="13" text-anchor="middle" opacity="0.5" font-family="Courier New">TONIC THOUGHT STUDIOS — SACRED GEOMETRY UPGRADE</text>
+  <line x1="200" y1="100" x2="2200" y2="100" stroke="#ff69b4" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- CATEGORY 1: SACRED GEOMETRY CORE -->
+  <!-- ════════════════════════════════════════════════ -->
+  <text x="120" y="150" class="category">◆ SACRED GEOMETRY CORE</text>
+
+  <!-- 1. Flower of Life (rough/punk style) -->
+  <g transform="translate(200, 280)" stroke="#ff69b4" fill="none" stroke-width="2.5" stroke-linecap="round">
+    <!-- Central circle -->
+    <circle cx="0" cy="0" r="30" stroke-dasharray="3,2" opacity="0.9"/>
+    <!-- 6 petals -->
+    <circle cx="30" cy="0" r="30" opacity="0.8"/>
+    <circle cx="-30" cy="0" r="30" opacity="0.75"/>
+    <circle cx="15" cy="26" r="30" opacity="0.85"/>
+    <circle cx="-15" cy="26" r="30" opacity="0.7"/>
+    <circle cx="15" cy="-26" r="30" opacity="0.8"/>
+    <circle cx="-15" cy="-26" r="30" opacity="0.75"/>
+    <!-- Rough outer ring -->
+    <circle cx="0" cy="0" r="62" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.4"/>
+    <!-- Drip marks (your style) -->
+    <line x1="-20" y1="58" x2="-22" y2="78" stroke-width="2" opacity="0.6"/>
+    <line x1="25" y1="55" x2="27" y2="70" stroke-width="1.5" opacity="0.5"/>
+    <text x="0" y="95" class="label">FLOWER OF LIFE</text>
+  </g>
+
+  <!-- 2. Metatron's Cube -->
+  <g transform="translate(480, 280)" stroke="#ff69b4" fill="none" stroke-width="2" stroke-linecap="round">
+    <!-- 13 circles of Metatron -->
+    <circle cx="0" cy="0" r="8" fill="#ff69b4" opacity="0.4"/>
+    <circle cx="0" cy="-35" r="8" fill="#ff69b4" opacity="0.3"/>
+    <circle cx="0" cy="35" r="8" fill="#ff69b4" opacity="0.3"/>
+    <circle cx="30" cy="-17.5" r="8" fill="#ff69b4" opacity="0.3"/>
+    <circle cx="30" cy="17.5" r="8" fill="#ff69b4" opacity="0.3"/>
+    <circle cx="-30" cy="-17.5" r="8" fill="#ff69b4" opacity="0.3"/>
+    <circle cx="-30" cy="17.5" r="8" fill="#ff69b4" opacity="0.3"/>
+    <!-- Outer ring -->
+    <circle cx="0" cy="-52" r="6" opacity="0.5"/>
+    <circle cx="0" cy="52" r="6" opacity="0.5"/>
+    <circle cx="45" cy="-26" r="6" opacity="0.5"/>
+    <circle cx="45" cy="26" r="6" opacity="0.5"/>
+    <circle cx="-45" cy="-26" r="6" opacity="0.5"/>
+    <circle cx="-45" cy="26" r="6" opacity="0.5"/>
+    <!-- Connecting lines (rough) -->
+    <line x1="0" y1="-52" x2="45" y2="-26" stroke-width="1" opacity="0.6"/>
+    <line x1="45" y1="-26" x2="45" y2="26" stroke-width="1" opacity="0.6"/>
+    <line x1="45" y1="26" x2="0" y2="52" stroke-width="1" opacity="0.6"/>
+    <line x1="0" y1="52" x2="-45" y2="26" stroke-width="1" opacity="0.6"/>
+    <line x1="-45" y1="26" x2="-45" y2="-26" stroke-width="1" opacity="0.6"/>
+    <line x1="-45" y1="-26" x2="0" y2="-52" stroke-width="1" opacity="0.6"/>
+    <!-- Inner hexagon lines -->
+    <line x1="0" y1="-35" x2="30" y2="-17.5" stroke-width="1.5"/>
+    <line x1="30" y1="-17.5" x2="30" y2="17.5" stroke-width="1.5"/>
+    <line x1="30" y1="17.5" x2="0" y2="35" stroke-width="1.5"/>
+    <line x1="0" y1="35" x2="-30" y2="17.5" stroke-width="1.5"/>
+    <line x1="-30" y1="17.5" x2="-30" y2="-17.5" stroke-width="1.5"/>
+    <line x1="-30" y1="-17.5" x2="0" y2="-35" stroke-width="1.5"/>
+    <!-- Cross lines through center -->
+    <line x1="0" y1="-52" x2="0" y2="52" stroke-width="1" opacity="0.5"/>
+    <line x1="-45" y1="-26" x2="45" y2="26" stroke-width="1" opacity="0.5"/>
+    <line x1="-45" y1="26" x2="45" y2="-26" stroke-width="1" opacity="0.5"/>
+    <text x="0" y="95" class="label">METATRON'S CUBE</text>
+  </g>
+
+  <!-- 3. Vesica Piscis (THE PORTAL) -->
+  <g transform="translate(760, 280)" stroke="#ff69b4" fill="none" stroke-width="2.5" stroke-linecap="round">
+    <circle cx="-20" cy="0" r="40" opacity="0.8"/>
+    <circle cx="20" cy="0" r="40" opacity="0.8"/>
+    <!-- Portal glow in vesica -->
+    <ellipse cx="0" cy="0" rx="18" ry="35" fill="#ff69b4" opacity="0.08" stroke="none"/>
+    <!-- Eye in the portal -->
+    <ellipse cx="0" cy="0" rx="12" ry="6" stroke-width="2" opacity="0.9"/>
+    <circle cx="0" cy="0" r="3" fill="#ff69b4" opacity="0.8"/>
+    <!-- Rays emanating -->
+    <line x1="0" y1="-40" x2="0" y2="-55" stroke-width="1.5" opacity="0.5"/>
+    <line x1="0" y1="40" x2="0" y2="55" stroke-width="1.5" opacity="0.5"/>
+    <line x1="-12" y1="-38" x2="-18" y2="-52" stroke-width="1" opacity="0.4"/>
+    <line x1="12" y1="-38" x2="18" y2="-52" stroke-width="1" opacity="0.4"/>
+    <text x="0" y="95" class="label">VESICA PISCIS</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">"THE PORTAL"</text>
+  </g>
+
+  <!-- 4. Sri Yantra -->
+  <g transform="translate(1040, 280)" stroke="#ff69b4" fill="none" stroke-width="2" stroke-linecap="round">
+    <!-- 9 interlocking triangles (simplified) -->
+    <!-- Upward triangles -->
+    <polygon points="0,-50 -45,40 45,40" stroke-width="1.5" opacity="0.8"/>
+    <polygon points="0,-35 -32,28 32,28" stroke-width="1.5" opacity="0.7"/>
+    <polygon points="0,-22 -20,18 20,18" stroke-width="1.5" opacity="0.6"/>
+    <polygon points="0,-12 -11,10 11,10" stroke-width="1.5" opacity="0.5"/>
+    <!-- Downward triangles -->
+    <polygon points="0,50 -45,-40 45,-40" stroke-width="1.5" opacity="0.8"/>
+    <polygon points="0,38 -35,-30 35,-30" stroke-width="1.5" opacity="0.7"/>
+    <polygon points="0,26 -24,-20 24,-20" stroke-width="1.5" opacity="0.6"/>
+    <polygon points="0,16 -14,-12 14,-12" stroke-width="1.5" opacity="0.5"/>
+    <!-- Central bindu point -->
+    <circle cx="0" cy="0" r="3" fill="#ff69b4" opacity="0.9"/>
+    <!-- Outer circle -->
+    <circle cx="0" cy="0" r="58" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+    <text x="0" y="95" class="label">SRI YANTRA</text>
+  </g>
+
+  <!-- 5. Merkaba (Star Tetrahedron) -->
+  <g transform="translate(1320, 280)" stroke="#ff69b4" fill="none" stroke-width="2" stroke-linecap="round">
+    <!-- Upward tetrahedron (2D projection) -->
+    <polygon points="0,-55 -48,35 48,35" stroke-width="2.5" opacity="0.85"/>
+    <!-- Downward tetrahedron -->
+    <polygon points="0,55 -48,-35 48,-35" stroke-width="2.5" opacity="0.85"/>
+    <!-- Inner energy lines -->
+    <line x1="0" y1="-55" x2="0" y2="55" stroke-width="1" opacity="0.3" stroke-dasharray="3,4"/>
+    <line x1="-48" y1="35" x2="48" y2="-35" stroke-width="1" opacity="0.3" stroke-dasharray="3,4"/>
+    <line x1="48" y1="35" x2="-48" y2="-35" stroke-width="1" opacity="0.3" stroke-dasharray="3,4"/>
+    <!-- Central glow -->
+    <circle cx="0" cy="0" r="12" fill="#ff69b4" opacity="0.1" stroke="none"/>
+    <circle cx="0" cy="0" r="4" fill="#ff69b4" opacity="0.6"/>
+    <!-- Rotation arrows -->
+    <path d="M -18,-5 A 18,18 0 0,1 5,-18" stroke-width="1.5" opacity="0.5"/>
+    <path d="M 18,5 A 18,18 0 0,1 -5,18" stroke-width="1.5" opacity="0.5"/>
+    <text x="0" y="95" class="label">MERKABA</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">VEHICLE OF LIGHT</text>
+  </g>
+
+  <!-- 6. Icositetragon (24-gon — Grant's) -->
+  <g transform="translate(1600, 280)" stroke="#ff69b4" fill="none" stroke-width="2" stroke-linecap="round">
+    <!-- 24-sided polygon -->
+    <polygon points="50,0 48.3,13 43.3,25 35.4,35.4 25,43.3 13,48.3 0,50 -13,48.3 -25,43.3 -35.4,35.4 -43.3,25 -48.3,13 -50,0 -48.3,-13 -43.3,-25 -35.4,-35.4 -25,-43.3 -13,-48.3 0,-50 13,-48.3 25,-43.3 35.4,-35.4 43.3,-25 48.3,-13" stroke-width="2.5" opacity="0.9"/>
+    <!-- Quasi-prime connections (vertices 1,5,7,11 connected) -->
+    <line x1="50" y1="0" x2="25" y2="43.3" stroke-width="1.5" opacity="0.5" stroke-dasharray="3,2"/>
+    <line x1="25" y1="43.3" x2="-25" y2="43.3" stroke-width="1.5" opacity="0.5" stroke-dasharray="3,2"/>
+    <line x1="-25" y1="43.3" x2="-48.3" y2="-13" stroke-width="1.5" opacity="0.5" stroke-dasharray="3,2"/>
+    <line x1="-48.3" y1="-13" x2="0" y2="-50" stroke-width="1.5" opacity="0.5" stroke-dasharray="3,2"/>
+    <line x1="0" y1="-50" x2="50" y2="0" stroke-width="1.5" opacity="0.5" stroke-dasharray="3,2"/>
+    <!-- Center dot -->
+    <circle cx="0" cy="0" r="3" fill="#ff69b4" opacity="0.7"/>
+    <!-- "24" mark -->
+    <text x="0" y="4" fill="#ff69b4" font-size="10" text-anchor="middle" opacity="0.5" font-family="Courier New">24</text>
+    <text x="0" y="95" class="label">ICOSITETRAGON</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">GRANT PRIME</text>
+  </g>
+
+  <!-- 7. Seed of Life -->
+  <g transform="translate(1880, 280)" stroke="#ff69b4" fill="none" stroke-width="2" stroke-linecap="round">
+    <circle cx="0" cy="0" r="22" opacity="0.9"/>
+    <circle cx="22" cy="0" r="22" opacity="0.7"/>
+    <circle cx="-22" cy="0" r="22" opacity="0.7"/>
+    <circle cx="11" cy="19" r="22" opacity="0.7"/>
+    <circle cx="-11" cy="19" r="22" opacity="0.7"/>
+    <circle cx="11" cy="-19" r="22" opacity="0.7"/>
+    <circle cx="-11" cy="-19" r="22" opacity="0.7"/>
+    <!-- Drip -->
+    <line x1="0" y1="42" x2="-2" y2="62" stroke-width="2" opacity="0.5"/>
+    <text x="0" y="95" class="label">SEED OF LIFE</text>
+  </g>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- CATEGORY 2: EQUATIONS AS GLYPHS -->
+  <!-- ════════════════════════════════════════════════ -->
+  <line x1="200" y1="420" x2="2200" y2="420" stroke="#ff69b4" stroke-width="0.5" opacity="0.2"/>
+  <text x="120" y="470" class="category">◆ EQUATIONS AS GLYPHS</text>
+
+  <!-- 8. Euler's Identity -->
+  <g transform="translate(200, 600)" stroke="#ff69b4" fill="none" stroke-width="2">
+    <!-- The equation in a rough circle -->
+    <circle cx="0" cy="0" r="55" stroke-dasharray="6,4" opacity="0.4"/>
+    <text x="0" y="-8" fill="#ff69b4" font-size="22" text-anchor="middle" font-family="Courier New" font-weight="bold">e<tspan baseline-shift="super" font-size="14">iπ</tspan></text>
+    <text x="0" y="16" fill="#ff69b4" font-size="18" text-anchor="middle" font-family="Courier New">+ 1 = 0</text>
+    <!-- Radiating lines -->
+    <line x1="-55" y1="0" x2="-70" y2="0" stroke-width="1" opacity="0.4"/>
+    <line x1="55" y1="0" x2="70" y2="0" stroke-width="1" opacity="0.4"/>
+    <line x1="0" y1="-55" x2="0" y2="-70" stroke-width="1" opacity="0.4"/>
+    <line x1="0" y1="55" x2="0" y2="70" stroke-width="1" opacity="0.4"/>
+    <text x="0" y="95" class="label">EULER'S IDENTITY</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">THE MOST BEAUTIFUL EQUATION</text>
+  </g>
+
+  <!-- 9. Golden Ratio -->
+  <g transform="translate(480, 600)" stroke="#ff69b4" fill="none" stroke-width="2" stroke-linecap="round">
+    <!-- Golden spiral (approximated) -->
+    <path d="M 0,0 A 5,5 0 0,1 5,5 A 8,8 0 0,1 -3,13 A 13,13 0 0,1 -16,0 A 21,21 0 0,1 5,-21 A 34,34 0 0,1 39,13" stroke-width="2.5" opacity="0.8"/>
+    <!-- Golden rectangle -->
+    <rect x="-30" y="-30" width="70" height="43" stroke-width="1.5" opacity="0.5" stroke-dasharray="4,3"/>
+    <!-- Phi symbol large -->
+    <text x="0" y="-35" fill="#ff69b4" font-size="28" text-anchor="middle" font-family="serif" font-style="italic" opacity="0.9">φ</text>
+    <!-- Value -->
+    <text x="0" y="55" fill="#ff69b4" font-size="12" text-anchor="middle" font-family="Courier New" opacity="0.7">1.61803398...</text>
+    <text x="0" y="95" class="label">GOLDEN RATIO</text>
+  </g>
+
+  <!-- 10. Fine Structure Constant -->
+  <g transform="translate(760, 600)" stroke="#ff69b4" fill="none" stroke-width="2">
+    <!-- Alpha in a triangle -->
+    <polygon points="0,-50 -45,35 45,35" stroke-width="1.5" opacity="0.5"/>
+    <text x="0" y="5" fill="#ff69b4" font-size="30" text-anchor="middle" font-family="serif" font-style="italic">α</text>
+    <text x="0" y="22" fill="#ff69b4" font-size="11" text-anchor="middle" font-family="Courier New" opacity="0.7">= 1/137</text>
+    <!-- Electron orbit rings -->
+    <ellipse cx="0" cy="-5" rx="55" ry="20" stroke-width="1" opacity="0.3" stroke-dasharray="3,3"/>
+    <ellipse cx="0" cy="-5" rx="20" ry="55" stroke-width="1" opacity="0.3" stroke-dasharray="3,3" transform="rotate(30, 0, -5)"/>
+    <text x="0" y="95" class="label">FINE STRUCTURE</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">THE GOD NUMBER</text>
+  </g>
+
+  <!-- 11. Riemann Zeta -->
+  <g transform="translate(1040, 600)" stroke="#ff69b4" fill="none" stroke-width="2">
+    <!-- Critical line -->
+    <line x1="0" y1="-55" x2="0" y2="55" stroke-width="2.5" opacity="0.7"/>
+    <!-- Zeros on the critical line -->
+    <circle cx="0" cy="-40" r="4" fill="#ff69b4" opacity="0.8"/>
+    <circle cx="0" cy="-18" r="4" fill="#ff69b4" opacity="0.8"/>
+    <circle cx="0" cy="5" r="4" fill="#ff69b4" opacity="0.8"/>
+    <circle cx="0" cy="30" r="4" fill="#ff69b4" opacity="0.8"/>
+    <!-- Re(s) = 1/2 label -->
+    <text x="25" y="-40" fill="#ff69b4" font-size="9" font-family="Courier New" opacity="0.5">½+14.1i</text>
+    <text x="25" y="-18" fill="#ff69b4" font-size="9" font-family="Courier New" opacity="0.5">½+21.0i</text>
+    <!-- Zeta symbol -->
+    <text x="0" y="-62" fill="#ff69b4" font-size="24" text-anchor="middle" font-family="serif" font-style="italic">ζ(s)</text>
+    <!-- Wavy energy -->
+    <path d="M -40,-30 Q -25,-20 -40,-10 Q -55,0 -40,10 Q -25,20 -40,30" stroke-width="1" opacity="0.3"/>
+    <path d="M 40,-30 Q 55,-20 40,-10 Q 25,0 40,10 Q 55,20 40,30" stroke-width="1" opacity="0.3"/>
+    <text x="0" y="95" class="label">RIEMANN ZEROS</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">THE UNSOLVED MYSTERY</text>
+  </g>
+
+  <!-- 12. 432 Hz Waveform -->
+  <g transform="translate(1320, 600)" stroke="#ff69b4" fill="none" stroke-width="2.5" stroke-linecap="round">
+    <!-- Sine wave -->
+    <path d="M -55,0 Q -42,-30 -28,0 Q -14,30 0,0 Q 14,-30 28,0 Q 42,30 55,0" opacity="0.9"/>
+    <!-- Second harmonic overlay -->
+    <path d="M -55,0 Q -48,-15 -41,0 Q -34,15 -28,0 Q -21,-15 -14,0 Q -7,15 0,0 Q 7,-15 14,0 Q 21,15 28,0 Q 35,-15 42,0 Q 49,15 55,0" stroke-width="1.5" opacity="0.5"/>
+    <!-- Frequency label -->
+    <text x="0" y="-40" fill="#ff69b4" font-size="20" text-anchor="middle" font-family="Courier New" font-weight="bold">432</text>
+    <text x="0" y="-28" fill="#ff69b4" font-size="10" text-anchor="middle" font-family="Courier New" opacity="0.6">Hz</text>
+    <!-- Nodes -->
+    <circle cx="-55" cy="0" r="3" fill="#ff69b4" opacity="0.6"/>
+    <circle cx="0" cy="0" r="3" fill="#ff69b4" opacity="0.6"/>
+    <circle cx="55" cy="0" r="3" fill="#ff69b4" opacity="0.6"/>
+    <text x="0" y="95" class="label">COSMIC FREQUENCY</text>
+  </g>
+
+  <!-- 13. Maxwell's Light -->
+  <g transform="translate(1600, 600)" stroke="#ff69b4" fill="none" stroke-width="2">
+    <!-- Nabla symbol (del operator) -->
+    <polygon points="0,-45 -30,20 30,20" stroke-width="2.5" opacity="0.8"/>
+    <text x="6" y="8" fill="#ff69b4" font-size="16" text-anchor="middle" font-family="Courier New">×</text>
+    <!-- E and B fields crossing -->
+    <text x="40" y="0" fill="#ff69b4" font-size="20" font-family="serif" font-weight="bold" font-style="italic">E</text>
+    <!-- Arrow -->
+    <line x1="-45" y1="30" x2="45" y2="30" stroke-width="1.5" opacity="0.6"/>
+    <polygon points="45,30 38,26 38,34" fill="#ff69b4" opacity="0.6"/>
+    <text x="0" y="48" fill="#ff69b4" font-size="10" text-anchor="middle" font-family="Courier New" opacity="0.6">-∂B/∂t</text>
+    <text x="0" y="95" class="label">MAXWELL</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">LIGHT ITSELF</text>
+  </g>
+
+  <!-- 14. Planck -->
+  <g transform="translate(1880, 600)" stroke="#ff69b4" fill="none" stroke-width="2">
+    <text x="0" y="0" fill="#ff69b4" font-size="36" text-anchor="middle" font-family="serif" font-style="italic">ℏ</text>
+    <text x="0" y="20" fill="#ff69b4" font-size="11" text-anchor="middle" font-family="Courier New" opacity="0.6">E = ℏω</text>
+    <!-- Quantized energy levels -->
+    <line x1="-30" y1="-45" x2="30" y2="-45" stroke-width="2" opacity="0.7"/>
+    <line x1="-25" y1="-32" x2="25" y2="-32" stroke-width="2" opacity="0.6"/>
+    <line x1="-20" y1="-22" x2="20" y2="-22" stroke-width="2" opacity="0.5"/>
+    <!-- Quantum jump arrow -->
+    <path d="M 35,-45 Q 45,-38 35,-32" stroke-width="1.5" opacity="0.5"/>
+    <polygon points="35,-32 32,-37 38,-37" fill="#ff69b4" opacity="0.5"/>
+    <text x="0" y="95" class="label">PLANCK QUANTUM</text>
+  </g>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- CATEGORY 3: HIGHER-DIMENSIONAL PORTALS -->
+  <!-- ════════════════════════════════════════════════ -->
+  <line x1="200" y1="740" x2="2200" y2="740" stroke="#ff69b4" stroke-width="0.5" opacity="0.2"/>
+  <text x="120" y="790" class="category">◆ HIGHER-DIMENSIONAL PORTALS</text>
+
+  <!-- 15. Tesseract (4D Hypercube) -->
+  <g transform="translate(200, 920)" stroke="#ff69b4" fill="none" stroke-width="2" stroke-linecap="round">
+    <!-- Outer cube -->
+    <rect x="-45" y="-45" width="90" height="90" opacity="0.8"/>
+    <!-- Inner cube (rotated/scaled) -->
+    <rect x="-25" y="-25" width="50" height="50" opacity="0.6" transform="rotate(5)"/>
+    <!-- Connecting edges (4D projection) -->
+    <line x1="-45" y1="-45" x2="-25" y2="-25" stroke-width="1.5" opacity="0.5"/>
+    <line x1="45" y1="-45" x2="25" y2="-25" stroke-width="1.5" opacity="0.5"/>
+    <line x1="45" y1="45" x2="25" y2="25" stroke-width="1.5" opacity="0.5"/>
+    <line x1="-45" y1="45" x2="-25" y2="25" stroke-width="1.5" opacity="0.5"/>
+    <!-- Central glow -->
+    <circle cx="0" cy="0" r="6" fill="#ff69b4" opacity="0.3"/>
+    <!-- Drips -->
+    <line x1="-45" y1="45" x2="-47" y2="65" stroke-width="2" opacity="0.5"/>
+    <line x1="45" y1="45" x2="43" y2="60" stroke-width="1.5" opacity="0.4"/>
+    <text x="0" y="95" class="label">TESSERACT</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">4D PROJECTION</text>
+  </g>
+
+  <!-- 16. Torus -->
+  <g transform="translate(480, 920)" stroke="#ff69b4" fill="none" stroke-width="2" stroke-linecap="round">
+    <!-- Outer ring -->
+    <ellipse cx="0" cy="0" rx="55" ry="25" opacity="0.8"/>
+    <!-- Inner hole -->
+    <ellipse cx="0" cy="0" rx="20" ry="8" opacity="0.6"/>
+    <!-- Top curve (3D illusion) -->
+    <path d="M -55,0 Q -55,-45 0,-45 Q 55,-45 55,0" stroke-width="2" opacity="0.6"/>
+    <!-- Bottom curve -->
+    <path d="M -20,0 Q -20,20 0,20 Q 20,20 20,0" stroke-width="1.5" opacity="0.4" stroke-dasharray="3,2"/>
+    <!-- Energy flow arrows (through center, around outside) -->
+    <line x1="0" y1="-45" x2="0" y2="-55" stroke-width="1" opacity="0.4"/>
+    <polygon points="0,-55 -3,-50 3,-50" fill="#ff69b4" opacity="0.4"/>
+    <line x1="0" y1="20" x2="0" y2="30" stroke-width="1" opacity="0.4"/>
+    <polygon points="0,30 -3,25 3,25" fill="#ff69b4" opacity="0.4"/>
+    <text x="0" y="95" class="label">TORUS</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">SHAPE OF THE UNIVERSE</text>
+  </g>
+
+  <!-- 17. Calabi-Yau Manifold -->
+  <g transform="translate(760, 920)" stroke="#ff69b4" fill="none" stroke-width="1.5" stroke-linecap="round">
+    <!-- Simplified Calabi-Yau (overlapping curved surfaces) -->
+    <path d="M 0,-50 Q 40,-30 30,0 Q 20,30 0,50 Q -20,30 -30,0 Q -40,-30 0,-50" stroke-width="2" opacity="0.8"/>
+    <path d="M 0,-50 Q -10,-20 -40,0 Q -10,20 0,50 Q 10,20 40,0 Q 10,-20 0,-50" stroke-width="1.5" opacity="0.6"/>
+    <path d="M -40,0 Q -20,-30 0,0 Q 20,30 40,0" stroke-width="1.5" opacity="0.5"/>
+    <path d="M -40,0 Q -20,30 0,0 Q 20,-30 40,0" stroke-width="1" opacity="0.4"/>
+    <!-- Hidden dimension indicator -->
+    <text x="0" y="-55" fill="#ff69b4" font-size="10" text-anchor="middle" font-family="Courier New" opacity="0.5">6D</text>
+    <circle cx="0" cy="0" r="3" fill="#ff69b4" opacity="0.5"/>
+    <text x="0" y="95" class="label">CALABI-YAU</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">HIDDEN DIMENSIONS</text>
+  </g>
+
+  <!-- 18. Klein Bottle -->
+  <g transform="translate(1040, 920)" stroke="#ff69b4" fill="none" stroke-width="2" stroke-linecap="round">
+    <!-- Klein bottle profile (the tube that passes through itself) -->
+    <path d="M 0,50 Q -40,50 -40,10 Q -40,-30 -20,-40 Q 0,-50 20,-40 Q 40,-30 40,-10 Q 40,10 20,10 Q 5,10 5,-5 Q 5,-20 -5,-25 Q -15,-20 -15,0 Q -15,20 0,25 Q 15,30 15,50" stroke-width="2.5" opacity="0.8"/>
+    <!-- "No inside" indicator -->
+    <path d="M -10,0 L 10,0" stroke-width="1.5" opacity="0.4"/>
+    <path d="M 0,-10 L 0,10" stroke-width="1.5" opacity="0.4"/>
+    <!-- Infinity symbol -->
+    <text x="0" y="65" fill="#ff69b4" font-size="18" text-anchor="middle" opacity="0.6">∞</text>
+    <text x="0" y="95" class="label">KLEIN BOTTLE</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">NO INSIDE OR OUTSIDE</text>
+  </g>
+
+  <!-- 19. Penrose Triangle -->
+  <g transform="translate(1320, 920)" stroke="#ff69b4" fill="none" stroke-width="2.5" stroke-linecap="round">
+    <!-- Impossible triangle -->
+    <path d="M 0,-45 L 50,40 L -50,40 Z" stroke-width="1" opacity="0.3"/>
+    <!-- Thick impossible version -->
+    <path d="M 0,-50 L 12,-28 L -38,32 L -50,32 Z" opacity="0.8"/>
+    <path d="M 12,-28 L 50,40 L 38,40 L 8,-16 Z" opacity="0.7"/>
+    <path d="M -50,32 L -38,32 L 50,32 L 50,42 L -50,42 Z" opacity="0.6"/>
+    <!-- ? in center -->
+    <text x="0" y="15" fill="#ff69b4" font-size="16" text-anchor="middle" font-family="Courier New" opacity="0.5">?</text>
+    <text x="0" y="95" class="label">PENROSE</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">IMPOSSIBLE GEOMETRY</text>
+  </g>
+
+  <!-- 20. Hyperbolic Space -->
+  <g transform="translate(1600, 920)" stroke="#ff69b4" fill="none" stroke-width="1.5" stroke-linecap="round">
+    <!-- Poincaré disk -->
+    <circle cx="0" cy="0" r="55" stroke-width="2" opacity="0.8"/>
+    <!-- Hyperbolic tiling (simplified) -->
+    <circle cx="0" cy="-25" r="25" opacity="0.5"/>
+    <circle cx="22" cy="13" r="25" opacity="0.5"/>
+    <circle cx="-22" cy="13" r="25" opacity="0.5"/>
+    <circle cx="0" cy="0" r="12" opacity="0.6"/>
+    <!-- Smaller at edges -->
+    <circle cx="0" cy="-45" r="8" opacity="0.3"/>
+    <circle cx="40" cy="23" r="8" opacity="0.3"/>
+    <circle cx="-40" cy="23" r="8" opacity="0.3"/>
+    <circle cx="40" cy="-23" r="6" opacity="0.2"/>
+    <circle cx="-40" cy="-23" r="6" opacity="0.2"/>
+    <text x="0" y="95" class="label">HYPERBOLIC SPACE</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">INFINITE IN FINITE</text>
+  </g>
+
+  <!-- 21. Wormhole -->
+  <g transform="translate(1880, 920)" stroke="#ff69b4" fill="none" stroke-width="2" stroke-linecap="round">
+    <!-- Two mouths -->
+    <ellipse cx="0" cy="-35" rx="40" ry="15" opacity="0.8"/>
+    <ellipse cx="0" cy="35" rx="40" ry="15" opacity="0.8"/>
+    <!-- Throat -->
+    <path d="M -40,-35 Q -20,0 -40,35" stroke-width="1.5" opacity="0.6"/>
+    <path d="M 40,-35 Q 20,0 40,35" stroke-width="1.5" opacity="0.6"/>
+    <!-- Inner throat (narrower) -->
+    <path d="M -25,-35 Q -10,0 -25,35" stroke-width="1" opacity="0.4" stroke-dasharray="3,2"/>
+    <path d="M 25,-35 Q 10,0 25,35" stroke-width="1" opacity="0.4" stroke-dasharray="3,2"/>
+    <!-- Singularity -->
+    <circle cx="0" cy="0" r="4" fill="#ff69b4" opacity="0.6"/>
+    <text x="0" y="95" class="label">WORMHOLE</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">EINSTEIN-ROSEN BRIDGE</text>
+  </g>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- CATEGORY 4: YOUR ORIGINALS EVOLVED -->
+  <!-- ════════════════════════════════════════════════ -->
+  <line x1="200" y1="1060" x2="2200" y2="1060" stroke="#ff69b4" stroke-width="0.5" opacity="0.2"/>
+  <text x="120" y="1110" class="category">◆ YOUR ORIGINALS — EVOLVED</text>
+
+  <!-- 22. Eye of Horus + Golden Spiral -->
+  <g transform="translate(200, 1240)" stroke="#ff69b4" fill="none" stroke-width="2.5" stroke-linecap="round">
+    <!-- Eye shape -->
+    <path d="M -50,0 Q -25,-30 0,-25 Q 25,-20 50,0 Q 25,20 0,25 Q -25,30 -50,0" opacity="0.9"/>
+    <!-- Iris with golden spiral -->
+    <circle cx="0" cy="0" r="15" opacity="0.7"/>
+    <path d="M 0,0 A 3,3 0 0,1 3,3 A 5,5 0 0,1 -2,8 A 8,8 0 0,1 -10,0 A 13,13 0 0,1 3,-13" stroke-width="2" opacity="0.8"/>
+    <!-- Pupil -->
+    <circle cx="0" cy="0" r="5" fill="#ff69b4" opacity="0.6"/>
+    <!-- Horus tear line (with phi ratio marks) -->
+    <path d="M 0,25 Q -5,40 -15,55" stroke-width="2.5" opacity="0.7"/>
+    <circle cx="-8" cy="38" r="2" fill="#ff69b4" opacity="0.5"/>
+    <!-- Brow with equation -->
+    <path d="M -50,0 Q -50,-15 -35,-25 Q -15,-35 15,-35 Q 35,-30 55,-10" stroke-width="1.5" opacity="0.5"/>
+    <text x="55" y="-15" fill="#ff69b4" font-size="8" font-family="Courier New" opacity="0.5">φ</text>
+    <text x="0" y="95" class="label">EYE OF φ</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">HORUS × GOLDEN SPIRAL</text>
+  </g>
+
+  <!-- 23. Skull → Dodecahedron Head -->
+  <g transform="translate(480, 1240)" stroke="#ff69b4" fill="none" stroke-width="2" stroke-linecap="round">
+    <!-- Pentagon skull (dodecahedron face) -->
+    <polygon points="0,-50 -48,-15 -30,40 30,40 48,-15" stroke-width="2.5" opacity="0.85"/>
+    <!-- Inner pentagon -->
+    <polygon points="0,-28 -27,-8 -17,23 17,23 27,-8" stroke-width="1.5" opacity="0.5"/>
+    <!-- Eye sockets (pentagons) -->
+    <polygon points="-18,-12 -25,-5 -22,5 -14,5 -11,-5" fill="#ff69b4" opacity="0.15" stroke-width="1.5"/>
+    <polygon points="18,-12 25,-5 22,5 14,5 11,-5" fill="#ff69b4" opacity="0.15" stroke-width="1.5"/>
+    <!-- Nose triangle -->
+    <polygon points="0,2 -5,12 5,12" stroke-width="1.5" opacity="0.6"/>
+    <!-- Teeth (hash marks) -->
+    <line x1="-12" y1="23" x2="-12" y2="30" stroke-width="2" opacity="0.6"/>
+    <line x1="-4" y1="23" x2="-4" y2="32" stroke-width="2" opacity="0.6"/>
+    <line x1="4" y1="23" x2="4" y2="32" stroke-width="2" opacity="0.6"/>
+    <line x1="12" y1="23" x2="12" y2="30" stroke-width="2" opacity="0.6"/>
+    <!-- Drip from jaw -->
+    <line x1="-4" y1="32" x2="-6" y2="50" stroke-width="1.5" opacity="0.4"/>
+    <text x="0" y="95" class="label">PLATONIC SKULL</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">DODECAHEDRON HEAD</text>
+  </g>
+
+  <!-- 24. Heart → Cardioid Curve -->
+  <g transform="translate(760, 1240)" stroke="#ff69b4" fill="none" stroke-width="2.5" stroke-linecap="round">
+    <!-- Mathematical cardioid: r = 1 - cos(θ) -->
+    <path d="M 0,15 Q -15,-10 -35,-15 Q -55,-15 -50,10 Q -45,35 -20,50 Q 0,60 0,60 Q 0,60 20,50 Q 45,35 50,10 Q 55,-15 35,-15 Q 15,-10 0,15" stroke-width="2.5" opacity="0.9"/>
+    <!-- Inner cardioid -->
+    <path d="M 0,25 Q -8,10 -18,8 Q -28,8 -25,20 Q -22,32 -10,40 Q 0,45 0,45 Q 0,45 10,40 Q 22,32 25,20 Q 28,8 18,8 Q 8,10 0,25" stroke-width="1.5" opacity="0.5"/>
+    <!-- Equation -->
+    <text x="0" y="-30" fill="#ff69b4" font-size="10" text-anchor="middle" font-family="Courier New" opacity="0.6">r = 1-cos(θ)</text>
+    <!-- Cusp point -->
+    <circle cx="0" cy="15" r="3" fill="#ff69b4" opacity="0.7"/>
+    <!-- Drip from bottom -->
+    <line x1="0" y1="60" x2="-2" y2="78" stroke-width="2" opacity="0.5"/>
+    <text x="0" y="95" class="label">CARDIOID HEART</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">MATH OF LOVE</text>
+  </g>
+
+  <!-- 25. Spiral → Fibonacci with numbers -->
+  <g transform="translate(1040, 1240)" stroke="#ff69b4" fill="none" stroke-width="2" stroke-linecap="round">
+    <!-- Golden rectangles -->
+    <rect x="-50" y="-50" width="100" height="100" stroke-width="1" opacity="0.3"/>
+    <rect x="-50" y="-50" width="62" height="62" stroke-width="1" opacity="0.3"/>
+    <rect x="-50" y="-50" width="38" height="38" stroke-width="1" opacity="0.3"/>
+    <!-- Fibonacci spiral -->
+    <path d="M 50,50 A 100,100 0 0,0 -50,-50" stroke-width="2.5" opacity="0.5"/>
+    <path d="M -50,-50 A 62,62 0 0,0 12,12" stroke-width="2.5" opacity="0.6"/>
+    <path d="M 12,12 A 38,38 0 0,0 -12,-26" stroke-width="2.5" opacity="0.7"/>
+    <path d="M -12,-26 A 24,24 0 0,0 0,-2" stroke-width="2.5" opacity="0.8"/>
+    <path d="M 0,-2 A 14,14 0 0,0 -5,-12" stroke-width="2" opacity="0.9"/>
+    <!-- Numbers -->
+    <text x="30" y="30" fill="#ff69b4" font-size="14" font-family="Courier New" opacity="0.4">8</text>
+    <text x="-25" y="-5" fill="#ff69b4" font-size="12" font-family="Courier New" opacity="0.4">5</text>
+    <text x="-35" y="-30" fill="#ff69b4" font-size="10" font-family="Courier New" opacity="0.4">3</text>
+    <text x="-5" y="-15" fill="#ff69b4" font-size="8" font-family="Courier New" opacity="0.5">2</text>
+    <text x="-5" y="-8" fill="#ff69b4" font-size="7" font-family="Courier New" opacity="0.5">1</text>
+    <text x="0" y="95" class="label">FIBONACCI</text>
+  </g>
+
+  <!-- 26. Planet → Orbital Resonance -->
+  <g transform="translate(1320, 1240)" stroke="#ff69b4" fill="none" stroke-width="2" stroke-linecap="round">
+    <!-- Central body -->
+    <circle cx="0" cy="0" r="8" fill="#ff69b4" opacity="0.5"/>
+    <!-- Orbital rings (resonance ratios) -->
+    <ellipse cx="0" cy="0" rx="22" ry="18" opacity="0.7" transform="rotate(-10)"/>
+    <ellipse cx="0" cy="0" rx="38" ry="30" opacity="0.5" transform="rotate(5)"/>
+    <ellipse cx="0" cy="0" rx="55" ry="45" opacity="0.3" transform="rotate(-5)"/>
+    <!-- Bodies on orbits -->
+    <circle cx="22" cy="-3" r="4" fill="#ff69b4" opacity="0.7"/>
+    <circle cx="-35" cy="15" r="5" fill="#ff69b4" opacity="0.5"/>
+    <circle cx="10" cy="-44" r="3" fill="#ff69b4" opacity="0.3"/>
+    <!-- Resonance ratios -->
+    <text x="30" y="-10" fill="#ff69b4" font-size="8" font-family="Courier New" opacity="0.5">1:1</text>
+    <text x="-45" y="8" fill="#ff69b4" font-size="8" font-family="Courier New" opacity="0.5">2:3</text>
+    <text x="20" y="-48" fill="#ff69b4" font-size="8" font-family="Courier New" opacity="0.5">1:2</text>
+    <text x="0" y="95" class="label">ORBITAL RESONANCE</text>
+  </g>
+
+  <!-- 27. Cross → Dimensional Cross -->
+  <g transform="translate(1600, 1240)" stroke="#ff69b4" fill="none" stroke-width="2.5" stroke-linecap="round">
+    <!-- 3D cross with perspective -->
+    <line x1="0" y1="-55" x2="0" y2="55" stroke-width="3" opacity="0.9"/>
+    <line x1="-55" y1="0" x2="55" y2="0" stroke-width="3" opacity="0.9"/>
+    <!-- Diagonal (z-axis) -->
+    <line x1="-35" y1="-35" x2="35" y2="35" stroke-width="2" opacity="0.5" stroke-dasharray="4,3"/>
+    <!-- 4th dimension (w-axis) -->
+    <line x1="35" y1="-35" x2="-35" y2="35" stroke-width="1.5" opacity="0.3" stroke-dasharray="2,4"/>
+    <!-- Dimension labels -->
+    <text x="0" y="-58" fill="#ff69b4" font-size="8" text-anchor="middle" font-family="Courier New" opacity="0.5">y</text>
+    <text x="60" y="4" fill="#ff69b4" font-size="8" font-family="Courier New" opacity="0.5">x</text>
+    <text x="38" y="42" fill="#ff69b4" font-size="8" font-family="Courier New" opacity="0.4">z</text>
+    <text x="-38" y="42" fill="#ff69b4" font-size="8" font-family="Courier New" opacity="0.3">w</text>
+    <!-- Center node -->
+    <circle cx="0" cy="0" r="5" fill="#ff69b4" opacity="0.6"/>
+    <!-- Circle at intersection -->
+    <circle cx="0" cy="0" r="15" stroke-width="1" opacity="0.3" stroke-dasharray="2,3"/>
+    <text x="0" y="95" class="label">4D CROSS</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">DIMENSIONAL AXES</text>
+  </g>
+
+  <!-- 28. dYZ Sigil (personal glyph) -->
+  <g transform="translate(1880, 1240)" stroke="#ff69b4" fill="none" stroke-width="2.5" stroke-linecap="round">
+    <!-- d -->
+    <path d="M -30,-30 Q -45,-15 -40,5 Q -35,25 -20,25 Q -5,25 -5,5 Q -5,-15 -5,-40" stroke-width="3" opacity="0.9"/>
+    <!-- Y (with tree of life branch) -->
+    <line x1="0" y1="25" x2="8" y2="-5" stroke-width="3" opacity="0.9"/>
+    <line x1="8" y1="-5" x2="-2" y2="-30" stroke-width="2.5" opacity="0.8"/>
+    <line x1="8" y1="-5" x2="22" y2="-25" stroke-width="2.5" opacity="0.8"/>
+    <!-- Z (lightning bolt style) -->
+    <line x1="22" y1="-25" x2="40" y2="-25" stroke-width="3" opacity="0.9"/>
+    <line x1="40" y1="-25" x2="25" y2="5" stroke-width="3" opacity="0.9"/>
+    <line x1="25" y1="5" x2="42" y2="5" stroke-width="3" opacity="0.9"/>
+    <!-- Sacred circle around it all -->
+    <circle cx="5" cy="-5" r="55" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.4"/>
+    <!-- Vesica piscis portal behind -->
+    <ellipse cx="5" cy="-5" rx="15" ry="40" stroke-width="1" opacity="0.2"/>
+    <!-- 137 encoded -->
+    <text x="45" y="30" fill="#ff69b4" font-size="8" font-family="Courier New" opacity="0.4">137</text>
+    <text x="0" y="95" class="label">dYZ SIGIL</text>
+    <text x="0" y="107" class="label" font-size="9" opacity="0.4">YOUR MARK — EVOLVED</text>
+  </g>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- FOOTER -->
+  <!-- ════════════════════════════════════════════════ -->
+  <line x1="200" y1="1380" x2="2200" y2="1380" stroke="#ff69b4" stroke-width="0.5" opacity="0.2"/>
+  <text x="1200" y="1420" fill="#ff69b4" font-size="11" text-anchor="middle" opacity="0.4" font-family="Courier New">28 GLYPHS — REDRAW IN YOUR HAND — KEEP THE PUNK, ADD THE MATH</text>
+  <text x="1200" y="1440" fill="#ff69b4" font-size="9" text-anchor="middle" opacity="0.3" font-family="Courier New">© TONIC THOUGHT STUDIOS 2026 — TRANSMISSION GLYPHS v2</text>
+
+</svg>

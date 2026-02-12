@@ -1,12 +1,45 @@
 import { Artifact } from '../types';
 
+// Replace with your actual Shopify Storefront Access Token
+const SHOPIFY_DOMAIN = import.meta.env.VITE_SHOPIFY_DOMAIN || 'tonic-thought-studios.myshopify.com';
+const STOREFRONT_ACCESS_TOKEN = import.meta.env.VITE_SHOPIFY_ACCESS_TOKEN || '';
+
+const GRAPHQL_QUERY = `
+  query getProducts {
+    products(first: 20) {
+      nodes {
+        id
+        title
+        description
+        handle
+        tags
+        variants(first: 1) {
+          nodes {
+            id
+            price {
+              amount
+              currencyCode
+            }
+          }
+        }
+        images(first: 3) {
+          nodes {
+            url
+            altText
+          }
+        }
+      }
+    }
+  }
+`;
+
 /**
  * Fallback Artifacts: Manifested when the Shopify Nexus is disconnected.
  * Populated with the 'Static Stack' and '333 Resonance' collection.
  */
 const FALLBACK_ARTIFACTS: Artifact[] = [
   {
-    id: 'gid://shopify/Product/static-monolith',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/static-monolith',
     version: '1.0.0',
     name: 'Static Monolith',
     category: 'VISION',
@@ -25,7 +58,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/333-resonance',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/333-resonance',
     version: '3.3.3',
     name: 'Trinity Protocol',
     category: 'ONENESS',
@@ -44,7 +77,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/tv-stack-variant-2',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/tv-stack-variant-2',
     version: '1.0.1',
     name: 'Cathode Ray Shrine',
     category: 'VISION',
@@ -62,7 +95,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/333-variant-2',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/333-variant-2',
     version: '3.3.4',
     name: 'Wisdom Glyph',
     category: 'ONENESS',
@@ -80,7 +113,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/static-variant-3',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/static-variant-3',
     version: '1.0.2',
     name: 'Blue Screen Void',
     category: 'GROUNDING',
@@ -98,7 +131,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/333-variant-3',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/333-variant-3',
     version: '3.3.5',
     name: 'Pink Noise Map',
     category: 'PROTOCOL',
@@ -116,7 +149,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/metatron-plate',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/metatron-plate',
     version: '1.3.7',
     name: 'Metatron Density Plate',
     category: 'GROUNDING',
@@ -134,7 +167,7 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
     }
   },
   {
-    id: 'gid://shopify/Product/vision-lens',
+    variantId: 'gid://shopify/ProductVariant/fallback', id: 'gid://shopify/Product/vision-lens',
     version: '2.0.1',
     name: 'Visionary Lens Overlay',
     category: 'VISION',
@@ -154,25 +187,27 @@ const FALLBACK_ARTIFACTS: Artifact[] = [
 ];
 
 export const fetchShopifyArtifacts = async (): Promise<Artifact[]> => {
-  try {
-    // Use our server-side proxy to avoid CORS issues
-    console.log('Fetching from /api/shopify...');
-    const response = await fetch('/api/shopify');
-    console.log('Shopify proxy response status:', response.status);
+  // 1. Check if token is still a placeholder to avoid useless network calls
+  if (STOREFRONT_ACCESS_TOKEN === 'your-access-token-here') {
+    // console.warn("Shopify Nexus: Credentials unset. Manifesting fallback protocols.");
+    return FALLBACK_ARTIFACTS;
+  }
 
-    const json = await response.json();
-    console.log('Shopify API response:', json);
+  try {
+    const response = await fetch(`https://${SHOPIFY_DOMAIN}/api/2024-01/graphql.json`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Storefront-Access-Token': STOREFRONT_ACCESS_TOKEN,
+      },
+      body: JSON.stringify({ query: GRAPHQL_QUERY }),
+    });
 
     if (!response.ok) {
-      console.error('Shopify proxy not ok:', response.status, json);
-      throw new Error(`Shopify proxy error: ${json.message || json.error || response.statusText}`);
+      throw new Error(`Shopify Network response was not ok: ${response.statusText}`);
     }
 
-    // Check for API-level errors
-    if (json.error) {
-      console.error("Shopify API Error:", json.error, json.message);
-      return FALLBACK_ARTIFACTS;
-    }
+    const json = await response.json();
 
     // Check for GraphQL errors
     if (json.errors) {
@@ -181,10 +216,7 @@ export const fetchShopifyArtifacts = async (): Promise<Artifact[]> => {
     }
 
     const products = json.data?.products?.nodes;
-    console.log('Products found:', products?.length || 0);
-
     if (!products || products.length === 0) {
-      console.log('No products, using fallback');
       return FALLBACK_ARTIFACTS;
     }
 
@@ -200,6 +232,7 @@ export const fetchShopifyArtifacts = async (): Promise<Artifact[]> => {
 
       return {
         id: product.id,
+        variantId: product.variants.nodes[0]?.id || product.id,
         version: versionTag.replace('v', ''),
         name: product.title,
         category: categoryTag.toUpperCase() as any,

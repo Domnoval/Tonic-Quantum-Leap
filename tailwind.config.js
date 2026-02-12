@@ -11,8 +11,14 @@ export default {
         mono: ['Inter', 'monospace'],
       },
       colors: {
-        void: '#050505',
+        void: '#0a0a0a',
+        'void-deep': '#050505',
         source: '#F5F5F5',
+        gold: { DEFAULT: '#C9A84C', bright: '#d4af37', dim: '#8a7030' },
+        'deep-purple': '#1a0a2e',
+        teal: '#0d9488',
+        ruby: '#9f1239',
+        amethyst: '#7c3aed',
       },
       animation: {
         'spin-slow': 'spin 20s linear infinite',

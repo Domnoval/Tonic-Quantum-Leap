@@ -9,11 +9,15 @@ import Oracle from './components/Oracle';
 import ManualIndex from './components/ManualIndex';
 import Void from './components/Void';
 import Forge from './components/Forge';
+import FeaturedCollection from './components/FeaturedCollection';
+import About from './components/About';
+import SimplifiedNav from './components/SimplifiedNav';
 import QuantumField from './components/QuantumField';
 import AuthModal from './components/AuthModal';
 import { AuthProvider } from './contexts/AuthContext';
 import { fetchShopifyArtifacts } from './services/shopifyService';
 import { SACRED_GEOMETRY } from './constants';
+import SacredGeometry from './components/SacredGeometry';
 
 const THEME_CONFIG = {
   sky: { hex: '#38bdf8', rgb: '56, 189, 248' },   // Tailwind sky-400
@@ -40,12 +44,6 @@ const App: React.FC = () => {
   const [artifacts, setArtifacts] = useState<Artifact[]>([]);
   const [selectedArtifact, setSelectedArtifact] = useState<Artifact | null>(null);
   const [isLoadingInventory, setIsLoadingInventory] = useState(true);
-  
-  // Forge preselection state
-  const [forgePreselection, setForgePreselection] = useState<{
-    image?: string;
-    mode?: 'style' | 'remix' | 'inpaint' | 'mashup';
-  } | null>(null);
   
   // Perspective Awareness State (Default: Aether/Sky)
   const [themeColor, setThemeColor] = useState<ThemeColor>('sky');
@@ -166,17 +164,6 @@ const App: React.FC = () => {
     navigate(View.Apothecary);
   };
 
-  // Handle navigation with data (e.g., Void → Forge with preselected image)
-  const handleNavigateWithData = (section: string, data?: any) => {
-    if (section === 'forge') {
-      setForgePreselection({
-        image: data?.preselectedImage,
-        mode: data?.preselectedMode,
-      });
-      navigate(View.Forge);
-    }
-  };
-
   if (!isCalibrated) {
     return (
       <AuthProvider>
@@ -192,8 +179,10 @@ const App: React.FC = () => {
 
   return (
     <AuthProvider>
-    <main id="main-content" className="relative min-h-screen bg-black overflow-hidden">
-      <HUD currentView={currentView} setView={navigate} themeColor={themeColor} />
+    <main id="main-content" className="relative min-h-screen bg-[#0a0a0a] overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)', paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right)' }}>
+      {/* SimplifiedNav for cleaner UX — swap with HUD */}
+      <SimplifiedNav currentView={currentView} setView={navigate} cartCount={cart.length} themeColor={themeColor} />
+      {/* <HUD currentView={currentView} setView={navigate} themeColor={themeColor} /> */}
       <AuthModal />
       
       {/* 
@@ -204,7 +193,30 @@ const App: React.FC = () => {
         {currentView === View.Origin && (
           <div className="flex flex-col items-center justify-center min-h-screen relative px-6 overflow-hidden">
             <QuantumField particleCount={60} connectionDistance={120} />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[60vh] bg-[#111] border border-white/5 opacity-40 z-0" />
+            
+            {/* Sacred Geometry Background — Flower of Life */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
+              <SacredGeometry variant="flower-of-life" size={1000} opacity={0.1} animated />
+            </div>
+            {/* Secondary geometry — slower counter-rotation */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
+              <div className="sacred-geo-rotate-reverse" style={{ opacity: 0.07 }}>
+                <SacredGeometry variant="metatrons-cube" size={650} opacity={1} animated={false} />
+              </div>
+            </div>
+            
+            {/* Concentric pulse rings */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
+              <div className="concentric-ring absolute" style={{ width: 400, height: 400, left: -200, top: -200 }} />
+              <div className="concentric-ring absolute" style={{ width: 600, height: 600, left: -300, top: -300 }} />
+              <div className="concentric-ring absolute" style={{ width: 800, height: 800, left: -400, top: -400 }} />
+            </div>
+            
+            {/* Radial gold glow behind title */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none z-0" style={{ background: 'radial-gradient(circle, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.03) 40%, transparent 70%)' }} />
+            
+            {/* Reflective water surface at bottom */}
+            <div className="absolute bottom-0 left-0 w-full h-48 reflection-surface pointer-events-none z-[1]" />
             
             <div className="relative z-10 flex flex-col items-center">
               <div className="flex flex-col items-center gap-6 mb-12 text-center">
@@ -220,11 +232,13 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <h1 className="serif text-6xl md:text-[10rem] leading-none uppercase font-black tracking-tighter text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                TONIC<br/><span className="italic opacity-50">THOUGHT</span>
+              <h1 className="serif text-[clamp(3rem,12vw,10rem)] leading-none uppercase font-black tracking-tighter text-white" style={{ textShadow: '0 0 60px rgba(201,168,76,0.15), 0 0 120px rgba(201,168,76,0.05)' }}>
+                TONIC<br/><span className="italic" style={{ color: '#C9A84C', textShadow: '0 0 40px rgba(201,168,76,0.3)' }}>THOUGHT</span>
               </h1>
               
-              <p className="serif text-xl md:text-2xl mt-8 italic text-white/40 max-w-xl text-center mb-12">
+              <div className="w-32 h-px my-8" style={{ background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)' }} />
+              
+              <p className="serif text-xl md:text-2xl italic text-white/50 max-w-xl text-center mb-12 tracking-wide">
                 Distilling the infinite noise of the void into grounded packets of meaning.
               </p>
 
@@ -261,31 +275,21 @@ const App: React.FC = () => {
                  </div>
               </div>
 
-              <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full max-w-md md:max-w-none md:w-auto">
+              <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full max-w-md md:max-w-none md:w-auto">
+                <button
+                  onClick={() => navigate(View.Featured)}
+                  className="mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] px-8 md:px-12 py-4 md:py-5 transition-all duration-500 backdrop-blur active:scale-95 w-full md:w-auto"
+                  style={{ border: '1px solid #C9A84C', color: '#C9A84C', backgroundColor: 'rgba(201,168,76,0.08)', boxShadow: '0 0 20px rgba(201,168,76,0.1), inset 0 0 20px rgba(201,168,76,0.03)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(201,168,76,0.18)'; e.currentTarget.style.boxShadow = '0 0 40px rgba(201,168,76,0.2), inset 0 0 30px rgba(201,168,76,0.05)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(201,168,76,0.08)'; e.currentTarget.style.boxShadow = '0 0 20px rgba(201,168,76,0.1), inset 0 0 20px rgba(201,168,76,0.03)'; }}
+                >
+                  View Featured Art
+                </button>
                 <button
                   onClick={() => navigate(View.Void)}
-                  className="origin-btn group mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.4em] border px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/40 backdrop-blur active:scale-95 w-full md:w-auto"
-                  style={{ 
-                    borderColor: 'rgba(var(--theme-rgb), 0.5)',
-                    boxShadow: '0 0 20px rgba(var(--theme-rgb), 0.1)'
-                  }}
+                  className="mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] border border-white/15 text-white/60 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-white/[0.02] backdrop-blur active:scale-95 w-full md:w-auto hover:border-white/30 hover:text-white/80 hover:bg-white/[0.05]"
                 >
-                  <span className="block" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>Enter Gallery</span>
-                  <span className="block text-[8px] text-white/40 mt-1 group-hover:text-white/60 transition-colors">225+ Original Works</span>
-                </button>
-                <button
-                  onClick={() => navigate(View.Index)}
-                  className="origin-btn group mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.4em] border border-white/10 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/40 backdrop-blur active:scale-95 w-full md:w-auto hover:border-white/30"
-                >
-                  <span className="block">Shop Prints</span>
-                  <span className="block text-[8px] text-white/40 mt-1 group-hover:text-white/60 transition-colors">From $65</span>
-                </button>
-                <button
-                  onClick={() => navigate(View.Forge)}
-                  className="origin-btn group mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.4em] border border-white/10 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/40 backdrop-blur active:scale-95 w-full md:w-auto hover:border-white/30"
-                >
-                  <span className="block">The Forge</span>
-                  <span className="block text-[8px] text-white/40 mt-1 group-hover:text-white/60 transition-colors">Remix & Create</span>
+                  Explore Gallery
                 </button>
               </div>
             </div>
@@ -311,8 +315,10 @@ const App: React.FC = () => {
           />
         )}
         {currentView === View.Architect && <Architect />}
-        {currentView === View.Void && <Void themeColor={themeColor} onNavigate={handleNavigateWithData} />}
-        {currentView === View.Forge && <Forge themeColor={themeColor} preselection={forgePreselection} onClearPreselection={() => setForgePreselection(null)} />}
+        {currentView === View.Featured && <FeaturedCollection themeColor={themeColor} onBuyClick={(piece) => { /* TODO: wire to cart/checkout */ console.log('Buy:', piece); }} />}
+        {currentView === View.Void && <Void themeColor={themeColor} />}
+        {currentView === View.Forge && <Forge themeColor={themeColor} />}
+        {currentView === View.About && <About themeColor={themeColor} />}
       </div>
 
       <Oracle cartCount={cart.length} themeColor={themeColor} />
