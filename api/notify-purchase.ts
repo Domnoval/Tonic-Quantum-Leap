@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+﻿import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 // Simple email notification using Resend (or fallback to webhook)
 // Set RESEND_API_KEY and NOTIFY_EMAIL in Vercel env vars
@@ -59,7 +59,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         <div style="font-family: monospace; background: #0a0a0a; color: #fff; padding: 40px; max-width: 600px;">
           <div style="border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 20px;">
             <h1 style="font-family: Georgia, serif; font-style: italic; font-weight: normal; margin: 0; font-size: 28px;">
-              🎨 New Purchase Request
+              ≡ƒÄ¿ New Purchase Request
             </h1>
             <p style="color: #f59e0b; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px;">
               Someone wants to buy your art
@@ -120,7 +120,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         body: JSON.stringify({
           from: 'Tonic Thought Studios <noreply@tonicthoughtstudios.com>',
           to: [notifyEmail],
-          subject: `💰 Purchase Request: Transmission #${transmissionNumber} - $${(price / 100).toFixed(0)}`,
+          subject: `≡ƒÆ░ Purchase Request: Transmission #${transmissionNumber} - $${(price / 100).toFixed(0)}`,
           html: emailHtml,
         }),
       });
