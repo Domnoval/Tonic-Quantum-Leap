@@ -196,17 +196,24 @@ const App: React.FC = () => {
             
             {/* Sacred Geometry Background — Flower of Life */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
-              <SacredGeometry variant="flower-of-life" size={900} opacity={0.04} animated />
+              <SacredGeometry variant="flower-of-life" size={1000} opacity={0.1} animated />
             </div>
             {/* Secondary geometry — slower counter-rotation */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
-              <div className="sacred-geo-rotate-reverse" style={{ opacity: 0.025 }}>
-                <SacredGeometry variant="metatrons-cube" size={600} opacity={1} animated={false} />
+              <div className="sacred-geo-rotate-reverse" style={{ opacity: 0.07 }}>
+                <SacredGeometry variant="metatrons-cube" size={650} opacity={1} animated={false} />
               </div>
             </div>
             
-            {/* Dark void panel */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[60vh] bg-[#0a0a0a] border border-[#C9A84C]/5 opacity-50 z-0" />
+            {/* Concentric pulse rings */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
+              <div className="concentric-ring absolute" style={{ width: 400, height: 400, left: -200, top: -200 }} />
+              <div className="concentric-ring absolute" style={{ width: 600, height: 600, left: -300, top: -300 }} />
+              <div className="concentric-ring absolute" style={{ width: 800, height: 800, left: -400, top: -400 }} />
+            </div>
+            
+            {/* Radial gold glow behind title */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none z-0" style={{ background: 'radial-gradient(circle, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.03) 40%, transparent 70%)' }} />
             
             {/* Reflective water surface at bottom */}
             <div className="absolute bottom-0 left-0 w-full h-48 reflection-surface pointer-events-none z-[1]" />
@@ -225,11 +232,13 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <h1 className="serif text-[clamp(3rem,12vw,10rem)] leading-none uppercase font-black tracking-tighter text-white drop-shadow-[0_0_40px_rgba(201,168,76,0.08)]">
-                TONIC<br/><span className="italic" style={{ color: 'rgba(201, 168, 76, 0.5)' }}>THOUGHT</span>
+              <h1 className="serif text-[clamp(3rem,12vw,10rem)] leading-none uppercase font-black tracking-tighter text-white" style={{ textShadow: '0 0 60px rgba(201,168,76,0.15), 0 0 120px rgba(201,168,76,0.05)' }}>
+                TONIC<br/><span className="italic" style={{ color: '#C9A84C', textShadow: '0 0 40px rgba(201,168,76,0.3)' }}>THOUGHT</span>
               </h1>
               
-              <p className="serif text-xl md:text-2xl mt-8 italic text-white/40 max-w-xl text-center mb-12 tracking-wide">
+              <div className="w-32 h-px my-8" style={{ background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)' }} />
+              
+              <p className="serif text-xl md:text-2xl italic text-white/50 max-w-xl text-center mb-12 tracking-wide">
                 Distilling the infinite noise of the void into grounded packets of meaning.
               </p>
 
@@ -269,14 +278,16 @@ const App: React.FC = () => {
               <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full max-w-md md:max-w-none md:w-auto">
                 <button
                   onClick={() => navigate(View.Featured)}
-                  className="origin-btn mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] border px-8 md:px-12 py-4 md:py-5 transition-all duration-500 backdrop-blur active:scale-95 w-full md:w-auto"
-                  style={{ borderColor: 'rgba(var(--theme-rgb), 0.4)', color: 'rgba(var(--theme-rgb), 1)', backgroundColor: 'rgba(var(--theme-rgb), 0.08)' }}
+                  className="mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] px-8 md:px-12 py-4 md:py-5 transition-all duration-500 backdrop-blur active:scale-95 w-full md:w-auto"
+                  style={{ border: '1px solid #C9A84C', color: '#C9A84C', backgroundColor: 'rgba(201,168,76,0.08)', boxShadow: '0 0 20px rgba(201,168,76,0.1), inset 0 0 20px rgba(201,168,76,0.03)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(201,168,76,0.18)'; e.currentTarget.style.boxShadow = '0 0 40px rgba(201,168,76,0.2), inset 0 0 30px rgba(201,168,76,0.05)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(201,168,76,0.08)'; e.currentTarget.style.boxShadow = '0 0 20px rgba(201,168,76,0.1), inset 0 0 20px rgba(201,168,76,0.03)'; }}
                 >
                   View Featured Art
                 </button>
                 <button
                   onClick={() => navigate(View.Void)}
-                  className="origin-btn mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] border border-white/10 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/40 backdrop-blur active:scale-95 w-full md:w-auto"
+                  className="mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] border border-white/15 text-white/60 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-white/[0.02] backdrop-blur active:scale-95 w-full md:w-auto hover:border-white/30 hover:text-white/80 hover:bg-white/[0.05]"
                 >
                   Explore Gallery
                 </button>

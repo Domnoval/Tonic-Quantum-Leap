@@ -72,8 +72,10 @@ const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ themeColor, onB
     <section className="relative w-full px-4 md:px-12 py-16 md:py-24 bg-[#0a0a0a]" aria-label="Featured Art Collection">
       {/* Background sacred geometry watermark */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-        <SacredGeometry variant="flower-of-life" size={800} opacity={0.03} animated />
+        <SacredGeometry variant="flower-of-life" size={1000} opacity={0.08} animated />
       </div>
+      {/* Top gradient fade from hero */}
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#0a0a0a] to-transparent pointer-events-none z-[5]" />
 
       {/* Section Header */}
       <div className="relative z-10 text-center mb-12 md:mb-16">
