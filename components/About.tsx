@@ -1,5 +1,6 @@
 import React from 'react';
 import { ThemeColor } from '../types';
+import SacredGeometry, { GeometricDivider } from './SacredGeometry';
 
 interface AboutProps {
   themeColor: ThemeColor;
@@ -22,39 +23,36 @@ const SOCIALS = [
 
 const About: React.FC<AboutProps> = ({ themeColor }) => {
   return (
-    <section className="w-full px-4 md:px-12 py-16 md:py-24" aria-label="About the artist">
-      <div className="max-w-6xl mx-auto">
+    <section className="relative w-full px-4 md:px-12 py-16 md:py-24 bg-[#0a0a0a]" aria-label="About the artist">
+      {/* Background Metatron's Cube watermark */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+        <SacredGeometry variant="metatrons-cube" size={600} opacity={0.03} animated />
+      </div>
+
+      <div className="relative z-10 max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
           <h2
-            className="mono text-xs tracking-[0.4em] uppercase mb-3 transition-colors duration-500"
-            style={{ color: 'rgba(var(--theme-rgb), 0.6)' }}
+            className="mono text-xs tracking-[0.5em] uppercase mb-3"
+            style={{ color: '#C9A84C' }}
           >
             About
           </h2>
-          <p className="serif text-3xl md:text-4xl text-white/90 font-light">
+          <p className="serif text-3xl md:text-4xl text-white/90 font-light tracking-wide">
             The Artist
           </p>
-          <div
-            className="w-16 h-px mx-auto mt-6 transition-colors duration-500"
-            style={{ backgroundColor: 'rgba(var(--theme-rgb), 0.4)' }}
-          />
+          <GeometricDivider className="max-w-xs mx-auto mt-6" />
         </div>
 
         {/* Main Content: Photo + Bio */}
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 mb-16">
           {/* Photo */}
           <div className="w-full md:w-2/5 flex-shrink-0">
-            <div className="aspect-[3/4] bg-white/[0.03] border border-white/10 rounded-sm overflow-hidden">
+            <div className="aspect-[3/4] glass-card rounded-sm overflow-hidden relative">
               <div className="w-full h-full flex items-center justify-center">
                 <div className="text-center">
-                  <div
-                    className="text-6xl mb-4 transition-colors duration-500"
-                    style={{ color: 'rgba(var(--theme-rgb), 0.3)' }}
-                  >
-                    ◎
-                  </div>
-                  <span className="mono text-[10px] uppercase tracking-widest text-white/20">
+                  <SacredGeometry variant="seed-of-life" size={120} opacity={0.15} color="#C9A84C" />
+                  <span className="mono text-[10px] uppercase tracking-widest text-white/20 mt-4 block">
                     Artist Portrait
                   </span>
                 </div>
@@ -66,8 +64,8 @@ const About: React.FC<AboutProps> = ({ themeColor }) => {
           <div className="w-full md:w-3/5">
             <h3 className="serif text-2xl text-white/90 mb-1">Michael</h3>
             <p
-              className="mono text-[11px] uppercase tracking-widest mb-6 transition-colors duration-500"
-              style={{ color: 'rgba(var(--theme-rgb), 0.7)' }}
+              className="mono text-[11px] uppercase tracking-widest mb-6"
+              style={{ color: 'rgba(201, 168, 76, 0.7)' }}
             >
               Tonic Thought Studios / dYZ
             </p>
@@ -91,8 +89,11 @@ const About: React.FC<AboutProps> = ({ themeColor }) => {
               </p>
             </div>
 
+            {/* Geometric Divider */}
+            <GeometricDivider className="my-10" />
+
             {/* Skills */}
-            <div className="mt-10">
+            <div className="mt-0">
               <h4 className="mono text-[10px] uppercase tracking-widest text-white/30 mb-4">
                 Disciplines
               </h4>
@@ -101,7 +102,7 @@ const About: React.FC<AboutProps> = ({ themeColor }) => {
                   <span
                     key={skill.label}
                     title={skill.desc}
-                    className="mono text-[11px] px-3 py-1.5 border border-white/10 text-white/50 rounded-sm transition-all duration-300 hover:border-white/25 hover:text-white/70 cursor-default"
+                    className="mono text-[11px] px-3 py-1.5 border border-[#C9A84C]/15 text-white/50 rounded-sm transition-all duration-500 hover:border-[#C9A84C]/35 hover:text-[#C9A84C]/80 cursor-default"
                   >
                     {skill.label}
                   </span>

@@ -1,3 +1,8 @@
+/**
+ * @deprecated This Replicate-based endpoint is superseded by the direct ComfyUI
+ * integration in services/comfyuiService.ts for local development.
+ * Kept for potential production/Vercel deployment where ComfyUI isn't available.
+ */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 const REPLICATE_API_TOKEN = process.env.REPLICATE_API_TOKEN || '';

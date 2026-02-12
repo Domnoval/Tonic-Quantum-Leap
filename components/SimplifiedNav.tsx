@@ -26,7 +26,7 @@ const SimplifiedNav: React.FC<SimplifiedNavProps> = ({ currentView, setView, car
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-[200] bg-black/80 backdrop-blur-md border-b border-white/10" aria-label="Main navigation">
+    <nav className="fixed top-0 left-0 w-full z-[200] glass-nav" aria-label="Main navigation">
       <div className="max-w-7xl mx-auto px-4 md:px-8 h-14 md:h-16 flex items-center justify-between">
         {/* Brand */}
         <button
@@ -35,8 +35,8 @@ const SimplifiedNav: React.FC<SimplifiedNavProps> = ({ currentView, setView, car
           aria-label="Go to home page"
         >
           <span
-            className="mono text-sm md:text-base font-bold tracking-[0.25em] transition-colors duration-500"
-            style={{ color: 'rgba(var(--theme-rgb), 1)' }}
+            className="mono text-sm md:text-base font-bold tracking-[0.35em] transition-colors duration-500"
+            style={{ color: '#C9A84C' }}
           >
             TONIC THOUGHT
           </span>
@@ -49,12 +49,12 @@ const SimplifiedNav: React.FC<SimplifiedNavProps> = ({ currentView, setView, car
               key={view}
               onClick={() => handleNavClick(view)}
               aria-current={currentView === view ? 'page' : undefined}
-              className={`mono text-[12px] uppercase tracking-[0.2em] transition-all duration-300 py-1 border-b-2 ${
+              className={`mono text-[12px] uppercase tracking-[0.2em] transition-all duration-500 py-1 border-b-2 ${
                 currentView === view
-                  ? 'text-white border-current'
-                  : 'text-white/40 border-transparent hover:text-white/70'
+                  ? 'border-current'
+                  : 'text-white/40 border-transparent hover:text-white/60'
               }`}
-              style={currentView === view ? { borderColor: 'rgba(var(--theme-rgb), 0.8)' } : undefined}
+              style={currentView === view ? { borderColor: '#C9A84C', color: '#C9A84C' } : undefined}
             >
               {label}
             </button>
@@ -109,7 +109,7 @@ const SimplifiedNav: React.FC<SimplifiedNavProps> = ({ currentView, setView, car
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden bg-black/95 backdrop-blur-md border-b border-white/10 transition-all duration-300 overflow-hidden ${
+        className={`md:hidden bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-[#C9A84C]/10 transition-all duration-300 overflow-hidden ${
           mobileMenuOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
@@ -125,7 +125,8 @@ const SimplifiedNav: React.FC<SimplifiedNavProps> = ({ currentView, setView, car
                   : 'text-white/40 border-transparent hover:text-white/60 hover:bg-white/[0.02]'
               }`}
               style={{
-                borderColor: currentView === view ? 'rgba(var(--theme-rgb), 1)' : 'transparent',
+                borderColor: currentView === view ? '#C9A84C' : 'transparent',
+                color: currentView === view ? '#C9A84C' : undefined,
               }}
             >
               {label}

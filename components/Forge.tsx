@@ -1,17 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import {
+  type ForgeMode,
+  type Intensity,
+  type SourceImage,
+  type GeneratedImage,
+  checkConnection,
+  generate,
+} from '../services/comfyuiService';
 
-type ForgeMode = 'style' | 'remix' | 'inpaint' | 'mashup' | 'collage';
+// ---------------------------------------------------------------------------
+// Void archive (180+ images)
+// ---------------------------------------------------------------------------
 
-interface ForgeProps {
-  themeColor: string;
-}
-
-interface VoidImage {
-  src: string;
-  name: string;
-}
-
-// Full Void archive
 const VOID_IMAGE_NAMES = [
   '20200622_080827.jpg', '20200627_172054.jpg', '20200828_171533.jpg', '20201219_160203.jpg',
   '20210409_104713.jpg', '20210526_002930~2.jpg', '20210526_013054~2.jpg', '20210527_213252~2.jpg',
@@ -85,611 +85,496 @@ const VOID_IMAGE_NAMES = [
   'THE MADNESS AND ARCITEXY.jpeg', 'Tophat 102422 cropped copy.jpg', 'Untitled-1.jpg', 'Untitled-3.jpg',
 ];
 
-const VOID_IMAGES: VoidImage[] = VOID_IMAGE_NAMES.map((name, i) => ({
-  src: `/void/${name}`,
-  name: `Transmission ${String(i + 1).padStart(3, '0')}`,
-}));
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 
-const MODE_INFO: Record<ForgeMode, { name: string; description: string }> = {
-  style: {
-    name: 'Style Alchemy',
-    description: 'Use Void art as style reference + your prompt = new creation',
-  },
-  remix: {
-    name: 'Corruption',
-    description: 'Mutate and transform a Void piece with AI guidance',
-  },
-  inpaint: {
-    name: 'The Surgeon',
-    description: 'Paint a mask, prompt what fills it',
-  },
-  mashup: {
-    name: 'Fusion',
-    description: 'Blend multiple Void pieces into one',
-  },
-  collage: {
-    name: 'Manual Collage',
-    description: 'Layer and compose without AI',
-  },
+const MODE_LABELS: Record<ForgeMode, string> = {
+  reimagine: 'Reimagine',
+  style: 'Style Transfer',
+  blend: 'Blend',
 };
 
-const Forge: React.FC<ForgeProps> = ({ themeColor }) => {
-  const [mode, setMode] = useState<ForgeMode>('style');
-  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+const MODE_DESCRIPTIONS: Record<ForgeMode, string> = {
+  reimagine: 'Transform a Void piece with your prompt',
+  style: 'Use art as style reference for a new creation',
+  blend: 'Fuse multiple pieces into one',
+};
+
+const INTENSITY_LABELS: Record<Intensity, string> = {
+  subtle: 'Subtle',
+  medium: 'Medium',
+  wild: 'Wild',
+  chaos: 'Chaos',
+};
+
+const MAX_SOURCES: Record<ForgeMode, number> = {
+  reimagine: 1,
+  style: 1,
+  blend: 4,
+};
+
+let _idCounter = 0;
+function uid(): string {
+  return `forge_${Date.now()}_${++_idCounter}`;
+}
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
+
+interface ForgeProps {
+  themeColor?: string;
+}
+
+const Forge: React.FC<ForgeProps> = () => {
+  // -- State --
+  const [mode, setMode] = useState<ForgeMode>('reimagine');
+  const [sourceImages, setSourceImages] = useState<SourceImage[]>([]);
   const [prompt, setPrompt] = useState('');
-  const [creativity, setCreativity] = useState(50);
-  const [chaos, setChaos] = useState(30);
+  const [intensity, setIntensity] = useState<Intensity>('medium');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
-  const [transmissionNumber, setTransmissionNumber] = useState<number | null>(null);
+  const [generationTime, setGenerationTime] = useState(0);
+  const [result, setResult] = useState<GeneratedImage | null>(null);
+  const [history, setHistory] = useState<GeneratedImage[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [comfyStatus, setComfyStatus] = useState<'connected' | 'disconnected' | 'checking'>('checking');
   const [showVoidPicker, setShowVoidPicker] = useState(false);
+  const [voidSearch, setVoidSearch] = useState('');
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [brushSize, setBrushSize] = useState(30);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Handle image selection
-  const toggleImageSelection = (src: string) => {
-    const maxSelections = mode === 'mashup' ? 4 : mode === 'style' ? 3 : 1;
+  // -- Check ComfyUI on mount --
+  useEffect(() => {
+    let mounted = true;
+    const check = async () => {
+      setComfyStatus('checking');
+      const ok = await checkConnection();
+      if (mounted) setComfyStatus(ok ? 'connected' : 'disconnected');
+    };
+    check();
+    const iv = setInterval(check, 30_000);
+    return () => { mounted = false; clearInterval(iv); };
+  }, []);
 
-    if (selectedImages.includes(src)) {
-      setSelectedImages(prev => prev.filter(s => s !== src));
-    } else if (selectedImages.length < maxSelections) {
-      setSelectedImages(prev => [...prev, src]);
+  // -- Timer for generation elapsed --
+  useEffect(() => {
+    if (isGenerating) {
+      setGenerationTime(0);
+      timerRef.current = setInterval(() => setGenerationTime(t => t + 1), 1000);
+    } else if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
     }
-  };
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [isGenerating]);
 
-  // Canvas drawing for inpaint mode - supports both mouse and touch
-  const getCanvasCoordinates = (
-    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
-  ) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return null;
+  // -- Handlers --
 
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
+  const addVoidImage = useCallback((name: string) => {
+    const max = MAX_SOURCES[mode];
+    setSourceImages(prev => {
+      if (prev.length >= max) return prev;
+      if (prev.some(s => s.src === `/void/${name}`)) return prev;
+      return [...prev, { id: uid(), src: `/void/${name}`, name, type: 'void' as const }];
+    });
+  }, [mode]);
 
-    if ('touches' in e) {
-      const touch = e.touches[0];
-      return {
-        x: (touch.clientX - rect.left) * scaleX,
-        y: (touch.clientY - rect.top) * scaleY,
-      };
-    } else {
-      return {
-        x: (e.clientX - rect.left) * scaleX,
-        y: (e.clientY - rect.top) * scaleY,
-      };
+  const removeSource = useCallback((id: string) => {
+    setSourceImages(prev => prev.filter(s => s.id !== id));
+  }, []);
+
+  const handleUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const max = MAX_SOURCES[mode];
+    setSourceImages(prev => {
+      if (prev.length >= max) return prev;
+      const url = URL.createObjectURL(file);
+      return [...prev, { id: uid(), src: url, name: file.name, type: 'upload' as const }];
+    });
+    e.target.value = '';
+  }, [mode]);
+
+  const handleGenerate = useCallback(async () => {
+    if (comfyStatus !== 'connected') {
+      setError('ComfyUI is not running. Start it at http://127.0.0.1:8188');
+      return;
     }
-  };
-
-  const startDrawing = (
-    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
-  ) => {
-    if (mode !== 'inpaint') return;
-    e.preventDefault();
-    setIsDrawing(true);
-    drawAt(e);
-  };
-
-  const stopDrawing = () => {
-    setIsDrawing(false);
-  };
-
-  const drawAt = (
-    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
-  ) => {
-    if (!isDrawing || mode !== 'inpaint') return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const coords = getCanvasCoordinates(e);
-    if (!coords) return;
-
-    ctx.fillStyle = 'rgba(var(--theme-rgb), 0.5)';
-    ctx.beginPath();
-    ctx.arc(coords.x, coords.y, brushSize / 2, 0, Math.PI * 2);
-    ctx.fill();
-  };
-
-  const draw = (
-    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
-  ) => {
-    if (!isDrawing) return;
-    e.preventDefault();
-    drawAt(e);
-  };
-
-  // Get mask data from canvas for inpaint mode
-  const getMaskData = (): string | undefined => {
-    if (mode !== 'inpaint' || !canvasRef.current) return undefined;
-    return canvasRef.current.toDataURL('image/png');
-  };
-
-  // Generate image via Forge API
-  const handleGenerate = async () => {
-    if (selectedImages.length === 0) return;
-    if (mode === 'collage') return; // Collage mode doesn't use AI
-
     setIsGenerating(true);
     setError(null);
+    setResult(null);
 
     try {
-      // Convert relative paths to absolute URLs for the API
-      const absoluteUrls = selectedImages.map(src => {
-        if (src.startsWith('http')) return src;
-        return `${window.location.origin}${src}`;
-      });
-
-      const response = await fetch('/api/forge', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          mode,
-          sourceImages: absoluteUrls,
-          prompt,
-          creativity,
-          chaos,
-          mask: getMaskData(),
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || data.message || 'Generation failed');
-      }
-
-      setGeneratedImage(data.resultUrl);
-      setTransmissionNumber(data.transmissionNumber);
+      const gen = await generate(
+        { mode, sourceImages, prompt, intensity },
+        (elapsed) => setGenerationTime(elapsed),
+      );
+      setResult(gen);
+      setHistory(prev => [gen, ...prev].slice(0, 10));
     } catch (err: any) {
-      console.error('Forge generation error:', err);
-      setError(err.message || 'Transmission failed. Check your connection.');
-      // Fallback to showing source image in dev mode
-      if (import.meta.env.DEV) {
-        setGeneratedImage(selectedImages[0]);
-        setTransmissionNumber(Math.floor(Math.random() * 100000));
-      }
+      console.error('Forge error:', err);
+      setError(err.message || 'Generation failed');
     } finally {
       setIsGenerating(false);
     }
-  };
+  }, [mode, sourceImages, prompt, intensity, comfyStatus]);
 
-  const clearSelection = () => {
-    setSelectedImages([]);
-    setGeneratedImage(null);
-    setTransmissionNumber(null);
-    setError(null);
-    setPrompt('');
-  };
+  const handleDownload = useCallback(async () => {
+    if (!result) return;
+    try {
+      const res = await fetch(result.src);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `forge_${result.id}.png`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch { /* ignore */ }
+  }, [result]);
+
+  // Filtered void images for picker search
+  const filteredVoid = voidSearch
+    ? VOID_IMAGE_NAMES.filter(n => n.toLowerCase().includes(voidSearch.toLowerCase()))
+    : VOID_IMAGE_NAMES;
+
+  // What to show in the big preview
+  const previewSrc = result?.src ?? (sourceImages.length > 0 ? sourceImages[0].src : null);
+
+  // -- Status dot color --
+  const statusColor = comfyStatus === 'connected' ? '#22c55e'
+    : comfyStatus === 'disconnected' ? '#ef4444' : '#eab308';
+
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
 
   return (
     <div className="min-h-screen bg-black pt-20 md:pt-28 pb-20 px-4 md:px-8">
-      {/* Header */}
-      <div className="max-w-7xl mx-auto mb-6 md:mb-8">
-        <h1 className="serif text-3xl md:text-5xl text-white italic mb-1 md:mb-2">The Forge</h1>
-        <p
-          className="mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em]"
-          style={{ color: 'rgba(var(--theme-rgb), 1)' }}
-        >
-          Transmute the void into your vision
-        </p>
-      </div>
+      <div className="max-w-4xl mx-auto">
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Panel - Mode Selection & Controls */}
-        <div className="lg:col-span-1 space-y-6">
-          {/* Mode Selector */}
-          <div className="border border-white/10 p-3 md:p-4 bg-black/50">
-            <h3 className="mono text-[10px] uppercase tracking-widest text-white/40 mb-3 md:mb-4">
-              Transmutation Mode
-            </h3>
-            {/* Horizontal scroll on mobile, stacked on desktop */}
-            <div className="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0 -mx-3 px-3 lg:mx-0 lg:px-0 snap-x snap-mandatory lg:snap-none">
-              {(Object.keys(MODE_INFO) as ForgeMode[]).map((m) => (
+        {/* ── Header ── */}
+        <div className="mb-6 md:mb-8">
+          <h1 className="serif text-3xl md:text-5xl text-white italic mb-1">The Forge</h1>
+          <p
+            className="mono text-[9px] md:text-[10px] uppercase tracking-[0.25em]"
+            style={{ color: 'rgba(var(--theme-rgb), 1)' }}
+          >
+            Transmute the void
+          </p>
+        </div>
+
+        {/* ── Mode Tabs ── */}
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-1 -mx-1 px-1">
+          {(Object.keys(MODE_LABELS) as ForgeMode[]).map(m => (
+            <button
+              key={m}
+              onClick={() => { setMode(m); setSourceImages([]); setResult(null); setError(null); }}
+              className="flex-shrink-0 px-4 py-2.5 border transition-all text-left min-h-[48px]"
+              style={{
+                borderColor: mode === m ? 'rgba(var(--theme-rgb), 0.6)' : 'rgba(255,255,255,0.1)',
+                backgroundColor: mode === m ? 'rgba(var(--theme-rgb), 0.1)' : 'transparent',
+              }}
+            >
+              <span
+                className="mono text-[11px] md:text-xs uppercase tracking-wider block"
+                style={{ color: mode === m ? 'rgba(var(--theme-rgb), 1)' : 'rgba(255,255,255,0.7)' }}
+              >
+                {MODE_LABELS[m]}
+              </span>
+              <span className="text-white/30 text-[9px] block mt-0.5 hidden md:block">
+                {MODE_DESCRIPTIONS[m]}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* ── Preview Area ── */}
+        <div
+          className="border border-white/10 bg-black/50 mb-4 relative overflow-hidden"
+          style={{ minHeight: 320 }}
+        >
+          {isGenerating ? (
+            <div className="flex flex-col items-center justify-center h-80">
+              <div
+                className="w-12 h-12 border-2 rounded-full animate-spin mb-4"
+                style={{ borderColor: 'rgba(var(--theme-rgb), 0.3)', borderTopColor: 'rgba(var(--theme-rgb), 1)' }}
+              />
+              <span className="mono text-xs uppercase tracking-widest" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
+                Forging… {generationTime}s
+              </span>
+            </div>
+          ) : previewSrc ? (
+            <img
+              src={previewSrc}
+              alt="Preview"
+              className="w-full max-h-[500px] object-contain cursor-pointer"
+              onClick={() => setLightboxSrc(previewSrc)}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center h-80 text-center">
+              <div
+                className="w-16 h-16 border border-white/20 rounded-full flex items-center justify-center mb-4"
+                style={{ borderColor: 'rgba(var(--theme-rgb), 0.3)' }}
+              >
+                <span className="text-2xl opacity-30">⬡</span>
+              </div>
+              <p className="mono text-[10px] uppercase tracking-widest text-white/30">
+                Select source material to begin
+              </p>
+            </div>
+          )}
+
+          {/* Download / Share overlay on result */}
+          {result && !isGenerating && (
+            <div className="absolute top-3 right-3 flex gap-2">
+              <button
+                onClick={handleDownload}
+                className="px-3 py-1.5 bg-black/70 border border-white/20 mono text-[9px] uppercase tracking-wider text-white/70 hover:text-white hover:border-white/40 transition-colors"
+              >
+                ↓ Download
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* ── Source Thumbnails ── */}
+        <div className="mb-4">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2">
+            {sourceImages.map(src => (
+              <div
+                key={src.id}
+                className="relative flex-shrink-0 w-16 h-16 border border-white/20 overflow-hidden group cursor-pointer"
+                onClick={() => removeSource(src.id)}
+              >
+                <img src={src.src} alt="" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="mono text-[8px] text-white">✕</span>
+                </div>
+              </div>
+            ))}
+
+            {sourceImages.length < MAX_SOURCES[mode] && (
+              <>
                 <button
-                  key={m}
-                  onClick={() => {
-                    setMode(m);
-                    clearSelection();
-                  }}
-                  className={`flex-shrink-0 w-[140px] lg:w-full text-left p-3 md:p-4 border transition-all snap-start active:scale-95 ${
-                    mode === m
-                      ? 'border-white/40 bg-white/5'
-                      : 'border-white/10'
-                  }`}
+                  onClick={() => setShowVoidPicker(true)}
+                  className="flex-shrink-0 w-16 h-16 border border-dashed border-white/20 flex flex-col items-center justify-center gap-1 hover:border-white/40 transition-colors min-h-[48px]"
                 >
-                  <span
-                    className="mono text-[11px] md:text-xs uppercase tracking-wider block"
-                    style={{ color: mode === m ? 'rgba(var(--theme-rgb), 1)' : 'white' }}
-                  >
-                    {MODE_INFO[m].name}
-                  </span>
-                  <p className="text-white/40 text-[9px] md:text-[10px] mt-1 line-clamp-2">
-                    {MODE_INFO[m].description}
-                  </p>
+                  <span className="text-white/40 text-lg">+</span>
+                  <span className="mono text-[7px] uppercase text-white/30">Void</span>
                 </button>
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex-shrink-0 w-16 h-16 border border-dashed border-white/20 flex flex-col items-center justify-center gap-1 hover:border-white/40 transition-colors min-h-[48px]"
+                >
+                  <span className="text-white/40 text-lg">↑</span>
+                  <span className="mono text-[7px] uppercase text-white/30">Upload</span>
+                </button>
+              </>
+            )}
+          </div>
+          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleUpload} />
+        </div>
+
+        {/* ── Prompt ── */}
+        <div className="mb-4">
+          <textarea
+            value={prompt}
+            onChange={e => setPrompt(e.target.value)}
+            placeholder="Describe your vision…"
+            rows={1}
+            className="w-full bg-black border border-white/20 px-4 py-3 mono text-sm text-white resize-none focus:border-white/40 focus:outline-none placeholder-white/20"
+            onInput={(e) => {
+              const el = e.target as HTMLTextAreaElement;
+              el.style.height = 'auto';
+              el.style.height = el.scrollHeight + 'px';
+            }}
+          />
+        </div>
+
+        {/* ── Intensity ── */}
+        <div className="mb-5">
+          <span className="mono text-[9px] uppercase tracking-widest text-white/40 block mb-2">
+            Intensity
+          </span>
+          <div className="flex gap-2">
+            {(Object.keys(INTENSITY_LABELS) as Intensity[]).map(i => (
+              <button
+                key={i}
+                onClick={() => setIntensity(i)}
+                className="flex-1 py-2.5 border mono text-[10px] uppercase tracking-wider transition-all min-h-[44px]"
+                style={{
+                  borderColor: intensity === i ? 'rgba(var(--theme-rgb), 0.6)' : 'rgba(255,255,255,0.1)',
+                  backgroundColor: intensity === i ? 'rgba(var(--theme-rgb), 0.1)' : 'transparent',
+                  color: intensity === i ? 'rgba(var(--theme-rgb), 1)' : 'rgba(255,255,255,0.5)',
+                }}
+              >
+                {INTENSITY_LABELS[i]}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Generate Button ── */}
+        <button
+          onClick={handleGenerate}
+          disabled={isGenerating || comfyStatus !== 'connected'}
+          className="w-full py-4 border mono text-sm uppercase tracking-widest transition-all disabled:opacity-30 disabled:cursor-not-allowed mb-6 min-h-[52px]"
+          style={{
+            borderColor: isGenerating ? 'rgba(var(--theme-rgb), 0.5)' : 'rgba(var(--theme-rgb), 0.4)',
+            backgroundColor: isGenerating ? 'transparent' : 'rgba(var(--theme-rgb), 0.1)',
+            color: 'rgba(var(--theme-rgb), 1)',
+          }}
+        >
+          {isGenerating ? `Forging… ${generationTime}s` : '✦ FORGE'}
+        </button>
+
+        {/* ── Error ── */}
+        {error && (
+          <div className="mb-4 p-3 border border-red-500/30 bg-red-500/10">
+            <span className="mono text-[10px] uppercase tracking-wider text-red-400">{error}</span>
+          </div>
+        )}
+
+        {/* ── History Strip ── */}
+        {history.length > 0 && (
+          <div className="mb-6">
+            <span className="mono text-[9px] uppercase tracking-widest text-white/40 block mb-2">
+              Recent Generations
+            </span>
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              {history.slice(0, 6).map(h => (
+                <div
+                  key={h.id}
+                  className="flex-shrink-0 w-20 h-20 border border-white/10 overflow-hidden cursor-pointer hover:border-white/30 transition-colors"
+                  onClick={() => { setResult(h); setLightboxSrc(h.src); }}
+                >
+                  <img src={h.src} alt="" className="w-full h-full object-cover" />
+                </div>
               ))}
             </div>
           </div>
+        )}
 
-          {/* Source Selection */}
-          <div className="border border-white/10 p-4 bg-black/50">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="mono text-[10px] uppercase tracking-widest text-white/40">
-                Source Material ({selectedImages.length}/{mode === 'mashup' ? 4 : mode === 'style' ? 3 : 1})
-              </h3>
-              <button
-                onClick={() => setShowVoidPicker(true)}
-                className="mono text-[9px] uppercase tracking-wider px-3 py-1 border border-white/20 hover:border-white/40 transition-colors"
-                style={{ color: 'rgba(var(--theme-rgb), 1)' }}
-              >
-                Browse Void
-              </button>
-            </div>
-
-            {selectedImages.length > 0 ? (
-              <div className="grid grid-cols-3 gap-2">
-                {selectedImages.map((src, i) => (
-                  <div
-                    key={i}
-                    className="relative aspect-square border border-white/20 overflow-hidden group cursor-pointer"
-                    onClick={() => toggleImageSelection(src)}
-                  >
-                    <img src={src} alt="" className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="mono text-[9px] text-white">REMOVE</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="aspect-video border border-dashed border-white/20 flex items-center justify-center">
-                <span className="mono text-[10px] text-white/30 uppercase">
-                  Select source images
-                </span>
-              </div>
-            )}
-          </div>
-
-          {/* Controls */}
-          <div className="border border-white/10 p-4 bg-black/50 space-y-4">
-            <h3 className="mono text-[10px] uppercase tracking-widest text-white/40 mb-4">
-              Parameters
-            </h3>
-
-            {/* Prompt */}
-            {mode !== 'collage' && (
-              <div>
-                <label className="mono text-[9px] uppercase tracking-wider text-white/60 block mb-2">
-                  Prompt
-                </label>
-                <textarea
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="Describe your vision..."
-                  className="w-full bg-black border border-white/20 p-3 mono text-sm text-white resize-none focus:border-white/40 focus:outline-none"
-                  rows={3}
-                />
-              </div>
-            )}
-
-            {/* Creativity Slider */}
-            {(mode === 'remix' || mode === 'style') && (
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="mono text-[9px] uppercase tracking-wider text-white/60">
-                    Creativity
-                  </label>
-                  <span className="mono text-[9px]" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
-                    {creativity}%
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={creativity}
-                  onChange={(e) => setCreativity(Number(e.target.value))}
-                  className="w-full accent-current"
-                  style={{ accentColor: 'rgba(var(--theme-rgb), 1)' }}
-                />
-              </div>
-            )}
-
-            {/* Chaos Slider */}
-            <div>
-              <div className="flex justify-between mb-2">
-                <label className="mono text-[9px] uppercase tracking-wider text-white/60">
-                  Chaos Level
-                </label>
-                <span className="mono text-[9px]" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
-                  {chaos}%
-                </span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={chaos}
-                onChange={(e) => setChaos(Number(e.target.value))}
-                className="w-full"
-                style={{ accentColor: 'rgba(var(--theme-rgb), 1)' }}
-              />
-            </div>
-
-            {/* Brush Size (Inpaint mode) */}
-            {mode === 'inpaint' && (
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="mono text-[9px] uppercase tracking-wider text-white/60">
-                    Brush Size
-                  </label>
-                  <span className="mono text-[9px]" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
-                    {brushSize}px
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="5"
-                  max="100"
-                  value={brushSize}
-                  onChange={(e) => setBrushSize(Number(e.target.value))}
-                  className="w-full"
-                  style={{ accentColor: 'rgba(var(--theme-rgb), 1)' }}
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Generate Button */}
-          <button
-            onClick={handleGenerate}
-            disabled={selectedImages.length === 0 || isGenerating}
-            className="w-full py-4 border border-white/20 mono text-sm uppercase tracking-widest transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-white/40"
-            style={{
-              backgroundColor: isGenerating ? 'transparent' : 'rgba(var(--theme-rgb), 0.1)',
-              borderColor: isGenerating ? 'rgba(var(--theme-rgb), 0.5)' : undefined,
-            }}
-          >
-            {isGenerating ? (
-              <span className="animate-pulse" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
-                Transmuting...
-              </span>
-            ) : (
-              <span style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
-                Forge Transmission
-              </span>
-            )}
-          </button>
-        </div>
-
-        {/* Right Panel - Canvas / Preview */}
-        <div className="lg:col-span-2 order-first lg:order-last">
-          <div className="border border-white/10 bg-black/50 p-3 md:p-4 h-full min-h-[300px] md:min-h-[500px] flex flex-col">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="mono text-[10px] uppercase tracking-widest text-white/40">
-                {generatedImage ? 'Transmission Result' : 'Preview'}
-              </h3>
-              {transmissionNumber && (
-                <span
-                  className="mono text-[10px] uppercase tracking-wider"
-                  style={{ color: 'rgba(var(--theme-rgb), 1)' }}
-                >
-                  Transmission #{transmissionNumber}
-                </span>
-              )}
-            </div>
-
-            {/* Error Display */}
-            {error && (
-              <div className="mb-4 p-3 border border-red-500/30 bg-red-500/10">
-                <span className="mono text-[10px] uppercase tracking-wider text-red-400">
-                  {error}
-                </span>
-              </div>
-            )}
-
-            <div className="flex-1 relative border border-white/10 overflow-hidden flex items-center justify-center bg-black/30">
-              {mode === 'inpaint' && selectedImages.length > 0 ? (
-                <div className="relative w-full h-full">
-                  <img
-                    src={selectedImages[0]}
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-contain"
-                  />
-                  <canvas
-                    ref={canvasRef}
-                    width={800}
-                    height={600}
-                    className="absolute inset-0 w-full h-full cursor-crosshair touch-none"
-                    onMouseDown={startDrawing}
-                    onMouseUp={stopDrawing}
-                    onMouseMove={draw}
-                    onMouseLeave={stopDrawing}
-                    onTouchStart={startDrawing}
-                    onTouchEnd={stopDrawing}
-                    onTouchMove={draw}
-                  />
-                </div>
-              ) : generatedImage ? (
-                <img
-                  src={generatedImage}
-                  alt="Generated"
-                  className="max-w-full max-h-full object-contain"
-                />
-              ) : selectedImages.length > 0 ? (
-                <div className="grid grid-cols-2 gap-4 p-8 w-full max-w-lg">
-                  {selectedImages.map((src, i) => (
-                    <img
-                      key={i}
-                      src={src}
-                      alt=""
-                      className="w-full aspect-square object-cover border border-white/20"
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center">
-                  <div
-                    className="w-16 h-16 mx-auto mb-4 border border-white/20 rounded-full flex items-center justify-center"
-                    style={{ borderColor: 'rgba(var(--theme-rgb), 0.3)' }}
-                  >
-                    <span className="text-2xl opacity-30">⬡</span>
-                  </div>
-                  <p className="mono text-[10px] uppercase tracking-widest text-white/30">
-                    Select source material to begin
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Action Buttons */}
-            {generatedImage && (
-              <div className="flex gap-4 mt-4">
-                <button
-                  onClick={handleGenerate}
-                  className="flex-1 py-3 border border-white/20 mono text-[10px] uppercase tracking-widest hover:border-white/40 transition-colors"
-                >
-                  Regenerate
-                </button>
-                <button
-                  className="flex-1 py-3 mono text-[10px] uppercase tracking-widest transition-colors"
-                  style={{
-                    backgroundColor: 'rgba(var(--theme-rgb), 0.2)',
-                    border: '1px solid rgba(var(--theme-rgb), 0.5)',
-                    color: 'rgba(var(--theme-rgb), 1)',
-                  }}
-                >
-                  Purchase Print
-                </button>
-              </div>
-            )}
-          </div>
+        {/* ── Status Bar ── */}
+        <div className="flex items-center gap-2 py-3 border-t border-white/10">
+          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: statusColor }} />
+          <span className="mono text-[9px] uppercase tracking-wider text-white/40">
+            {comfyStatus === 'connected' ? 'ComfyUI Connected'
+              : comfyStatus === 'checking' ? 'Checking ComfyUI…'
+              : 'ComfyUI Disconnected'}
+          </span>
+          {isGenerating && (
+            <span className="mono text-[9px] uppercase tracking-wider ml-auto" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
+              Generating ({generationTime}s)
+            </span>
+          )}
         </div>
       </div>
 
-      {/* Void Image Picker Modal */}
+      {/* ── Void Picker (slide-up panel) ── */}
       {showVoidPicker && (
         <div
-          className="fixed inset-0 z-50 bg-black/95 md:bg-black/90 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-8"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end justify-center"
           onClick={() => setShowVoidPicker(false)}
         >
           <div
-            className="w-full md:max-w-4xl h-[85vh] md:h-auto md:max-h-[80vh] overflow-auto border-t md:border border-white/20 bg-black p-4 md:p-6 rounded-t-2xl md:rounded-none"
-            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-4xl h-[80vh] bg-black border-t border-white/20 rounded-t-xl overflow-hidden flex flex-col"
+            onClick={e => e.stopPropagation()}
           >
-            {/* Mobile drag handle */}
-            <div className="md:hidden w-12 h-1 bg-white/20 rounded-full mx-auto mb-4" />
-
-            <div className="flex justify-between items-center mb-4 md:mb-6">
-              <h3 className="mono text-xs md:text-sm uppercase tracking-widest" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
-                The Void Archive
-              </h3>
-              <button
-                onClick={() => setShowVoidPicker(false)}
-                className="mono text-[10px] uppercase tracking-widest text-white/40 hover:text-white p-2 -mr-2"
-              >
-                [ Close ]
-              </button>
-            </div>
-
-            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3">
-              {VOID_IMAGES.map((img, i) => (
-                <div
-                  key={i}
-                  onClick={() => toggleImageSelection(img.src)}
-                  className={`relative aspect-square cursor-pointer border-2 overflow-hidden transition-all active:scale-95 ${
-                    selectedImages.includes(img.src)
-                      ? 'border-white scale-95'
-                      : 'border-transparent'
-                  }`}
-                  style={{
-                    borderColor: selectedImages.includes(img.src)
-                      ? 'rgba(var(--theme-rgb), 1)'
-                      : undefined,
-                  }}
+            {/* Drag handle */}
+            <div className="flex-shrink-0 pt-3 pb-2 px-4">
+              <div className="w-10 h-1 bg-white/20 rounded-full mx-auto mb-3" />
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="mono text-xs uppercase tracking-widest" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
+                  Void Archive
+                </h3>
+                <button
+                  onClick={() => setShowVoidPicker(false)}
+                  className="mono text-[10px] uppercase tracking-widest text-white/40 hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
-                  <img
-                    src={img.src}
-                    alt={img.name}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                  {selectedImages.includes(img.src) && (
-                    <div
-                      className="absolute inset-0 flex items-center justify-center"
-                      style={{ backgroundColor: 'rgba(var(--theme-rgb), 0.3)' }}
-                    >
-                      <span className="mono text-xs md:text-sm font-bold">
-                        {selectedImages.indexOf(img.src) + 1}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              ))}
+                  ✕
+                </button>
+              </div>
+              <input
+                type="text"
+                value={voidSearch}
+                onChange={e => setVoidSearch(e.target.value)}
+                placeholder="Search…"
+                className="w-full bg-white/5 border border-white/10 px-3 py-2 mono text-xs text-white focus:outline-none focus:border-white/30 placeholder-white/20"
+              />
             </div>
 
-            {/* Sticky footer for mobile */}
-            <div className="sticky bottom-0 left-0 right-0 mt-4 md:mt-6 pt-4 bg-black border-t border-white/10 md:border-0 md:pt-0 flex justify-center md:justify-end">
+            {/* Grid */}
+            <div className="flex-1 overflow-y-auto p-4 pt-2">
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
+                {filteredVoid.map(name => {
+                  const selected = sourceImages.some(s => s.src === `/void/${name}`);
+                  return (
+                    <div
+                      key={name}
+                      onClick={() => {
+                        if (selected) {
+                          setSourceImages(prev => prev.filter(s => s.src !== `/void/${name}`));
+                        } else {
+                          addVoidImage(name);
+                        }
+                      }}
+                      className="relative aspect-square cursor-pointer overflow-hidden border-2 transition-all active:scale-95"
+                      style={{
+                        borderColor: selected ? 'rgba(var(--theme-rgb), 1)' : 'transparent',
+                      }}
+                    >
+                      <img src={`/void/${name}`} alt="" className="w-full h-full object-cover" loading="lazy" />
+                      {selected && (
+                        <div
+                          className="absolute inset-0 flex items-center justify-center"
+                          style={{ backgroundColor: 'rgba(var(--theme-rgb), 0.3)' }}
+                        >
+                          <span className="mono text-sm font-bold text-white">
+                            {sourceImages.findIndex(s => s.src === `/void/${name}`) + 1}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex-shrink-0 p-4 border-t border-white/10">
               <button
                 onClick={() => setShowVoidPicker(false)}
-                className="w-full md:w-auto px-6 py-3 md:py-2 mono text-xs md:text-[10px] uppercase tracking-widest"
+                className="w-full py-3 mono text-xs uppercase tracking-widest min-h-[48px]"
                 style={{
-                  backgroundColor: 'rgba(var(--theme-rgb), 0.2)',
-                  border: '1px solid rgba(var(--theme-rgb), 0.5)',
+                  backgroundColor: 'rgba(var(--theme-rgb), 0.15)',
+                  border: '1px solid rgba(var(--theme-rgb), 0.4)',
                   color: 'rgba(var(--theme-rgb), 1)',
                 }}
               >
-                Confirm Selection ({selectedImages.length})
+                Done ({sourceImages.length}/{MAX_SOURCES[mode]})
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Hover styles */}
-      <style>{`
-        input[type="range"] {
-          -webkit-appearance: none;
-          background: rgba(255, 255, 255, 0.1);
-          height: 6px;
-          border-radius: 3px;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          width: 24px;
-          height: 24px;
-          background: rgba(var(--theme-rgb), 1);
-          border-radius: 50%;
-          cursor: pointer;
-          box-shadow: 0 0 10px rgba(var(--theme-rgb), 0.5);
-        }
-        @media (min-width: 768px) {
-          input[type="range"] {
-            height: 4px;
-          }
-          input[type="range"]::-webkit-slider-thumb {
-            width: 16px;
-            height: 16px;
-          }
-        }
-        /* Hide scrollbar for mode selector on mobile */
-        .overflow-x-auto::-webkit-scrollbar {
-          display: none;
-        }
-        .overflow-x-auto {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
+      {/* ── Lightbox ── */}
+      {lightboxSrc && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 cursor-pointer"
+          onClick={() => setLightboxSrc(null)}
+        >
+          <img src={lightboxSrc} alt="" className="max-w-full max-h-full object-contain" />
+          <button className="absolute top-4 right-4 mono text-white/50 hover:text-white text-lg min-h-[48px] min-w-[48px] flex items-center justify-center">
+            ✕
+          </button>
+        </div>
+      )}
     </div>
   );
 };

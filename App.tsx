@@ -17,6 +17,7 @@ import AuthModal from './components/AuthModal';
 import { AuthProvider } from './contexts/AuthContext';
 import { fetchShopifyArtifacts } from './services/shopifyService';
 import { SACRED_GEOMETRY } from './constants';
+import SacredGeometry from './components/SacredGeometry';
 
 const THEME_CONFIG = {
   sky: { hex: '#38bdf8', rgb: '56, 189, 248' },   // Tailwind sky-400
@@ -178,7 +179,7 @@ const App: React.FC = () => {
 
   return (
     <AuthProvider>
-    <main id="main-content" className="relative min-h-screen bg-black overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)', paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right)' }}>
+    <main id="main-content" className="relative min-h-screen bg-[#0a0a0a] overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)', paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right)' }}>
       {/* SimplifiedNav for cleaner UX — swap with HUD */}
       <SimplifiedNav currentView={currentView} setView={navigate} cartCount={cart.length} themeColor={themeColor} />
       {/* <HUD currentView={currentView} setView={navigate} themeColor={themeColor} /> */}
@@ -192,7 +193,23 @@ const App: React.FC = () => {
         {currentView === View.Origin && (
           <div className="flex flex-col items-center justify-center min-h-screen relative px-6 overflow-hidden">
             <QuantumField particleCount={60} connectionDistance={120} />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[60vh] bg-[#111] border border-white/5 opacity-40 z-0" />
+            
+            {/* Sacred Geometry Background — Flower of Life */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
+              <SacredGeometry variant="flower-of-life" size={900} opacity={0.04} animated />
+            </div>
+            {/* Secondary geometry — slower counter-rotation */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
+              <div className="sacred-geo-rotate-reverse" style={{ opacity: 0.025 }}>
+                <SacredGeometry variant="metatrons-cube" size={600} opacity={1} animated={false} />
+              </div>
+            </div>
+            
+            {/* Dark void panel */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[60vh] bg-[#0a0a0a] border border-[#C9A84C]/5 opacity-50 z-0" />
+            
+            {/* Reflective water surface at bottom */}
+            <div className="absolute bottom-0 left-0 w-full h-48 reflection-surface pointer-events-none z-[1]" />
             
             <div className="relative z-10 flex flex-col items-center">
               <div className="flex flex-col items-center gap-6 mb-12 text-center">
@@ -208,11 +225,11 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <h1 className="serif text-[clamp(3rem,12vw,10rem)] leading-none uppercase font-black tracking-tighter text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                TONIC<br/><span className="italic opacity-50">THOUGHT</span>
+              <h1 className="serif text-[clamp(3rem,12vw,10rem)] leading-none uppercase font-black tracking-tighter text-white drop-shadow-[0_0_40px_rgba(201,168,76,0.08)]">
+                TONIC<br/><span className="italic" style={{ color: 'rgba(201, 168, 76, 0.5)' }}>THOUGHT</span>
               </h1>
               
-              <p className="serif text-xl md:text-2xl mt-8 italic text-white/40 max-w-xl text-center mb-12">
+              <p className="serif text-xl md:text-2xl mt-8 italic text-white/40 max-w-xl text-center mb-12 tracking-wide">
                 Distilling the infinite noise of the void into grounded packets of meaning.
               </p>
 
