@@ -52,13 +52,13 @@ body::before {
 
 /* Quantum Transition Classes */
 .quantum-exit-active {
-  animation: decohere 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards;
+  animation: decohere 0.25s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards;
   pointer-events: none;
   transform-origin: center center;
 }
 
 .quantum-enter-active {
-  animation: rematerialize 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+  animation: rematerialize 0.25s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
   transform-origin: center center;
 }
 
@@ -268,4 +268,20 @@ canvas {
 .luxury-text {
   letter-spacing: 0.15em;
   font-weight: 300;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .sacred-geo-rotate,
+  .sacred-geo-rotate-reverse,
+  .sacred-geo-pulse,
+  .sacred-float,
+  .concentric-ring {
+    animation: none !important;
+  }
 }

@@ -16,6 +16,7 @@ import QuantumField from './components/QuantumField';
 import AuthModal from './components/AuthModal';
 import { AuthProvider } from './contexts/AuthContext';
 import { fetchShopifyArtifacts } from './services/shopifyService';
+import { createCheckout } from './services/shopifyCheckout';
 import { SACRED_GEOMETRY } from './constants';
 import SacredGeometry from './components/SacredGeometry';
 
@@ -25,11 +26,39 @@ const THEME_CONFIG = {
   amber: { hex: '#fbbf24', rgb: '251, 191, 36' },   // Tailwind amber-400
 };
 
+const VIEW_ROUTES = {
+  [View.Origin]: '',
+  [View.Featured]: 'featured',
+  [View.Apothecary]: 'shop',
+  [View.Void]: 'gallery',
+  [View.Forge]: 'forge',
+  [View.About]: 'about',
+  [View.Index]: 'prints',
+  [View.Transmission]: 'transmission',
+  [View.Architect]: 'architect'
+};
+
+const ROUTE_VIEWS = Object.fromEntries(
+  Object.entries(VIEW_ROUTES).map(([view, route]) => [route, view as View])
+);
+
 type TransitionState = 'IDLE' | 'COLLAPSING' | 'LEAPING';
 
 const App: React.FC = () => {
-  const [isCalibrated, setIsCalibrated] = useState(false);
-  const [currentView, setCurrentView] = useState<View>(View.Origin);
+  // Initialize based on URL hash
+  const initializeFromHash = () => {
+    const hash = window.location.hash.slice(1); // Remove #
+    const view = ROUTE_VIEWS[hash] || View.Origin;
+    return { 
+      isCalibrated: hash !== '',  // Skip FrequencyGate if there's a hash
+      currentView: view 
+    };
+  };
+
+  const { isCalibrated: initialIsCalibrated, currentView: initialView } = initializeFromHash();
+  
+  const [isCalibrated, setIsCalibrated] = useState(initialIsCalibrated);
+  const [currentView, setCurrentView] = useState<View>(initialView);
   const [transitionState, setTransitionState] = useState<TransitionState>('IDLE');
   
   const [cart, setCart] = useState<CartItem[]>(() => {
@@ -50,7 +79,22 @@ const App: React.FC = () => {
   const [lunarPhase, setLunarPhase] = useState<string>('');
   const [lunarProgress, setLunarProgress] = useState<number>(0);
 
-  // 1. Lunar Sync & Inventory Load
+  // 1. Hash routing - handle browser back/forward
+  useEffect(() => {
+    const handlePopState = () => {
+      const hash = window.location.hash.slice(1);
+      const view = ROUTE_VIEWS[hash] || View.Origin;
+      if (view !== currentView) {
+        setCurrentView(view);
+        window.scrollTo(0, 0);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [currentView]);
+
+  // 2. Lunar Sync & Inventory Load
   useEffect(() => {
     const loadInventory = async () => {
       const data = await fetchShopifyArtifacts();
@@ -108,7 +152,7 @@ const App: React.FC = () => {
     synchronizeLunarCycle();
   }, []);
 
-  // 2. CSS Variable Injection for Dynamic Styles
+  // 3. CSS Variable Injection for Dynamic Styles
   useEffect(() => {
     const config = THEME_CONFIG[themeColor];
     if (config) {
@@ -117,7 +161,7 @@ const App: React.FC = () => {
     }
   }, [themeColor]);
 
-  // 3. Cart Persistence - Save to localStorage on changes
+  // 4. Cart Persistence - Save to localStorage on changes
   useEffect(() => {
     try {
       localStorage.setItem('tonic-thought-cart', JSON.stringify(cart));
@@ -143,6 +187,11 @@ const App: React.FC = () => {
   const navigate = (view: View) => {
     if (transitionState !== 'IDLE' || view === currentView) return;
 
+    // Update URL hash
+    const route = VIEW_ROUTES[view];
+    const newHash = route ? `#${route}` : '#';
+    window.history.pushState(null, '', newHash);
+
     // Phase 1: Collapse the Quantum State (Decoherence)
     setTransitionState('COLLAPSING');
 
@@ -155,13 +204,20 @@ const App: React.FC = () => {
       setTimeout(() => {
         // Phase 3: Stabilization
         setTransitionState('IDLE');
-      }, 800); // Matches rematerialize animation duration
-    }, 800); // Matches decohere animation duration
+      }, 250); // Speeded up transition
+    }, 250); // Speeded up transition
   };
 
   const handleIndexSelection = (artifact: Artifact) => {
     setSelectedArtifact(artifact);
     navigate(View.Apothecary);
+  };
+
+  const handleFeaturedPurchase = async (piece: any) => {
+    // For now, create a simple checkout flow for featured pieces
+    // This could be enhanced to map featured pieces to actual Shopify products
+    const checkoutUrl = `https://${import.meta.env.VITE_SHOPIFY_DOMAIN || 'tonic-thought-studios-2.myshopify.com'}/cart?note=${encodeURIComponent(`Featured piece: ${piece.title} - $${piece.price}`)}&attributes[Featured+Piece]=${encodeURIComponent(piece.id)}`;
+    window.open(checkoutUrl, '_blank');
   };
 
   if (!isCalibrated) {
@@ -315,7 +371,7 @@ const App: React.FC = () => {
           />
         )}
         {currentView === View.Architect && <Architect />}
-        {currentView === View.Featured && <FeaturedCollection themeColor={themeColor} onBuyClick={(piece) => { /* TODO: wire to cart/checkout */ console.log('Buy:', piece); }} />}
+        {currentView === View.Featured && <FeaturedCollection themeColor={themeColor} onBuyClick={handleFeaturedPurchase} />}
         {currentView === View.Void && <Void themeColor={themeColor} />}
         {currentView === View.Forge && <Forge themeColor={themeColor} />}
         {currentView === View.About && <About themeColor={themeColor} />}
@@ -323,7 +379,7 @@ const App: React.FC = () => {
 
       <Oracle cartCount={cart.length} themeColor={themeColor} />
 
-      <footer className="hidden md:block fixed bottom-6 right-12 pointer-events-none z-50">
+      <footer className="hidden md:block fixed bottom-6 right-12 pointer-events-none z-10">
          <span className="mono text-[8px] uppercase tracking-widest opacity-20">SYSTEM_137 // BUILD_210724</span>
       </footer>
     </main>

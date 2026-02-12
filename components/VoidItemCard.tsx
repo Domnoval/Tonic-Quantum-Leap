@@ -29,13 +29,21 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
   onPrint,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isTouched, setIsTouched] = useState(false);
   const [scanPhase, setScanPhase] = useState(0);
   const [hoveredMode, setHoveredMode] = useState<ForgeMode | null>(null);
   const [hoveredAction, setHoveredAction] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Detect mobile device
+  useEffect(() => {
+    setIsMobile('ontouchstart' in window);
+  }, []);
 
   // Scanning animation
   useEffect(() => {
-    if (!isHovered) {
+    const isActive = isTouched || isHovered;
+    if (!isActive) {
       setScanPhase(0);
       return;
     }
@@ -49,7 +57,7 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
       clearTimeout(timer2);
       clearTimeout(timer3);
     };
-  }, [isHovered]);
+  }, [isHovered, isTouched]);
 
   const getSizeClasses = () => {
     switch (size) {
@@ -74,6 +82,29 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
     onPrint?.();
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (isMobile) {
+      e.preventDefault();
+      setIsTouched(true);
+    }
+  };
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (isMobile && !isTouched) {
+      // First tap on mobile - show overlay
+      e.preventDefault();
+      setIsTouched(true);
+    } else {
+      // Desktop or second tap on mobile - view
+      onView();
+    }
+  };
+
+  const handleCloseOverlay = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsTouched(false);
+  };
+
   return (
     <div
       className={`
@@ -81,11 +112,12 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
         void-item-card group relative overflow-visible
         transition-all duration-500 ease-out
         cursor-pointer
-        ${isHovered ? 'z-40' : 'z-10'}
+        ${(isTouched || isHovered) ? 'z-40' : 'z-10'}
       `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={onView}
+      onTouchStart={handleTouchStart}
+      onClick={handleCardClick}
     >
       {/* Main Card Container */}
       <div
@@ -93,13 +125,13 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
           relative w-full h-full overflow-hidden
           bg-black/50 backdrop-blur-sm
           border transition-all duration-500
-          ${isHovered 
+          ${(isTouched || isHovered)
             ? 'border-[rgba(var(--theme-rgb),0.8)] shadow-[0_0_30px_rgba(var(--theme-rgb),0.4)]' 
             : 'border-white/10'
           }
         `}
         style={{
-          transform: isHovered ? 'scale(1.02) translateY(-4px)' : 'scale(1)',
+          transform: (isTouched || isHovered) ? 'scale(1.02) translateY(-4px)' : 'scale(1)',
           transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease',
         }}
       >
@@ -111,14 +143,14 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
           className={`
             w-full h-full object-cover
             transition-all duration-700
-            ${isHovered 
+            ${(isTouched || isHovered)
               ? 'opacity-100 grayscale-0 scale-110' 
               : 'opacity-70 grayscale scale-100'
             }
           `}
         />
 
-        {/* ✨ FEATURE 1: Print Available Badge (subtle, always visible) */}
+        {/* ✨ FEATURE 1: Print Available Badge (visible on mobile, hidden on desktop hover) */}
         <div
           className={`
             absolute top-2 right-2 z-10
@@ -127,16 +159,28 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
             bg-black/70 backdrop-blur-sm
             border border-amber-500/30
             transition-all duration-300
-            ${isHovered ? 'opacity-0 scale-90' : 'opacity-80 hover:opacity-100'}
+            cursor-pointer
+            ${(isTouched || isHovered) && !isMobile ? 'opacity-0 scale-90' : 'opacity-80 hover:opacity-100'}
           `}
+          onClick={handlePrintClick}
         >
-          <span className="mono text-[7px] uppercase tracking-wider text-amber-400/80">
+          <span className="mono text-[10px] uppercase tracking-wider text-amber-400/80">
             $65+
           </span>
         </div>
 
+        {/* Mobile close button */}
+        {isMobile && isTouched && (
+          <button
+            className="absolute top-2 left-2 z-20 w-8 h-8 flex items-center justify-center bg-black/80 backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all duration-300"
+            onClick={handleCloseOverlay}
+          >
+            <span className="text-white/80 text-lg">×</span>
+          </button>
+        )}
+
         {/* Scan Line Effect */}
-        {isHovered && (
+        {(isTouched || isHovered) && (
           <div
             className="absolute inset-0 pointer-events-none overflow-hidden"
             style={{ mixBlendMode: 'overlay' }}
@@ -154,7 +198,7 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
         )}
 
         {/* Chromatic Aberration / Glitch Effect */}
-        {isHovered && (
+        {(isTouched || isHovered) && (
           <div className="absolute inset-0 pointer-events-none">
             <div
               className="absolute inset-0 mix-blend-screen opacity-30"
@@ -183,7 +227,7 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
         <div
           className={`
             absolute inset-0 pointer-events-none transition-opacity duration-300
-            ${isHovered ? 'opacity-40' : 'opacity-0'}
+            ${(isTouched || isHovered) ? 'opacity-40' : 'opacity-0'}
           `}
           style={{
             backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.5\'/%3E%3C/svg%3E")',
@@ -196,7 +240,7 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
           className={`
             absolute inset-0 pointer-events-none transition-opacity duration-500
             bg-gradient-to-t from-black via-black/20 to-transparent
-            ${isHovered ? 'opacity-90' : 'opacity-0'}
+            ${(isTouched || isHovered) ? 'opacity-90' : 'opacity-0'}
           `}
         />
 
@@ -204,30 +248,31 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
         <div
           className={`
             absolute top-2 left-2 border-t-2 border-l-2 transition-all duration-500
-            ${isHovered ? 'w-6 h-6 opacity-100' : 'w-3 h-3 opacity-30'}
+            ${(isTouched || isHovered) ? 'w-6 h-6 opacity-100' : 'w-3 h-3 opacity-30'}
+            ${isMobile && isTouched ? 'top-12' : ''}
           `}
-          style={{ borderColor: isHovered ? 'rgba(var(--theme-rgb), 1)' : 'rgba(255,255,255,0.3)' }}
+          style={{ borderColor: (isTouched || isHovered) ? 'rgba(var(--theme-rgb), 1)' : 'rgba(255,255,255,0.3)' }}
         />
         <div
           className={`
             absolute top-2 right-2 border-t-2 border-r-2 transition-all duration-500
-            ${isHovered ? 'w-6 h-6 opacity-100' : 'w-3 h-3 opacity-30'}
+            ${(isTouched || isHovered) ? 'w-6 h-6 opacity-100' : 'w-3 h-3 opacity-30'}
           `}
-          style={{ borderColor: isHovered ? 'rgba(var(--theme-rgb), 1)' : 'rgba(255,255,255,0.3)' }}
+          style={{ borderColor: (isTouched || isHovered) ? 'rgba(var(--theme-rgb), 1)' : 'rgba(255,255,255,0.3)' }}
         />
         <div
           className={`
             absolute bottom-2 left-2 border-b-2 border-l-2 transition-all duration-500
-            ${isHovered ? 'w-6 h-6 opacity-100' : 'w-3 h-3 opacity-30'}
+            ${(isTouched || isHovered) ? 'w-6 h-6 opacity-100' : 'w-3 h-3 opacity-30'}
           `}
-          style={{ borderColor: isHovered ? 'rgba(var(--theme-rgb), 1)' : 'rgba(255,255,255,0.3)' }}
+          style={{ borderColor: (isTouched || isHovered) ? 'rgba(var(--theme-rgb), 1)' : 'rgba(255,255,255,0.3)' }}
         />
         <div
           className={`
             absolute bottom-2 right-2 border-b-2 border-r-2 transition-all duration-500
-            ${isHovered ? 'w-6 h-6 opacity-100' : 'w-3 h-3 opacity-30'}
+            ${(isTouched || isHovered) ? 'w-6 h-6 opacity-100' : 'w-3 h-3 opacity-30'}
           `}
-          style={{ borderColor: isHovered ? 'rgba(var(--theme-rgb), 1)' : 'rgba(255,255,255,0.3)' }}
+          style={{ borderColor: (isTouched || isHovered) ? 'rgba(var(--theme-rgb), 1)' : 'rgba(255,255,255,0.3)' }}
         />
 
         {/* Scanning Status Text */}
@@ -236,7 +281,7 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
             absolute top-4 left-1/2 -translate-x-1/2
             mono text-[8px] uppercase tracking-[0.3em]
             transition-all duration-300
-            ${isHovered && scanPhase < 3 ? 'opacity-100' : 'opacity-0'}
+            ${(isTouched || isHovered) && scanPhase < 3 ? 'opacity-100' : 'opacity-0'}
           `}
           style={{ color: 'rgba(var(--theme-rgb), 1)' }}
         >
@@ -249,7 +294,7 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
           className={`
             absolute inset-x-0 bottom-0 p-3
             transition-all duration-500 ease-out
-            ${isHovered && scanPhase >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
+            ${(isTouched || isHovered) && scanPhase >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
           `}
         >
           {/* Two-button row: Forge + Materialize */}
@@ -268,7 +313,7 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
               `}
             >
               <span
-                className="mono text-[9px] uppercase tracking-[0.15em] flex items-center justify-center gap-1.5"
+                className="mono text-[10px] uppercase tracking-[0.15em] flex items-center justify-center gap-1.5"
                 style={{ color: 'rgba(var(--theme-rgb), 1)' }}
               >
                 <span className="text-sm">⚡</span>
@@ -292,7 +337,7 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
               `}
             >
               <span
-                className="mono text-[9px] uppercase tracking-[0.15em] flex items-center justify-center gap-1.5 text-amber-400/90 group-hover/print:text-amber-300"
+                className="mono text-[10px] uppercase tracking-[0.15em] flex items-center justify-center gap-1.5 text-amber-400/90 group-hover/print:text-amber-300"
               >
                 <span className="text-sm">🖼️</span>
                 GET PRINT
@@ -321,7 +366,7 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
               >
                 <div className="flex flex-col items-center gap-0.5">
                   <span className="text-xs">{icon}</span>
-                  <span className="mono text-[6px] uppercase tracking-wider text-white/60 group-hover/mode:text-white/90">
+                  <span className="mono text-[9px] uppercase tracking-wider text-white/60 group-hover/mode:text-white/90">
                     {label}
                   </span>
                 </div>
@@ -334,7 +379,7 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
             <div
               className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-black/90 border border-[rgba(var(--theme-rgb),0.4)] whitespace-nowrap"
             >
-              <span className="mono text-[9px] uppercase tracking-wider" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
+              <span className="mono text-[10px] uppercase tracking-wider" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
                 {FORGE_MODES.find(m => m.mode === hoveredMode)?.description}
               </span>
             </div>
@@ -345,7 +390,7 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
             <div
               className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-black/90 border border-amber-500/40 whitespace-nowrap"
             >
-              <span className="mono text-[9px] uppercase tracking-wider text-amber-400">
+              <span className="mono text-[10px] uppercase tracking-wider text-amber-400">
                 Order poster or canvas — ships worldwide
               </span>
             </div>
@@ -363,7 +408,7 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
         </div>
 
         {/* Caption (shows when not in portal mode) */}
-        {caption && !isHovered && (
+        {caption && !(isTouched || isHovered) && (
           <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
             <span
               className="mono text-[8px] uppercase tracking-widest drop-shadow-lg"
@@ -376,7 +421,7 @@ const VoidItemCard: React.FC<VoidItemCardProps> = ({
       </div>
 
       {/* External Glow Ring */}
-      {isHovered && (
+      {(isTouched || isHovered) && (
         <div
           className="absolute -inset-1 rounded-sm pointer-events-none animate-pulse"
           style={{

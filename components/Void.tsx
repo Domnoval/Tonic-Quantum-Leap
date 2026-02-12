@@ -253,10 +253,10 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
           <div>
             <h2 className="serif text-2xl md:text-4xl text-white italic">The Void</h2>
             <p
-              className="mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] mt-1 md:mt-2"
+              className="mono text-[11px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] mt-1 md:mt-2"
               style={{ color: 'rgba(var(--theme-rgb), 1)' }}
             >
-              Art Gallery • Hover any piece to order prints from $65
+              Art Gallery • Tap or hover any piece to order prints from $65
             </p>
           </div>
           <div className="hidden md:flex items-center gap-4">
@@ -264,7 +264,7 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
               className={`w-2 h-2 rounded-full ${isAutoScrolling ? 'animate-pulse' : ''}`}
               style={{ backgroundColor: 'rgba(var(--theme-rgb), 1)' }}
             />
-            <span className="mono text-[9px] uppercase tracking-widest text-white/40">
+            <span className="mono text-[11px] uppercase tracking-widest text-white/40">
               {isAutoScrolling ? 'AUTO_DRIFT' : 'MANUAL_CONTROL'}
             </span>
           </div>
@@ -307,7 +307,7 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
       <div className="fixed bottom-0 left-0 right-0 z-30 px-4 md:px-12 py-4 md:py-6 bg-gradient-to-t from-black via-black/80 to-transparent">
         <div className="flex justify-center gap-6 md:gap-8">
           <a
-            href="https://instagram.com"
+            href="https://instagram.com/Domnoval_art"
             target="_blank"
             rel="noopener noreferrer"
             className="void-link mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] text-white/40 transition-colors py-2"
