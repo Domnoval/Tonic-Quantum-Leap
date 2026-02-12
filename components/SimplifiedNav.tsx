@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, ThemeColor } from '../types';
 
 interface SimplifiedNavProps {
@@ -19,10 +19,44 @@ const NAV_ITEMS: { view: View; label: string }[] = [
 
 const SimplifiedNav: React.FC<SimplifiedNavProps> = ({ currentView, setView, cartCount, themeColor }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [magneticStyles, setMagneticStyles] = useState<{[key: string]: {transform: string}}>({});
 
   const handleNavClick = (view: View) => {
     setView(view);
     setMobileMenuOpen(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>, view: View) => {
+    const button = e.currentTarget;
+    const rect = button.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const distanceX = e.clientX - centerX;
+    const distanceY = e.clientY - centerY;
+    const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+    if (distance < 50) {
+      const pullStrength = 1 - (distance / 50);
+      const pullX = (distanceX / distance) * pullStrength * 4;
+      const pullY = (distanceY / distance) * pullStrength * 4;
+      
+      setMagneticStyles(prev => ({
+        ...prev,
+        [view]: { transform: `translate(${pullX}px, ${pullY}px)` }
+      }));
+    } else {
+      setMagneticStyles(prev => ({
+        ...prev,
+        [view]: { transform: 'translate(0px, 0px)' }
+      }));
+    }
+  };
+
+  const handleMouseLeave = (view: View) => {
+    setMagneticStyles(prev => ({
+      ...prev,
+      [view]: { transform: 'translate(0px, 0px)' }
+    }));
   };
 
   return (
@@ -48,13 +82,20 @@ const SimplifiedNav: React.FC<SimplifiedNavProps> = ({ currentView, setView, car
             <button
               key={view}
               onClick={() => handleNavClick(view)}
+              onMouseMove={(e) => handleMouseMove(e, view)}
+              onMouseLeave={() => handleMouseLeave(view)}
               aria-current={currentView === view ? 'page' : undefined}
               className={`mono text-[12px] uppercase tracking-[0.2em] transition-all duration-500 py-1 border-b-2 ${
                 currentView === view
                   ? 'border-current'
                   : 'text-white/40 border-transparent hover:text-white/60'
               }`}
-              style={currentView === view ? { borderColor: '#C9A84C', color: '#C9A84C' } : undefined}
+              style={{
+                ...(currentView === view ? { borderColor: '#C9A84C', color: '#C9A84C' } : {}),
+                ...(magneticStyles[view] || {}),
+                transitionProperty: 'color, border-color, transform',
+                transitionDuration: '0.3s'
+              }}
             >
               {label}
             </button>

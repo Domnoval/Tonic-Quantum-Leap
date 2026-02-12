@@ -91,12 +91,35 @@ const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ themeColor, onB
         <GeometricDivider className="max-w-xs mx-auto mt-6" />
       </div>
 
-      {/* Art Grid */}
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
-        {FEATURED_PIECES.map((piece) => (
-          <article
-            key={piece.id}
-            className="gallery-piece group relative glass-card rounded-sm transition-all duration-700"
+      {/* Art Grid - Bento Layout */}
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 max-w-7xl mx-auto auto-rows-auto">
+        {FEATURED_PIECES.map((piece, index) => {
+          // Bento grid layout pattern
+          let gridClasses = "gallery-piece group relative glass-card rounded-sm transition-all duration-700";
+          let contentClasses = "";
+          
+          if (index === 0) {
+            // Hero piece
+            gridClasses += " md:col-span-2 md:row-span-2";
+            contentClasses = "hero-piece";
+          } else if (index === 1) {
+            // Wide piece
+            gridClasses += " md:col-span-2 md:row-span-1";
+          } else if (index === 2 || index === 3) {
+            // Small pieces
+            gridClasses += " md:col-span-1 md:row-span-1";
+          } else if (index === 4 || index === 5) {
+            // Wide pieces
+            gridClasses += " md:col-span-2 md:row-span-1";
+          } else {
+            // Default fallback
+            gridClasses += " md:col-span-1 md:row-span-1";
+          }
+          
+          return (
+            <article
+              key={piece.id}
+              className={gridClasses}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLElement).style.boxShadow = `0 0 40px rgba(201, 168, 76, 0.1), inset 0 0 30px rgba(201, 168, 76, 0.02)`;
             }}
@@ -110,48 +133,63 @@ const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ themeColor, onB
             <GeometricCorner position="bottom-left" />
             <GeometricCorner position="bottom-right" />
 
-            {/* Image */}
-            <div className="aspect-square overflow-hidden bg-black relative">
-              <img
-                src={piece.imageUrl}
-                alt={piece.title}
-                loading="lazy"
-                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.04]"
-              />
-              {/* Hover sacred geometry reveal */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                <SacredGeometry variant="seed-of-life" size={200} opacity={0.12} color="#C9A84C" animated={false} />
+              {/* Image */}
+              <div className="aspect-square overflow-hidden bg-black relative">
+                <img
+                  src={piece.imageUrl}
+                  alt={piece.title}
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.04]"
+                />
+                {/* Hover sacred geometry reveal */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                  <SacredGeometry 
+                    variant="seed-of-life" 
+                    size={index === 0 ? 300 : 200} 
+                    opacity={0.12} 
+                    color="#C9A84C" 
+                    animated={false} 
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Info */}
-            <div className="p-5 md:p-6">
-              <h3 className="serif text-lg text-white/90 mb-1 tracking-wide">{piece.title}</h3>
-              <p className="mono text-[10px] uppercase tracking-widest text-white/30 mb-3">
-                {piece.medium}
-              </p>
-              <p className="text-sm text-white/50 leading-relaxed mb-5">
-                {piece.description}
-              </p>
+              {/* Info */}
+              <div className={`p-5 md:p-6 ${index === 0 ? 'md:p-8' : ''}`}>
+                <h3 className={`serif text-white/90 mb-1 tracking-wide ${
+                  index === 0 ? 'text-xl md:text-2xl' : 'text-lg'
+                }`}>
+                  {piece.title}
+                </h3>
+                <p className="mono text-[10px] uppercase tracking-widest text-white/30 mb-3">
+                  {piece.medium}
+                </p>
+                <p className={`text-white/50 leading-relaxed mb-5 ${
+                  index === 0 ? 'text-base' : 'text-sm'
+                }`}>
+                  {piece.description}
+                </p>
 
-              <div className="flex items-center justify-between">
-                <span
-                  className="mono text-lg font-light"
-                  style={{ color: '#C9A84C' }}
-                >
-                  ${piece.price}
-                </span>
-                <button
-                  onClick={() => onBuyClick(piece)}
-                  aria-label={`Buy ${piece.title} for $${piece.price}`}
-                  className="mono text-xs uppercase tracking-widest px-5 py-3 min-h-[44px] min-w-[44px] border border-[#C9A84C]/20 text-[#C9A84C]/70 rounded-sm transition-all duration-500 hover:bg-[#C9A84C]/10 hover:text-[#C9A84C] hover:border-[#C9A84C]/50 focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/30 active:scale-95"
-                >
-                  Buy Now
-                </button>
+                <div className="flex items-center justify-between">
+                  <span
+                    className={`mono font-light ${index === 0 ? 'text-xl' : 'text-lg'}`}
+                    style={{ color: '#C9A84C' }}
+                  >
+                    ${piece.price}
+                  </span>
+                  <button
+                    onClick={() => onBuyClick(piece)}
+                    aria-label={`Buy ${piece.title} for $${piece.price}`}
+                    className={`mono text-xs uppercase tracking-widest border border-[#C9A84C]/20 text-[#C9A84C]/70 rounded-sm transition-all duration-500 hover:bg-[#C9A84C]/10 hover:text-[#C9A84C] hover:border-[#C9A84C]/50 focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/30 active:scale-95 ${
+                      index === 0 ? 'px-6 py-4 min-h-[48px] min-w-[48px]' : 'px-5 py-3 min-h-[44px] min-w-[44px]'
+                    }`}
+                  >
+                    Buy Now
+                  </button>
+                </div>
               </div>
-            </div>
-          </article>
-        ))}
+            </article>
+          );
+        })}
       </div>
     </section>
   );

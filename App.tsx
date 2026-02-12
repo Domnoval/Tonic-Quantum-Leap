@@ -19,6 +19,7 @@ import { fetchShopifyArtifacts } from './services/shopifyService';
 import { createCheckout } from './services/shopifyCheckout';
 import { SACRED_GEOMETRY } from './constants';
 import SacredGeometry from './components/SacredGeometry';
+import CustomCursor from './components/CustomCursor';
 
 const THEME_CONFIG = {
   sky: { hex: '#38bdf8', rgb: '56, 189, 248' },   // Tailwind sky-400
@@ -235,6 +236,7 @@ const App: React.FC = () => {
 
   return (
     <AuthProvider>
+      <CustomCursor />
     <main id="main-content" className="relative min-h-screen bg-[#0a0a0a] overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)', paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right)' }}>
       {/* SimplifiedNav for cleaner UX — swap with HUD */}
       <SimplifiedNav currentView={currentView} setView={navigate} cartCount={cart.length} themeColor={themeColor} />
@@ -382,6 +384,8 @@ const App: React.FC = () => {
       <footer className="hidden md:block fixed bottom-6 right-12 pointer-events-none z-10">
          <span className="mono text-[8px] uppercase tracking-widest opacity-20">SYSTEM_137 // BUILD_210724</span>
       </footer>
+      
+      <div className="film-grain" aria-hidden="true" />
     </main>
     </AuthProvider>
   );
