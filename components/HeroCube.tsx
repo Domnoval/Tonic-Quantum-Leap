@@ -246,6 +246,126 @@ function createGridTexture(lineColor: THREE.Color, nodeColor: THREE.Color, nodeB
   return tex;
 }
 
+/* ── "TONIC THOUGHT" branded face texture ── */
+
+function createBrandedTexture(): THREE.CanvasTexture {
+  const size = 512;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d')!;
+
+  ctx.clearRect(0, 0, size, size);
+
+  // Draw mandala base first (so text overlays it)
+  // Concentric circles
+  const cx = size / 2;
+  const cy = size / 2;
+  const rings = [40, 80, 120, 160, 200];
+  rings.forEach((r) => {
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(201,168,76,0.3)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+  for (let i = 0; i < 12; i++) {
+    const angle = (i * Math.PI * 2) / 12;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(angle) * 200, cy + Math.sin(angle) * 200);
+    ctx.strokeStyle = 'rgba(123,47,190,0.25)';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+  }
+  for (const ring of [80, 160]) {
+    for (let i = 0; i < 12; i++) {
+      const angle = (i * Math.PI * 2) / 12;
+      ctx.beginPath();
+      ctx.arc(cx + Math.cos(angle) * ring, cy + Math.sin(angle) * ring, 6, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(0,255,209,0.3)';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+  }
+  ctx.beginPath();
+  ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(201,168,76,0.5)';
+  ctx.fill();
+
+  // Draw text
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  // Glow effect
+  ctx.shadowColor = '#C9A84C';
+  ctx.shadowBlur = 20;
+  ctx.fillStyle = '#C9A84C';
+
+  ctx.font = 'bold 72px "Courier New", Courier, monospace';
+  ctx.fillText('TONIC', cx, cy - 30);
+  ctx.font = 'bold 56px "Courier New", Courier, monospace';
+  ctx.fillText('THOUGHT', cx, cy + 40);
+
+  // Second pass for stronger glow
+  ctx.shadowBlur = 10;
+  ctx.fillStyle = 'rgba(201,168,76,0.6)';
+  ctx.font = 'bold 72px "Courier New", Courier, monospace';
+  ctx.fillText('TONIC', cx, cy - 30);
+  ctx.font = 'bold 56px "Courier New", Courier, monospace';
+  ctx.fillText('THOUGHT', cx, cy + 40);
+
+  ctx.shadowBlur = 0;
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+/* ── "TONIC THOUGHT" text texture for front face ── */
+
+function createTextTexture(): THREE.CanvasTexture {
+  const size = 512;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d')!;
+
+  ctx.clearRect(0, 0, size, size);
+
+  // Draw mandala background (same as other faces)
+  const cx = size / 2;
+  const cy = size / 2;
+  const rings = [40, 80, 120, 160, 200];
+  rings.forEach((r) => {
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(201,168,76,0.15)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  // "TONIC" text
+  ctx.font = '700 72px "Courier New", monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(201,168,76,0.9)';
+  ctx.shadowColor = 'rgba(201,168,76,0.6)';
+  ctx.shadowBlur = 20;
+  ctx.fillText('TONIC', cx, cy - 40);
+
+  // "THOUGHT" text
+  ctx.font = '700 56px "Courier New", monospace';
+  ctx.fillText('THOUGHT', cx, cy + 40);
+
+  // Reset shadow
+  ctx.shadowBlur = 0;
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
 /* ── Sacred cube with tesseract morph ── */
 
 interface SceneProps {
@@ -256,11 +376,39 @@ interface SceneProps {
 function SacredCube({ active, setActive }: SceneProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const wireRef = useRef<THREE.Mesh>(null);
-  const cubeMatRef = useRef<THREE.MeshPhysicalMaterial>(null);
   const wireMatRef = useRef<THREE.MeshBasicMaterial>(null);
   const morphRef = useRef(0);
+  const cubeMatsRef = useRef<THREE.MeshPhysicalMaterial[]>([]);
 
   const mandalaTexture = useMemo(() => createMandalaTexture(), []);
+  const brandedTexture = useMemo(() => createBrandedTexture(), []);
+
+  // 6 materials: +x, -x, +y, -y, +z (front), -z (back)
+  // Three.js BoxGeometry face order: +X, -X, +Y, -Y, +Z, -Z
+  const cubeMaterials = useMemo(() => {
+    const base = {
+      color: new THREE.Color(NEON.purple),
+      transmission: 0.6,
+      roughness: 0.1,
+      metalness: 0.1,
+      transparent: true,
+      opacity: 0.7,
+      emissive: new THREE.Color(NEON.gold),
+      emissiveIntensity: 0.15,
+      side: THREE.DoubleSide as THREE.Side,
+    };
+    const mats = Array.from({ length: 6 }, (_, i) => {
+      const mat = new THREE.MeshPhysicalMaterial({
+        ...base,
+        map: i === 4 ? brandedTexture : mandalaTexture, // +Z = front face
+        emissiveMap: i === 4 ? brandedTexture : undefined,
+        emissiveIntensity: i === 4 ? 0.4 : 0.15,
+      });
+      return mat;
+    });
+    cubeMatsRef.current = mats;
+    return mats;
+  }, [mandalaTexture, brandedTexture]);
 
   const handlePointerOver = useCallback(() => setActive(true), [setActive]);
   const handlePointerOut = useCallback(() => setActive(false), [setActive]);
@@ -283,9 +431,9 @@ function SacredCube({ active, setActive }: SceneProps) {
       wireRef.current.rotation.x = rotX;
     }
 
-    // Fade cube out as tesseract fades in
-    if (cubeMatRef.current) {
-      cubeMatRef.current.opacity = 0.7 * (1 - m);
+    // Fade all cube face materials out as tesseract fades in
+    for (const mat of cubeMatsRef.current) {
+      mat.opacity = 0.7 * (1 - m);
     }
     if (wireMatRef.current) {
       wireMatRef.current.opacity = 0.3 * (1 - m);
@@ -298,22 +446,9 @@ function SacredCube({ active, setActive }: SceneProps) {
       onPointerOut={handlePointerOut}
       onClick={handleClick}
     >
-      {/* Main translucent cube */}
-      <mesh ref={meshRef}>
+      {/* Main translucent cube with branded front face */}
+      <mesh ref={meshRef} material={cubeMaterials}>
         <boxGeometry args={[2, 2, 2]} />
-        <meshPhysicalMaterial
-          ref={cubeMatRef}
-          color={new THREE.Color(NEON.purple)}
-          transmission={0.6}
-          roughness={0.1}
-          metalness={0.1}
-          transparent
-          opacity={0.7}
-          map={mandalaTexture}
-          emissive={new THREE.Color(NEON.gold)}
-          emissiveIntensity={0.15}
-          side={THREE.DoubleSide}
-        />
       </mesh>
 
       {/* Wireframe glow overlay */}
