@@ -3,11 +3,8 @@ import { ThemeColor } from '../types';
 import VoidItemCard from './VoidItemCard';
 import PurchaseModal from './PurchaseModalPreview';
 
-type ForgeMode = 'style' | 'remix' | 'inpaint' | 'mashup';
-
 interface VoidProps {
   themeColor: ThemeColor;
-  onNavigate?: (section: string, data?: any) => void;
 }
 
 interface VoidItem {
@@ -130,12 +127,13 @@ const generateVoidContent = (): VoidItem[] => {
   }));
 };
 
-const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
+const Void: React.FC<VoidProps> = ({ themeColor }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
   const autoScrollRef = useRef<number | null>(null);
   const [lightboxImage, setLightboxImage] = useState<VoidItem | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number>(-1);
   
   // Purchase modal state
   const [purchaseItem, setPurchaseItem] = useState<VoidItem | null>(null);
@@ -148,8 +146,11 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setLightboxImage(null);
+        setLightboxIndex(-1);
         setIsPurchaseModalOpen(false);
       }
+      if (lightboxImage && e.key === 'ArrowRight') navigateLightbox(1);
+      if (lightboxImage && e.key === 'ArrowLeft') navigateLightbox(-1);
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -158,11 +159,21 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
   const openLightbox = (item: VoidItem) => {
     setIsAutoScrolling(false);
     setLightboxImage(item);
+    const idx = items.findIndex(i => i.id === item.id);
+    setLightboxIndex(idx);
   };
 
   const closeLightbox = () => {
     setLightboxImage(null);
+    setLightboxIndex(-1);
     setTimeout(() => setIsAutoScrolling(true), 500);
+  };
+
+  const navigateLightbox = (dir: number) => {
+    if (lightboxIndex < 0) return;
+    const next = (lightboxIndex + dir + items.length) % items.length;
+    setLightboxImage(items[next]);
+    setLightboxIndex(next);
   };
 
   // Handle opening purchase modal
@@ -175,16 +186,6 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
   const closePurchaseModal = () => {
     setIsPurchaseModalOpen(false);
     setPurchaseItem(null);
-  };
-
-  // Handle Forge navigation with pre-selected image and mode
-  const handleForge = (imageSrc: string, mode: ForgeMode) => {
-    if (onNavigate) {
-      onNavigate('forge', { 
-        preselectedImage: imageSrc,
-        preselectedMode: mode 
-      });
-    }
   };
 
   // Duplicate items for seamless infinite scroll
@@ -285,7 +286,6 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
               size={item.size}
               caption={item.caption}
               onView={() => openLightbox(item)}
-              onForge={(mode) => handleForge(item.content, mode)}
               onPrint={() => openPurchaseModal(item)}
             />
           ))}
@@ -347,6 +347,24 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
             [ CLOSE ]
           </button>
 
+          {/* Prev button */}
+          <button
+            onClick={(e) => { e.stopPropagation(); navigateLightbox(-1); }}
+            className="absolute left-4 top-1/2 -translate-y-1/2 mono text-white/30 hover:text-white/80 text-3xl transition-colors z-10 p-4"
+            aria-label="Previous image"
+          >
+            &#8249;
+          </button>
+
+          {/* Next button */}
+          <button
+            onClick={(e) => { e.stopPropagation(); navigateLightbox(1); }}
+            className="absolute right-4 top-1/2 -translate-y-1/2 mono text-white/30 hover:text-white/80 text-3xl transition-colors z-10 p-4"
+            aria-label="Next image"
+          >
+            &#8250;
+          </button>
+
           {/* Image container */}
           <div
             className="relative max-w-[90vw] max-h-[75vh] animate-lightbox-in"
@@ -404,30 +422,6 @@ const Void: React.FC<VoidProps> = ({ themeColor, onNavigate }) => {
                 </span>
               </button>
 
-              {/* Forge Button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  closeLightbox();
-                  handleForge(lightboxImage.content, 'remix');
-                }}
-                className="
-                  px-6 py-2.5
-                  bg-black/60 backdrop-blur-md
-                  border border-[rgba(var(--theme-rgb),0.6)]
-                  hover:border-[rgba(var(--theme-rgb),1)] hover:bg-[rgba(var(--theme-rgb),0.15)]
-                  transition-all duration-300
-                  group
-                "
-              >
-                <span 
-                  className="mono text-[10px] uppercase tracking-[0.2em] flex items-center gap-2"
-                  style={{ color: 'rgba(var(--theme-rgb), 1)' }}
-                >
-                  <span>⚡</span>
-                  FORGE THIS
-                </span>
-              </button>
             </div>
           </div>
 

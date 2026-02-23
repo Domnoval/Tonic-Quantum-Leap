@@ -136,9 +136,14 @@ const Apothecary: React.FC<ApothecaryProps> = ({ artifacts, cart, addToCart, rem
       </div>
 
       {artifacts.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-48 opacity-20 animate-pulse">
-            <div className="w-12 h-12 border border-white rounded-full animate-spin mb-4" />
-            <span className="mono text-[10px] uppercase tracking-[1em]">Scanning_Nexus_Inventory...</span>
+        <div className="flex flex-col items-center justify-center py-48 text-center">
+            <div className="w-16 h-16 mb-6 opacity-20">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-full h-full text-white">
+                <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              </svg>
+            </div>
+            <h3 className="serif text-2xl text-white/60 mb-3 italic">Coming Soon</h3>
+            <p className="mono text-[11px] uppercase tracking-widest text-white/30 max-w-sm">New pieces arriving. Check back soon or visit our Featured collection.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-24">

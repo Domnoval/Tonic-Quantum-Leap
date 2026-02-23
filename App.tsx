@@ -8,7 +8,6 @@ import Architect from './components/Architect';
 import Oracle from './components/Oracle';
 import ManualIndex from './components/ManualIndex';
 import Void from './components/Void';
-import Forge from './components/Forge';
 import FeaturedCollection from './components/FeaturedCollection';
 import About from './components/About';
 import SimplifiedNav from './components/SimplifiedNav';
@@ -32,7 +31,6 @@ const VIEW_ROUTES = {
   [View.Featured]: 'featured',
   [View.Apothecary]: 'shop',
   [View.Void]: 'gallery',
-  [View.Forge]: 'forge',
   [View.About]: 'about',
   [View.Index]: 'prints',
   [View.Transmission]: 'transmission',
@@ -214,13 +212,6 @@ const App: React.FC = () => {
     navigate(View.Apothecary);
   };
 
-  const handleFeaturedPurchase = async (piece: any) => {
-    // For now, create a simple checkout flow for featured pieces
-    // This could be enhanced to map featured pieces to actual Shopify products
-    const checkoutUrl = `https://${import.meta.env.VITE_SHOPIFY_DOMAIN || 'tonic-thought-studios-2.myshopify.com'}/cart?note=${encodeURIComponent(`Featured piece: ${piece.title} - $${piece.price}`)}&attributes[Featured+Piece]=${encodeURIComponent(piece.id)}`;
-    window.open(checkoutUrl, '_blank');
-  };
-
   if (!isCalibrated) {
     return (
       <AuthProvider>
@@ -373,9 +364,8 @@ const App: React.FC = () => {
           />
         )}
         {currentView === View.Architect && <Architect />}
-        {currentView === View.Featured && <FeaturedCollection themeColor={themeColor} onBuyClick={handleFeaturedPurchase} />}
+        {currentView === View.Featured && <FeaturedCollection themeColor={themeColor} />}
         {currentView === View.Void && <Void themeColor={themeColor} />}
-        {currentView === View.Forge && <Forge themeColor={themeColor} />}
         {currentView === View.About && <About themeColor={themeColor} />}
       </div>
 

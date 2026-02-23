@@ -11,9 +11,8 @@ interface SimplifiedNavProps {
 const NAV_ITEMS: { view: View; label: string }[] = [
   { view: View.Origin, label: 'Home' },
   { view: View.Featured, label: 'Featured' },
-  { view: View.Apothecary, label: 'Quantum Apothecary' },
   { view: View.Void, label: 'Gallery' },
-  { view: View.Forge, label: 'Forge' },
+  { view: View.Apothecary, label: 'Shop' },
   { view: View.About, label: 'About' },
 ];
 

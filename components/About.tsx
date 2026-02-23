@@ -15,10 +15,10 @@ const SKILLS = [
 ];
 
 const SOCIALS = [
-  { label: 'Instagram', href: '#', icon: '◻' },
-  { label: 'Twitter / X', href: '#', icon: '✕' },
-  { label: 'Etsy', href: '#', icon: '◈' },
-  { label: 'GitHub', href: '#', icon: '⬡' },
+  { label: 'Instagram', href: 'https://instagram.com/domnoval_art', icon: '\u25FB' },
+  { label: 'Twitter / X', href: '#', icon: '\u2715' },
+  { label: 'Etsy', href: '#', icon: '\u25C8' },
+  { label: 'GitHub', href: '#', icon: '\u2B21' },
 ];
 
 const About: React.FC<AboutProps> = ({ themeColor }) => {
