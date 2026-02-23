@@ -268,23 +268,8 @@ const App: React.FC = () => {
             {/* Reflective water surface at bottom */}
             <div className="absolute bottom-0 left-0 w-full h-48 reflection-surface pointer-events-none z-[1]" />
             
-            <div className="relative z-10 flex flex-col items-center">
-              <div className="flex flex-col items-center gap-6 mb-12 text-center">
-                {/* Master Sigil Display */}
-                <div className="w-16 h-16 opacity-80 animate-pulse" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
-                  {SACRED_GEOMETRY.masterSigil}
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <span className="mono text-[10px] uppercase tracking-[1.5em] font-bold transition-colors duration-500" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>Mainframe_Access</span>
-                  <div className="w-full h-px transition-colors duration-500" style={{ backgroundColor: 'rgba(var(--theme-rgb), 0.3)' }} />
-                  {isLoadingInventory && <span className="mono text-[8px] animate-pulse text-white/40 mt-2 uppercase tracking-widest">Scanning Shopify Nexus...</span>}
-                </div>
-              </div>
-
-              <h1 className="serif text-[clamp(3rem,12vw,10rem)] leading-none uppercase font-black tracking-tighter text-white glow-gold" style={{ textShadow: '0 0 60px rgba(201,168,76,0.15), 0 0 120px rgba(201,168,76,0.05)' }}>
-                TONIC<br/><span className="italic" style={{ color: '#C9A84C', textShadow: '0 0 40px rgba(201,168,76,0.3)' }}>THOUGHT</span>
-              </h1>
+            <div className="relative z-10 flex flex-col items-center pt-32 md:pt-48">
+              {/* Branding is now on the 3D cube face — no overlaid text */}
               
               <div className="w-32 h-px my-8" style={{ background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)' }} />
               

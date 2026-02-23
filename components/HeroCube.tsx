@@ -293,27 +293,35 @@ function createBrandedTexture(): THREE.CanvasTexture {
   ctx.fillStyle = 'rgba(201,168,76,0.5)';
   ctx.fill();
 
-  // Draw text
+  // Draw text — BIG and bold
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
-  // Glow effect
+  // Outer glow pass
   ctx.shadowColor = '#C9A84C';
-  ctx.shadowBlur = 20;
+  ctx.shadowBlur = 30;
   ctx.fillStyle = '#C9A84C';
 
-  ctx.font = 'bold 72px "Courier New", Courier, monospace';
-  ctx.fillText('TONIC', cx, cy - 30);
-  ctx.font = 'bold 56px "Courier New", Courier, monospace';
-  ctx.fillText('THOUGHT', cx, cy + 40);
+  ctx.font = 'bold 110px "Courier New", Courier, monospace';
+  ctx.fillText('TONIC', cx, cy - 50);
+  ctx.font = 'bold 74px "Courier New", Courier, monospace';
+  ctx.fillText('THOUGHT', cx, cy + 50);
 
-  // Second pass for stronger glow
-  ctx.shadowBlur = 10;
-  ctx.fillStyle = 'rgba(201,168,76,0.6)';
-  ctx.font = 'bold 72px "Courier New", Courier, monospace';
-  ctx.fillText('TONIC', cx, cy - 30);
-  ctx.font = 'bold 56px "Courier New", Courier, monospace';
-  ctx.fillText('THOUGHT', cx, cy + 40);
+  // Second pass — sharper inner glow
+  ctx.shadowBlur = 12;
+  ctx.fillStyle = 'rgba(255,240,200,0.9)';
+  ctx.font = 'bold 110px "Courier New", Courier, monospace';
+  ctx.fillText('TONIC', cx, cy - 50);
+  ctx.font = 'bold 74px "Courier New", Courier, monospace';
+  ctx.fillText('THOUGHT', cx, cy + 50);
+
+  // Third pass — bright core
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = 'rgba(201,168,76,0.7)';
+  ctx.font = 'bold 110px "Courier New", Courier, monospace';
+  ctx.fillText('TONIC', cx, cy - 50);
+  ctx.font = 'bold 74px "Courier New", Courier, monospace';
+  ctx.fillText('THOUGHT', cx, cy + 50);
 
   ctx.shadowBlur = 0;
 
