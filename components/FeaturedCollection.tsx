@@ -98,7 +98,7 @@ const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ themeColor }) =
       {/* Hero Piece - Full Width Cinematic */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-12 mb-8 md:mb-12">
         <article
-          className="group relative glass-card rounded-sm overflow-hidden cursor-pointer"
+          className="group relative glass-card neon-border rounded-sm overflow-hidden cursor-pointer"
           onClick={() => setInquiryPiece(hero)}
         >
           <GeometricCorner position="top-left" />
@@ -159,12 +159,22 @@ const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ themeColor }) =
           {rest.map((piece) => (
             <article
               key={piece.id}
-              className="group relative glass-card rounded-sm transition-all duration-700 overflow-hidden"
+              className="group relative rounded-sm transition-all duration-700 overflow-hidden"
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(201,168,76,0.15)',
+              }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 0 40px rgba(201,168,76,0.1), inset 0 0 30px rgba(201,168,76,0.02)';
+                const el = e.currentTarget as HTMLElement;
+                el.style.borderColor = 'rgba(255,0,110,0.3)';
+                el.style.boxShadow = '0 0 30px rgba(255,0,110,0.1), 0 0 60px rgba(0,255,209,0.05)';
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+                const el = e.currentTarget as HTMLElement;
+                el.style.borderColor = 'rgba(201,168,76,0.15)';
+                el.style.boxShadow = 'none';
               }}
             >
               <GeometricCorner position="top-left" />

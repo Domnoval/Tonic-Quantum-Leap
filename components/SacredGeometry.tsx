@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface SacredGeometryProps {
-  variant?: 'flower-of-life' | 'metatrons-cube' | 'seed-of-life';
+  variant?: 'flower-of-life' | 'metatrons-cube' | 'seed-of-life' | 'neon-grid';
   size?: number;
   opacity?: number;
   className?: string;
@@ -128,6 +128,21 @@ const SacredGeometry: React.FC<SacredGeometryProps> = ({
           <circle cx="200" cy="200" r="90" fill="none" stroke={color} strokeWidth={strokeWidth} />
           {seedOfLife().map((c, i) => (
             <circle key={i} cx={c.cx} cy={c.cy} r="50" fill="none" stroke={color} strokeWidth={strokeWidth} />
+          ))}
+        </g>
+      )}
+
+      {variant === 'neon-grid' && (
+        <g>
+          {/* Horizontal neon line */}
+          <line x1="0" y1="200" x2="400" y2="200" stroke="#FF006E" strokeWidth="1.5" opacity="0.8" />
+          <line x1="0" y1="200" x2="400" y2="200" stroke="#FF006E" strokeWidth="4" opacity="0.15" />
+          {/* Glowing intersection nodes */}
+          {[40, 100, 160, 200, 240, 300, 360].map((x, i) => (
+            <g key={i}>
+              <circle cx={x} cy="200" r="4" fill="#00FFD1" opacity="0.9" />
+              <circle cx={x} cy="200" r="8" fill="none" stroke="#00FFD1" strokeWidth="0.5" opacity="0.4" />
+            </g>
           ))}
         </g>
       )}

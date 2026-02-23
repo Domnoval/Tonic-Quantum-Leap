@@ -308,6 +308,38 @@ canvas {
   90% { transform: translate(-10%, 10%); }
 }
 
+/* ═══════════════════════════════════════════════════
+   CYBERPUNK GLOW & NEON EFFECTS
+   ═══════════════════════════════════════════════════ */
+
+.glow-gold {
+  text-shadow: 0 0 10px rgba(201,168,76,0.4), 0 0 40px rgba(201,168,76,0.15), 0 0 80px rgba(201,168,76,0.05);
+}
+
+.glow-magenta {
+  text-shadow: 0 0 10px rgba(255,0,110,0.4), 0 0 40px rgba(255,0,110,0.15);
+}
+
+.glow-cyan {
+  text-shadow: 0 0 10px rgba(0,255,209,0.4), 0 0 40px rgba(0,255,209,0.15);
+}
+
+@keyframes neon-border-cycle {
+  0%, 100% { border-color: rgba(255,0,110,0.4); box-shadow: 0 0 15px rgba(255,0,110,0.1); }
+  33% { border-color: rgba(0,255,209,0.4); box-shadow: 0 0 15px rgba(0,255,209,0.1); }
+  66% { border-color: rgba(201,168,76,0.4); box-shadow: 0 0 15px rgba(201,168,76,0.1); }
+}
+
+.neon-border {
+  animation: neon-border-cycle 6s ease-in-out infinite;
+}
+
+/* Nav items subtle glow on hover */
+.glass-nav a:hover,
+.glass-nav button:hover {
+  text-shadow: 0 0 8px rgba(201,168,76,0.3);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

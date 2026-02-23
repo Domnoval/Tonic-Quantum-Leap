@@ -12,6 +12,7 @@ import FeaturedCollection from './components/FeaturedCollection';
 import About from './components/About';
 import SimplifiedNav from './components/SimplifiedNav';
 import QuantumField from './components/QuantumField';
+import HeroCube from './components/HeroCube';
 import AuthModal from './components/AuthModal';
 import { AuthProvider } from './contexts/AuthContext';
 import { fetchShopifyArtifacts } from './services/shopifyService';
@@ -241,7 +242,7 @@ const App: React.FC = () => {
       <div className={containerClasses}>
         {currentView === View.Origin && (
           <div className="flex flex-col items-center justify-center min-h-screen relative px-6 overflow-hidden">
-            <QuantumField particleCount={60} connectionDistance={120} />
+            <HeroCube />
             
             {/* Sacred Geometry Background — Flower of Life */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
@@ -281,7 +282,7 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <h1 className="serif text-[clamp(3rem,12vw,10rem)] leading-none uppercase font-black tracking-tighter text-white" style={{ textShadow: '0 0 60px rgba(201,168,76,0.15), 0 0 120px rgba(201,168,76,0.05)' }}>
+              <h1 className="serif text-[clamp(3rem,12vw,10rem)] leading-none uppercase font-black tracking-tighter text-white glow-gold" style={{ textShadow: '0 0 60px rgba(201,168,76,0.15), 0 0 120px rgba(201,168,76,0.05)' }}>
                 TONIC<br/><span className="italic" style={{ color: '#C9A84C', textShadow: '0 0 40px rgba(201,168,76,0.3)' }}>THOUGHT</span>
               </h1>
               

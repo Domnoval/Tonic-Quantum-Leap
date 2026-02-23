@@ -10,15 +10,19 @@
   },
   "dependencies": {
     "@google/genai": "^1.35.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
     "@stripe/stripe-js": "^8.6.1",
     "@supabase/supabase-js": "^2.90.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "stripe": "^20.1.2"
+    "stripe": "^20.1.2",
+    "three": "^0.183.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^22.14.0",
+    "@types/three": "^0.183.1",
     "@vercel/node": "^5.5.28",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.23",

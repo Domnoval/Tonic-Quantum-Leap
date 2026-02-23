@@ -1,5 +1,12 @@
 import React from 'react';
 
+export const NEON = {
+  magenta: '#FF006E',
+  cyan: '#00FFD1',
+  purple: '#7B2FBE',
+  gold: '#C9A84C',
+};
+
 export const COLORS = {
   void: '#050505',
   source: '#F5F5F5',
