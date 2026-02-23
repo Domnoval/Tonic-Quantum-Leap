@@ -322,50 +322,6 @@ function createBrandedTexture(): THREE.CanvasTexture {
   return texture;
 }
 
-/* ── "TONIC THOUGHT" text texture for front face ── */
-
-function createTextTexture(): THREE.CanvasTexture {
-  const size = 512;
-  const canvas = document.createElement('canvas');
-  canvas.width = size;
-  canvas.height = size;
-  const ctx = canvas.getContext('2d')!;
-
-  ctx.clearRect(0, 0, size, size);
-
-  // Draw mandala background (same as other faces)
-  const cx = size / 2;
-  const cy = size / 2;
-  const rings = [40, 80, 120, 160, 200];
-  rings.forEach((r) => {
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(201,168,76,0.15)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  });
-
-  // "TONIC" text
-  ctx.font = '700 72px "Courier New", monospace';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillStyle = 'rgba(201,168,76,0.9)';
-  ctx.shadowColor = 'rgba(201,168,76,0.6)';
-  ctx.shadowBlur = 20;
-  ctx.fillText('TONIC', cx, cy - 40);
-
-  // "THOUGHT" text
-  ctx.font = '700 56px "Courier New", monospace';
-  ctx.fillText('THOUGHT', cx, cy + 40);
-
-  // Reset shadow
-  ctx.shadowBlur = 0;
-
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.needsUpdate = true;
-  return texture;
-}
-
 /* ── Sacred cube with tesseract morph ── */
 
 interface SceneProps {
