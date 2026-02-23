@@ -12,7 +12,6 @@ const NEON = {
 
 /* ── 4D Tesseract helpers ── */
 
-// 16 vertices of a 4D hypercube (±1, ±1, ±1, ±1)
 function buildHypercubeVertices(): number[][] {
   const verts: number[][] = [];
   for (let i = 0; i < 16; i++) {
@@ -26,7 +25,6 @@ function buildHypercubeVertices(): number[][] {
   return verts;
 }
 
-// Edges: pairs that differ in exactly one coordinate
 function buildHypercubeEdges(verts: number[][]): [number, number][] {
   const edges: [number, number][] = [];
   for (let i = 0; i < verts.length; i++) {
@@ -39,7 +37,6 @@ function buildHypercubeEdges(verts: number[][]): [number, number][] {
   return edges;
 }
 
-// 4D rotation in a plane (indices a, b)
 function rotate4D(v: number[], a: number, b: number, angle: number): number[] {
   const out = [...v];
   const c = Math.cos(angle);
@@ -49,7 +46,6 @@ function rotate4D(v: number[], a: number, b: number, angle: number): number[] {
   return out;
 }
 
-// Project 4D → 3D with perspective
 function project4Dto3D(v: number[], dist: number): THREE.Vector3 {
   const w = v[3];
   const f = 1 / (dist - w);
@@ -59,75 +55,53 @@ function project4Dto3D(v: number[], dist: number): THREE.Vector3 {
 const HYPER_VERTS = buildHypercubeVertices();
 const HYPER_EDGES = buildHypercubeEdges(HYPER_VERTS);
 
-/* ── Tesseract wireframe component ── */
+/* ── Tesseract wireframe ── */
 
-interface TesseractProps {
-  opacity: number;
-}
-
-function Tesseract({ opacity }: TesseractProps) {
+function Tesseract({ opacity }: { opacity: number }) {
   const geomRef = useRef<THREE.BufferGeometry>(null);
   const matRef = useRef<THREE.LineBasicMaterial>(null);
   const angleRef = useRef({ xw: 0, yz: 0 });
-
-  // Pre-allocate position buffer
   const positions = useMemo(() => new Float32Array(HYPER_EDGES.length * 6), []);
 
   useFrame((_state, delta) => {
     angleRef.current.xw += delta * 0.5;
     angleRef.current.yz += delta * 0.3;
-
     const { xw, yz } = angleRef.current;
 
-    // Rotate and project all vertices
     const projected = HYPER_VERTS.map((v) => {
-      let r = rotate4D(v, 0, 3, xw); // XW plane
-      r = rotate4D(r, 1, 2, yz);     // YZ plane
+      let r = rotate4D(v, 0, 3, xw);
+      r = rotate4D(r, 1, 2, yz);
       return project4Dto3D(r, 3);
     });
 
-    // Fill edge positions
     for (let i = 0; i < HYPER_EDGES.length; i++) {
       const [a, b] = HYPER_EDGES[i];
       const pa = projected[a];
       const pb = projected[b];
       const off = i * 6;
-      positions[off] = pa.x;
-      positions[off + 1] = pa.y;
-      positions[off + 2] = pa.z;
-      positions[off + 3] = pb.x;
-      positions[off + 4] = pb.y;
-      positions[off + 5] = pb.z;
+      positions[off] = pa.x; positions[off + 1] = pa.y; positions[off + 2] = pa.z;
+      positions[off + 3] = pb.x; positions[off + 4] = pb.y; positions[off + 5] = pb.z;
     }
 
     if (geomRef.current) {
       geomRef.current.setAttribute('position', new THREE.BufferAttribute(positions.slice(), 3));
       geomRef.current.computeBoundingSphere();
     }
-    if (matRef.current) {
-      matRef.current.opacity = opacity;
-    }
+    if (matRef.current) matRef.current.opacity = opacity;
   });
 
   return (
     <lineSegments>
       <bufferGeometry ref={geomRef} />
-      <lineBasicMaterial
-        ref={matRef}
-        color={NEON.cyan}
-        transparent
-        opacity={opacity}
-        depthWrite={false}
-        linewidth={1}
-      />
+      <lineBasicMaterial ref={matRef} color={NEON.cyan} transparent opacity={opacity} depthWrite={false} linewidth={1} />
     </lineSegments>
   );
 }
 
-/* ── Procedural mandala texture ── */
+/* ── Typographic cube face — every face is MADE of letters ── */
 
-function createMandalaTexture(): THREE.CanvasTexture {
-  const size = 512;
+function createTypeFaceTexture(faceIndex: number): THREE.CanvasTexture {
+  const size = 1024;
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
@@ -135,50 +109,125 @@ function createMandalaTexture(): THREE.CanvasTexture {
   const cx = size / 2;
   const cy = size / 2;
 
-  ctx.fillStyle = 'rgba(0,0,0,0)';
   ctx.clearRect(0, 0, size, size);
 
-  const rings = [40, 80, 120, 160, 200];
-  rings.forEach((r) => {
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(201,168,76,0.3)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  });
+  // Unique seed per face
+  const seed = faceIndex * 47;
 
-  for (let i = 0; i < 12; i++) {
-    const angle = (i * Math.PI * 2) / 12;
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(cx + Math.cos(angle) * 200, cy + Math.sin(angle) * 200);
-    ctx.strokeStyle = 'rgba(123,47,190,0.25)';
-    ctx.lineWidth = 0.8;
-    ctx.stroke();
+  // Layer 1: Dense background — tiny "TONIC THOUGHT" repeated, rotated
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(((seed * 0.3) % 6) - 3);
+  ctx.translate(-cx, -cy);
+  ctx.font = '600 18px "Courier New", Courier, monospace';
+  ctx.fillStyle = 'rgba(123,47,190,0.13)';
+  const bgLine = 'TONIC THOUGHT '.repeat(8);
+  for (let y = -20; y < size + 40; y += 22) {
+    const offset = ((y + seed * 13) % 80) - 40;
+    ctx.fillText(bgLine, -200 + offset, y);
   }
+  ctx.restore();
 
-  for (const ring of [80, 160]) {
-    for (let i = 0; i < 12; i++) {
-      const angle = (i * Math.PI * 2) / 12;
-      ctx.beginPath();
-      ctx.arc(cx + Math.cos(angle) * ring, cy + Math.sin(angle) * ring, 6, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(0,255,209,0.3)';
-      ctx.lineWidth = 0.8;
-      ctx.stroke();
+  // Layer 2: Medium diagonal text stripes
+  ctx.save();
+  ctx.translate(cx, cy);
+  const diagAngle = [0.785, -0.785, 0.52, -0.52, 1.05, -1.05][faceIndex];
+  ctx.rotate(diagAngle);
+  ctx.translate(-cx, -cy);
+  ctx.font = '700 36px "Courier New", Courier, monospace';
+  ctx.fillStyle = 'rgba(201,168,76,0.15)';
+  const words = ['TONIC', 'THOUGHT', 'STUDIOS'];
+  for (let y = -100; y < size + 200; y += 48) {
+    const word = words[(Math.abs(y + seed) >> 5) % words.length];
+    const spacing = word.length * 30;
+    for (let x = -200; x < size + 200; x += spacing + 60) {
+      ctx.fillText(word, x + ((y * 0.3 + seed) % 40), y);
     }
   }
+  ctx.restore();
 
-  ctx.beginPath();
-  ctx.arc(cx, cy, 4, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(201,168,76,0.5)';
-  ctx.fill();
+  // Layer 3: Large scattered accent letters
+  const accents = ['T', 'O', 'N', 'I', 'C', 'T', 'H', 'O', 'U', 'G', 'H', 'T'];
+  for (let i = 0; i < 10; i++) {
+    const ax = ((seed * 73 + i * 137) % size);
+    const ay = ((seed * 51 + i * 193) % size);
+    const aRot = ((seed + i * 89) % 628) / 100;
+    const aSize = 140 + ((seed + i * 43) % 100);
+    const letter = accents[(i + faceIndex) % accents.length];
+
+    ctx.save();
+    ctx.translate(ax, ay);
+    ctx.rotate(aRot);
+    ctx.font = `900 ${aSize}px "Courier New", Courier, monospace`;
+    ctx.fillStyle = `rgba(201,168,76,${0.05 + (i % 4) * 0.025})`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(letter, 0, 0);
+    ctx.restore();
+  }
+
+  // Layer 4: Hero text — different treatment per face for variety
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  if (faceIndex === 4 || faceIndex === 5) {
+    // Front / back — full brand, big and glowing
+    ctx.shadowColor = '#C9A84C';
+    ctx.shadowBlur = 40;
+    ctx.fillStyle = '#C9A84C';
+    ctx.font = '900 150px "Courier New", Courier, monospace';
+    ctx.fillText('TONIC', cx, cy - 70);
+    ctx.font = '900 95px "Courier New", Courier, monospace';
+    ctx.fillText('THOUGHT', cx, cy + 70);
+    // Bright core
+    ctx.shadowBlur = 15;
+    ctx.fillStyle = 'rgba(255,245,210,0.9)';
+    ctx.font = '900 150px "Courier New", Courier, monospace';
+    ctx.fillText('TONIC', cx, cy - 70);
+    ctx.font = '900 95px "Courier New", Courier, monospace';
+    ctx.fillText('THOUGHT', cx, cy + 70);
+    ctx.shadowBlur = 0;
+  } else if (faceIndex === 0 || faceIndex === 1) {
+    // Left / right — vertical stacked letters
+    ctx.shadowColor = '#C9A84C';
+    ctx.shadowBlur = 25;
+    ctx.fillStyle = 'rgba(201,168,76,0.75)';
+    ctx.font = '900 110px "Courier New", Courier, monospace';
+    const word = faceIndex === 0 ? 'TONIC' : 'THINK';
+    for (let i = 0; i < word.length; i++) {
+      ctx.fillText(word[i], cx, 120 + i * 170);
+    }
+    ctx.shadowBlur = 0;
+  } else {
+    // Top / bottom — spread text with rotation
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(faceIndex === 2 ? 0 : Math.PI);
+    ctx.shadowColor = '#C9A84C';
+    ctx.shadowBlur = 20;
+    ctx.fillStyle = 'rgba(201,168,76,0.6)';
+    ctx.font = '900 90px "Courier New", Courier, monospace';
+    ctx.fillText('TONIC', 0, -40);
+    ctx.font = '900 60px "Courier New", Courier, monospace';
+    ctx.fillText('THOUGHT', 0, 50);
+    ctx.shadowBlur = 0;
+    ctx.restore();
+  }
+
+  // Subtle edge vignette
+  const gradient = ctx.createRadialGradient(cx, cy, size * 0.3, cx, cy, size * 0.52);
+  gradient.addColorStop(0, 'rgba(0,0,0,0)');
+  gradient.addColorStop(1, 'rgba(0,0,0,0.4)');
+  ctx.globalCompositeOperation = 'destination-out';
+  // Actually let's NOT vignette — let the text fill the whole face
+  ctx.globalCompositeOperation = 'source-over';
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.needsUpdate = true;
   return texture;
 }
 
-/* ── Grid texture factory (parameterized by color) ── */
+/* ── Grid texture ── */
 
 function createGridTexture(lineColor: THREE.Color, nodeColor: THREE.Color, nodeBrightness: number): THREE.CanvasTexture {
   const size = 512;
@@ -195,25 +244,16 @@ function createGridTexture(lineColor: THREE.Color, nodeColor: THREE.Color, nodeB
   const lr = Math.round(lineColor.r * 255);
   const lg = Math.round(lineColor.g * 255);
   const lb = Math.round(lineColor.b * 255);
-
   const nr = Math.round(nodeColor.r * 255);
   const ng = Math.round(nodeColor.g * 255);
   const nb = Math.round(nodeColor.b * 255);
 
   for (let i = 0; i <= lines; i++) {
     const pos = i * gridSize;
-    ctx.beginPath();
-    ctx.moveTo(0, pos);
-    ctx.lineTo(size, pos);
-    ctx.strokeStyle = `rgba(${lr},${lg},${lb},0.4)`;
-    ctx.lineWidth = 1;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(pos, 0);
-    ctx.lineTo(pos, size);
-    ctx.strokeStyle = `rgba(${lr},${lg},${lb},0.4)`;
-    ctx.lineWidth = 1;
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, pos); ctx.lineTo(size, pos);
+    ctx.strokeStyle = `rgba(${lr},${lg},${lb},0.4)`; ctx.lineWidth = 1; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pos, 0); ctx.lineTo(pos, size);
+    ctx.strokeStyle = `rgba(${lr},${lg},${lb},0.4)`; ctx.lineWidth = 1; ctx.stroke();
   }
 
   for (let i = 0; i <= lines; i++) {
@@ -246,91 +286,7 @@ function createGridTexture(lineColor: THREE.Color, nodeColor: THREE.Color, nodeB
   return tex;
 }
 
-/* ── "TONIC THOUGHT" branded face texture ── */
-
-function createBrandedTexture(): THREE.CanvasTexture {
-  const size = 512;
-  const canvas = document.createElement('canvas');
-  canvas.width = size;
-  canvas.height = size;
-  const ctx = canvas.getContext('2d')!;
-
-  ctx.clearRect(0, 0, size, size);
-
-  // Draw mandala base first (so text overlays it)
-  // Concentric circles
-  const cx = size / 2;
-  const cy = size / 2;
-  const rings = [40, 80, 120, 160, 200];
-  rings.forEach((r) => {
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(201,168,76,0.3)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  });
-  for (let i = 0; i < 12; i++) {
-    const angle = (i * Math.PI * 2) / 12;
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(cx + Math.cos(angle) * 200, cy + Math.sin(angle) * 200);
-    ctx.strokeStyle = 'rgba(123,47,190,0.25)';
-    ctx.lineWidth = 0.8;
-    ctx.stroke();
-  }
-  for (const ring of [80, 160]) {
-    for (let i = 0; i < 12; i++) {
-      const angle = (i * Math.PI * 2) / 12;
-      ctx.beginPath();
-      ctx.arc(cx + Math.cos(angle) * ring, cy + Math.sin(angle) * ring, 6, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(0,255,209,0.3)';
-      ctx.lineWidth = 0.8;
-      ctx.stroke();
-    }
-  }
-  ctx.beginPath();
-  ctx.arc(cx, cy, 4, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(201,168,76,0.5)';
-  ctx.fill();
-
-  // Draw text — BIG and bold
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-
-  // Outer glow pass
-  ctx.shadowColor = '#C9A84C';
-  ctx.shadowBlur = 30;
-  ctx.fillStyle = '#C9A84C';
-
-  ctx.font = 'bold 110px "Courier New", Courier, monospace';
-  ctx.fillText('TONIC', cx, cy - 50);
-  ctx.font = 'bold 74px "Courier New", Courier, monospace';
-  ctx.fillText('THOUGHT', cx, cy + 50);
-
-  // Second pass — sharper inner glow
-  ctx.shadowBlur = 12;
-  ctx.fillStyle = 'rgba(255,240,200,0.9)';
-  ctx.font = 'bold 110px "Courier New", Courier, monospace';
-  ctx.fillText('TONIC', cx, cy - 50);
-  ctx.font = 'bold 74px "Courier New", Courier, monospace';
-  ctx.fillText('THOUGHT', cx, cy + 50);
-
-  // Third pass — bright core
-  ctx.shadowBlur = 0;
-  ctx.fillStyle = 'rgba(201,168,76,0.7)';
-  ctx.font = 'bold 110px "Courier New", Courier, monospace';
-  ctx.fillText('TONIC', cx, cy - 50);
-  ctx.font = 'bold 74px "Courier New", Courier, monospace';
-  ctx.fillText('THOUGHT', cx, cy + 50);
-
-  ctx.shadowBlur = 0;
-
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.needsUpdate = true;
-  return texture;
-}
-
-/* ── Sacred cube with tesseract morph ── */
+/* ── Sacred typographic cube with tesseract morph ── */
 
 interface SceneProps {
   active: boolean;
@@ -344,46 +300,40 @@ function SacredCube({ active, setActive }: SceneProps) {
   const morphRef = useRef(0);
   const cubeMatsRef = useRef<THREE.MeshPhysicalMaterial[]>([]);
 
-  const mandalaTexture = useMemo(() => createMandalaTexture(), []);
-  const brandedTexture = useMemo(() => createBrandedTexture(), []);
+  // Generate unique typographic texture for each face
+  const faceTextures = useMemo(() =>
+    Array.from({ length: 6 }, (_, i) => createTypeFaceTexture(i)), []);
 
-  // 6 materials: +x, -x, +y, -y, +z (front), -z (back)
-  // Three.js BoxGeometry face order: +X, -X, +Y, -Y, +Z, -Z
+  // 6 materials — one per face, each with its own typographic texture
   const cubeMaterials = useMemo(() => {
-    const base = {
-      color: new THREE.Color(NEON.purple),
-      transmission: 0.6,
-      roughness: 0.1,
-      metalness: 0.1,
-      transparent: true,
-      opacity: 0.7,
-      emissive: new THREE.Color(NEON.gold),
-      emissiveIntensity: 0.15,
-      side: THREE.DoubleSide as THREE.Side,
-    };
-    const mats = Array.from({ length: 6 }, (_, i) => {
-      const mat = new THREE.MeshPhysicalMaterial({
-        ...base,
-        map: i === 4 ? brandedTexture : mandalaTexture, // +Z = front face
-        emissiveMap: i === 4 ? brandedTexture : undefined,
-        emissiveIntensity: i === 4 ? 0.4 : 0.15,
+    const mats = faceTextures.map((tex, i) => {
+      const isFront = i === 4 || i === 5;
+      return new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color(NEON.purple),
+        transmission: 0.5,
+        roughness: 0.15,
+        metalness: 0.05,
+        transparent: true,
+        opacity: 0.75,
+        map: tex,
+        emissive: new THREE.Color(NEON.gold),
+        emissiveMap: tex,
+        emissiveIntensity: isFront ? 0.45 : 0.2,
+        side: THREE.DoubleSide as THREE.Side,
       });
-      return mat;
     });
     cubeMatsRef.current = mats;
     return mats;
-  }, [mandalaTexture, brandedTexture]);
+  }, [faceTextures]);
 
   const handlePointerOver = useCallback(() => setActive(true), [setActive]);
   const handlePointerOut = useCallback(() => setActive(false), [setActive]);
   const handleClick = useCallback(() => setActive(!active), [active, setActive]);
 
   useFrame((_state, delta) => {
-    // Morph progress
     morphRef.current = THREE.MathUtils.lerp(morphRef.current, active ? 1 : 0, 0.05);
     const m = morphRef.current;
 
-    // Rotate cube
     const rotY = delta * 0.15;
     const rotX = Math.sin(Date.now() * 0.0003) * 0.1;
     if (meshRef.current) {
@@ -395,9 +345,9 @@ function SacredCube({ active, setActive }: SceneProps) {
       wireRef.current.rotation.x = rotX;
     }
 
-    // Fade all cube face materials out as tesseract fades in
+    // Fade cube out, tesseract in
     for (const mat of cubeMatsRef.current) {
-      mat.opacity = 0.7 * (1 - m);
+      mat.opacity = 0.75 * (1 - m);
     }
     if (wireMatRef.current) {
       wireMatRef.current.opacity = 0.3 * (1 - m);
@@ -410,12 +360,10 @@ function SacredCube({ active, setActive }: SceneProps) {
       onPointerOut={handlePointerOut}
       onClick={handleClick}
     >
-      {/* Main translucent cube with branded front face */}
       <mesh ref={meshRef} material={cubeMaterials}>
         <boxGeometry args={[2, 2, 2]} />
       </mesh>
 
-      {/* Wireframe glow overlay */}
       <mesh ref={wireRef} scale={[1.02, 1.02, 1.02]}>
         <boxGeometry args={[2, 2, 2]} />
         <meshBasicMaterial
@@ -427,7 +375,6 @@ function SacredCube({ active, setActive }: SceneProps) {
         />
       </mesh>
 
-      {/* Tesseract */}
       <Tesseract opacity={morphRef.current} />
     </group>
   );
@@ -440,16 +387,11 @@ function NeonGrid({ active }: { active: boolean }) {
   const gridColorRef = useRef(new THREE.Color(NEON.magenta));
   const nodeColorRef = useRef(new THREE.Color(NEON.cyan));
   const brightnessRef = useRef(0);
-
-  // We regenerate the grid texture each frame during transitions (throttled)
   const texRef = useRef<THREE.CanvasTexture | null>(null);
   const frameCountRef = useRef(0);
 
-  // Initial texture
   const initialTex = useMemo(
-    () => createGridTexture(new THREE.Color(NEON.magenta), new THREE.Color(NEON.cyan), 0),
-    [],
-  );
+    () => createGridTexture(new THREE.Color(NEON.magenta), new THREE.Color(NEON.cyan), 0), []);
 
   useFrame(() => {
     const targetLine = new THREE.Color(active ? NEON.cyan : NEON.magenta);
@@ -458,15 +400,10 @@ function NeonGrid({ active }: { active: boolean }) {
     nodeColorRef.current.lerp(targetNode, 0.05);
     brightnessRef.current = THREE.MathUtils.lerp(brightnessRef.current, active ? 1 : 0, 0.05);
 
-    // Update texture every 3 frames to save perf
     frameCountRef.current++;
     if (frameCountRef.current % 3 === 0 && matRef.current) {
       if (texRef.current) texRef.current.dispose();
-      texRef.current = createGridTexture(
-        gridColorRef.current,
-        nodeColorRef.current,
-        brightnessRef.current,
-      );
+      texRef.current = createGridTexture(gridColorRef.current, nodeColorRef.current, brightnessRef.current);
       matRef.current.map = texRef.current;
       matRef.current.needsUpdate = true;
     }
@@ -475,14 +412,7 @@ function NeonGrid({ active }: { active: boolean }) {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.8, 0]}>
       <planeGeometry args={[10, 10]} />
-      <meshBasicMaterial
-        ref={matRef}
-        map={initialTex}
-        transparent
-        opacity={0.8}
-        side={THREE.DoubleSide}
-        depthWrite={false}
-      />
+      <meshBasicMaterial ref={matRef} map={initialTex} transparent opacity={0.8} side={THREE.DoubleSide} depthWrite={false} />
     </mesh>
   );
 }
@@ -493,16 +423,7 @@ const HeroCube: React.FC = () => {
   const [active, setActive] = useState(false);
 
   return (
-    <div
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 0,
-      }}
-    >
+    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
       <Canvas
         camera={{ position: [0, 1.5, 5], fov: 50 }}
         style={{ background: 'transparent', cursor: 'pointer' }}
@@ -512,7 +433,6 @@ const HeroCube: React.FC = () => {
         <pointLight position={[0, 0, 0]} color={NEON.gold} intensity={2} distance={8} />
         <pointLight position={[0, -2, 0]} color={NEON.magenta} intensity={0.5} distance={6} />
         <pointLight position={[2, 2, 2]} color={NEON.purple} intensity={0.3} distance={10} />
-
         <fog attach="fog" args={[NEON.purple, 5, 15]} />
 
         <SacredCube active={active} setActive={setActive} />
