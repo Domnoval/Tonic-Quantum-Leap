@@ -11,8 +11,7 @@ import Void from './components/Void';
 import FeaturedCollection from './components/FeaturedCollection';
 import About from './components/About';
 import SimplifiedNav from './components/SimplifiedNav';
-import QuantumField from './components/QuantumField';
-import HeroCube from './components/HeroCube';
+// HeroCube and QuantumField replaced by video background
 import AuthModal from './components/AuthModal';
 import { AuthProvider } from './contexts/AuthContext';
 import { fetchShopifyArtifacts } from './services/shopifyService';
@@ -241,79 +240,36 @@ const App: React.FC = () => {
       */}
       <div className={containerClasses}>
         {currentView === View.Origin && (
-          <div className="flex flex-col items-center justify-center min-h-screen relative px-6 overflow-hidden">
-            <HeroCube />
+          <div className="flex flex-col items-center justify-center min-h-screen relative overflow-hidden">
+            {/* Video Background — The Vibe IS the Site */}
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              poster="/hero-poster.jpg"
+              className="absolute inset-0 w-full h-full object-cover z-0"
+              style={{ filter: 'brightness(0.85) contrast(1.05)' }}
+            >
+              <source src="/hero-bg-web.mp4" type="video/mp4" />
+            </video>
+
+            {/* Subtle dark gradient overlay for text readability */}
+            <div className="absolute inset-0 z-[1]" style={{
+              background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.6) 100%)'
+            }} />
             
-            {/* Sacred Geometry Background — Flower of Life */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
-              <SacredGeometry variant="flower-of-life" size={1000} opacity={0.1} animated />
-            </div>
-            {/* Secondary geometry — slower counter-rotation */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
-              <div className="sacred-geo-rotate-reverse" style={{ opacity: 0.07 }}>
-                <SacredGeometry variant="metatrons-cube" size={650} opacity={1} animated={false} />
-              </div>
-            </div>
-            
-            {/* Concentric pulse rings */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
-              <div className="concentric-ring absolute" style={{ width: 400, height: 400, left: -200, top: -200 }} />
-              <div className="concentric-ring absolute" style={{ width: 600, height: 600, left: -300, top: -300 }} />
-              <div className="concentric-ring absolute" style={{ width: 800, height: 800, left: -400, top: -400 }} />
-            </div>
-            
-            {/* Radial gold glow behind title */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none z-0" style={{ background: 'radial-gradient(circle, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.03) 40%, transparent 70%)' }} />
-            
-            {/* Reflective water surface at bottom */}
-            <div className="absolute bottom-0 left-0 w-full h-48 reflection-surface pointer-events-none z-[1]" />
-            
-            <div className="relative z-10 flex flex-col items-center pt-32 md:pt-48">
-              {/* Branding is now on the 3D cube face — no overlaid text */}
+            {/* Content overlay */}
+            <div className="relative z-10 flex flex-col items-center justify-end min-h-screen pb-24 px-6">
               
-              <div className="w-32 h-px my-8" style={{ background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)' }} />
-              
-              <p className="serif text-xl md:text-2xl italic text-white/50 max-w-xl text-center mb-12 tracking-wide">
+              <p className="serif text-xl md:text-2xl italic text-white/70 max-w-xl text-center mb-12 tracking-wide" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}>
                 Distilling the infinite noise of the void into grounded packets of meaning.
               </p>
-
-              {/* Automatic Lunar Sync Indicator (Replaces Manual Buttons) */}
-              <div className="flex flex-col items-center gap-4 mb-16 w-full max-w-sm">
-                 <div className="flex flex-col items-center gap-2">
-                     <span className="mono text-[8px] uppercase tracking-[0.6em] opacity-30">Live Lunar Sync</span>
-                     {lunarPhase && (
-                         <span className="mono text-[9px] uppercase tracking-[0.2em] opacity-80 animate-pulse" style={{ color: 'rgba(var(--theme-rgb), 1)' }}>
-                             [ {lunarPhase} ]
-                         </span>
-                     )}
-                 </div>
-                 
-                 <div className="relative w-full h-[1px] bg-white/10 mt-2 flex items-center">
-                    {/* Progress Bar */}
-                    <div
-                        className="absolute top-0 left-0 h-full transition-all duration-1000 ease-out"
-                        style={{ width: `${lunarProgress}%`, backgroundColor: 'rgba(var(--theme-rgb), 1)' }}
-                    />
-                    {/* Current Position Marker */}
-                    <div
-                        className="absolute w-3 h-3 rounded-full bg-black flex items-center justify-center transition-all duration-1000 ease-out"
-                        style={{ left: `${lunarProgress}%`, transform: 'translateX(-50%)', border: '1px solid rgba(var(--theme-rgb), 1)', boxShadow: '0 0 10px rgba(var(--theme-rgb), 0.5)' }}
-                    >
-                         <div className="w-1 h-1 rounded-full" style={{ backgroundColor: 'rgba(var(--theme-rgb), 1)' }} />
-                    </div>
-                 </div>
-
-                 <div className="flex justify-between w-full mono text-[8px] uppercase tracking-widest opacity-20">
-                     <span>Void (0%)</span>
-                     <span>Solar (50%)</span>
-                     <span>Void (100%)</span>
-                 </div>
-              </div>
 
               <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full max-w-md md:max-w-none md:w-auto">
                 <button
                   onClick={() => navigate(View.Featured)}
-                  className="mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] px-8 md:px-12 py-4 md:py-5 transition-all duration-500 backdrop-blur active:scale-95 w-full md:w-auto"
+                  className="mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] px-8 md:px-12 py-4 md:py-5 transition-all duration-500 backdrop-blur-md active:scale-95 w-full md:w-auto"
                   style={{ border: '1px solid #C9A84C', color: '#C9A84C', backgroundColor: 'rgba(201,168,76,0.08)', boxShadow: '0 0 20px rgba(201,168,76,0.1), inset 0 0 20px rgba(201,168,76,0.03)' }}
                   onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(201,168,76,0.18)'; e.currentTarget.style.boxShadow = '0 0 40px rgba(201,168,76,0.2), inset 0 0 30px rgba(201,168,76,0.05)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(201,168,76,0.08)'; e.currentTarget.style.boxShadow = '0 0 20px rgba(201,168,76,0.1), inset 0 0 20px rgba(201,168,76,0.03)'; }}
@@ -322,14 +278,14 @@ const App: React.FC = () => {
                 </button>
                 <button
                   onClick={() => navigate(View.Void)}
-                  className="mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] border border-white/15 text-white/60 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-white/[0.02] backdrop-blur active:scale-95 w-full md:w-auto hover:border-white/30 hover:text-white/80 hover:bg-white/[0.05]"
+                  className="mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] border border-white/20 text-white/70 px-8 md:px-12 py-4 md:py-5 transition-all duration-500 bg-black/20 backdrop-blur-md active:scale-95 w-full md:w-auto hover:border-white/40 hover:text-white/90 hover:bg-black/30"
                 >
                   Explore Gallery
                 </button>
               </div>
             </div>
 
-            <div className="absolute bottom-12 left-12 mono text-[9px] uppercase tracking-widest text-white/20 hidden md:block">
+            <div className="absolute bottom-6 left-6 mono text-[9px] uppercase tracking-widest text-white/20 hidden md:block z-10" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>
               [ Protocol: Ethereal_Essentialism ]<br/>
               [ Frequency: 137.036hz ]<br/>
               [ State: {isLoadingInventory ? 'Syncing...' : 'Active'} ]
