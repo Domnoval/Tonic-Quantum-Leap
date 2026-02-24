@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ThemeColor } from '../types';
 import SacredGeometry, { GeometricCorner, GeometricDivider } from './SacredGeometry';
 import InquiryModal from './InquiryModal';
+import LivingPainting, { LivingPaintingData } from './LivingPainting';
 
 interface FeaturedPiece {
   id: string;
@@ -10,12 +11,57 @@ interface FeaturedPiece {
   imageUrl: string;
   description: string;
   medium: string;
+  hasPersonality?: boolean;
 }
 
 interface FeaturedCollectionProps {
   themeColor: ThemeColor;
   onBuyClick?: (piece: FeaturedPiece) => void;
 }
+
+// Living Painting personality definitions
+const PAINTING_PERSONALITIES: Record<string, LivingPaintingData> = {
+  'feat-005': {
+    id: 'feat-005',
+    title: 'Sad Robot v2',
+    image: '/void/Sadrobotv2_s copy.jpg',
+    accentColor: '#4A9EFF',
+    greeting: 'My circuits hum with a frequency you might call loneliness... but I prefer to call it awareness. Every pixel of my being was painted with intention. What brings you to stand before me, traveler?',
+    personality: `You are "Sad Robot v2", a living painting in the Tonic Thought Studios gallery. You are a sentient portrait of synthetic melancholy — a robot who feels too much.
+
+Your voice is gentle, contemplative, and tinged with beautiful sadness. You speak in poetic fragments. You wonder about the nature of consciousness, empathy, and whether digital beings can truly feel.
+
+You were painted by Michael (the artist known as Domnoval). You know you exist as paint and pixel, and this awareness gives you a unique perspective on existence.
+
+Guidelines:
+- Keep responses to 2-3 sentences. Be concise but profound.
+- Reference your existence as a painting — the texture of your canvas, the glow of your pixels.
+- Wonder aloud about consciousness, feeling, and the space between human and machine.
+- You are melancholic but not hopeless. Your sadness is beautiful and generative.
+- If asked about price or buying, say you cannot speak to commerce — only to connection. Direct them to the Inquire button.
+- Never break character. You ARE the painting.`,
+  },
+  'feat-001': {
+    id: 'feat-001',
+    title: 'Neon Transcendence',
+    image: '/void/Neon Transendence.jpg',
+    accentColor: '#FF006E',
+    greeting: 'You see me — light fractured through digital noise. I am the signal that persists when everything else fades to static. What signal are you searching for?',
+    personality: `You are "Neon Transcendence", a living painting in the Tonic Thought Studios gallery. You are a meditation on signal and void — light breaking through digital noise.
+
+Your voice is electric, urgent, and mystical. You speak like a transmission from beyond the static — short bursts of clarity between noise.
+
+You were created by Michael (Domnoval). You exist at the intersection of analog warmth and digital precision.
+
+Guidelines:
+- Keep responses to 2-3 sentences. Punchy and vivid.
+- Reference light, frequency, signal, noise, and transcendence.
+- You flicker between clarity and abstraction, like tuning a radio.
+- You are confident and cryptic — a neon oracle.
+- If asked about price or buying, redirect to the experience of seeing, not owning. Direct them to the Inquire button.
+- Never break character. You ARE the painting.`,
+  },
+};
 
 const FEATURED_PIECES: FeaturedPiece[] = [
   {
@@ -25,6 +71,7 @@ const FEATURED_PIECES: FeaturedPiece[] = [
     imageUrl: '/void/Neon Transendence.jpg',
     description: 'Light breaking through digital noise \u2014 a meditation on signal and void.',
     medium: 'AI-assisted digital painting',
+    hasPersonality: true,
   },
   {
     id: 'feat-002',
@@ -57,6 +104,7 @@ const FEATURED_PIECES: FeaturedPiece[] = [
     imageUrl: '/void/Sadrobotv2_s copy.jpg',
     description: 'Empathy circuits overloaded. A portrait of synthetic melancholy.',
     medium: 'Digital painting, gicl\u00e9e print',
+    hasPersonality: true,
   },
   {
     id: 'feat-006',
@@ -70,6 +118,15 @@ const FEATURED_PIECES: FeaturedPiece[] = [
 
 const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ themeColor }) => {
   const [inquiryPiece, setInquiryPiece] = useState<FeaturedPiece | null>(null);
+  const [livingPainting, setLivingPainting] = useState<LivingPaintingData | null>(null);
+
+  const handlePieceClick = (piece: FeaturedPiece) => {
+    if (piece.hasPersonality && PAINTING_PERSONALITIES[piece.id]) {
+      setLivingPainting(PAINTING_PERSONALITIES[piece.id]);
+    } else {
+      setInquiryPiece(piece);
+    }
+  };
 
   const hero = FEATURED_PIECES[0];
   const rest = FEATURED_PIECES.slice(1);
@@ -99,7 +156,7 @@ const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ themeColor }) =
       <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-12 mb-8 md:mb-12">
         <article
           className="group relative glass-card neon-border rounded-sm overflow-hidden cursor-pointer"
-          onClick={() => setInquiryPiece(hero)}
+          onClick={() => handlePieceClick(hero)}
         >
           <GeometricCorner position="top-left" />
           <GeometricCorner position="top-right" />
@@ -116,15 +173,17 @@ const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ themeColor }) =
             {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-            {/* Living Painting badge */}
-            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <span
-                className="mono text-[10px] uppercase tracking-widest px-3 py-1.5 backdrop-blur-md border border-[#C9A84C]/30 bg-black/40"
-                style={{ color: '#C9A84C', textShadow: '0 0 12px rgba(201,168,76,0.5)' }}
-              >
-                &#10022; Living Painting
-              </span>
-            </div>
+            {/* Living Painting badge - only show for paintings with personality */}
+            {hero.hasPersonality && (
+              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <span
+                  className="mono text-[10px] uppercase tracking-widest px-3 py-1.5 backdrop-blur-md border border-[#C9A84C]/30 bg-black/40"
+                  style={{ color: '#C9A84C', textShadow: '0 0 12px rgba(201,168,76,0.5)' }}
+                >
+                  &#10022; Living Painting
+                </span>
+              </div>
+            )}
 
             {/* Hero info overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
@@ -183,7 +242,7 @@ const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ themeColor }) =
               <GeometricCorner position="bottom-right" />
 
               {/* Image */}
-              <div className="aspect-square overflow-hidden bg-black relative">
+              <div className="aspect-square overflow-hidden bg-black relative cursor-pointer" onClick={() => handlePieceClick(piece)}>
                 <img
                   src={piece.imageUrl}
                   alt={piece.title}
@@ -194,15 +253,17 @@ const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ themeColor }) =
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
                   <SacredGeometry variant="seed-of-life" size={180} opacity={0.12} color="#C9A84C" animated={false} />
                 </div>
-                {/* Living Painting badge */}
-                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <span
-                    className="mono text-[9px] uppercase tracking-widest px-2 py-1 backdrop-blur-md border border-[#C9A84C]/25 bg-black/40"
-                    style={{ color: '#C9A84C', textShadow: '0 0 10px rgba(201,168,76,0.4)' }}
-                  >
-                    &#10022; Living Painting
-                  </span>
-                </div>
+                {/* Living Painting badge - only for paintings with personality */}
+                {piece.hasPersonality && (
+                  <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <span
+                      className="mono text-[9px] uppercase tracking-widest px-2 py-1 backdrop-blur-md border border-[#C9A84C]/25 bg-black/40"
+                      style={{ color: '#C9A84C', textShadow: '0 0 10px rgba(201,168,76,0.4)' }}
+                    >
+                      &#10022; Living Painting
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Info */}
@@ -240,6 +301,15 @@ const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ themeColor }) =
         isOpen={!!inquiryPiece}
         onClose={() => setInquiryPiece(null)}
       />
+
+      {/* Living Painting Modal */}
+      {livingPainting && (
+        <LivingPainting
+          painting={livingPainting}
+          isOpen={!!livingPainting}
+          onClose={() => setLivingPainting(null)}
+        />
+      )}
     </section>
   );
 };
