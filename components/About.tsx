@@ -67,7 +67,7 @@ const About: React.FC<AboutProps> = ({ themeColor }) => {
               className="mono text-[11px] uppercase tracking-widest mb-6"
               style={{ color: 'rgba(201, 168, 76, 0.7)' }}
             >
-              Tonic Thought Studios / dYZ
+              137 Studio / dYZ
             </p>
 
             <div className="space-y-4 text-white/60 leading-relaxed text-[15px]">

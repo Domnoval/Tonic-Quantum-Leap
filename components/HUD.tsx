@@ -95,7 +95,7 @@ const HUD: React.FC<HUDProps> = ({ currentView, setView, themeColor }) => {
             className="md:hidden mono text-[10px] font-bold tracking-widest"
             style={{ color: 'rgba(var(--theme-rgb), 1)' }}
           >
-            TONIC_THOUGHT
+            137_STUDIO
           </span>
         </div>
 

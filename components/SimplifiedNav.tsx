@@ -71,7 +71,7 @@ const SimplifiedNav: React.FC<SimplifiedNavProps> = ({ currentView, setView, car
             className="mono text-sm md:text-base font-bold tracking-[0.35em] transition-colors duration-500"
             style={{ color: '#C9A84C' }}
           >
-            TONIC THOUGHT
+            137 STUDIO
           </span>
         </button>
 

@@ -57,7 +57,7 @@ const CalibrationGate: React.FC<CalibrationGateProps> = ({ onCalibrate }) => {
       </div>
       
       <div className="fixed bottom-12 text-[10px] mono opacity-20 tracking-widest uppercase">
-        Tonic Thought Studios / 137 System
+        137 Studio / 137 System
       </div>
     </div>
   );

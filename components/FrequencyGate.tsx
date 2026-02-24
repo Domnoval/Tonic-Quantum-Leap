@@ -165,7 +165,7 @@ const FrequencyGate: React.FC<FrequencyGateProps> = ({ onEnter, themeColor }) =>
         <div className={`absolute -inset-12 bg-${themeColor}-400/5 blur-[100px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000`} />
         <button
           onClick={handleEnter}
-          aria-label="Enter the Tonic Thought Nexus"
+          aria-label="Enter the 137 Studio Nexus"
           className="relative px-24 py-8 border border-white/20 mono text-[13px] uppercase tracking-[1.2em] hover-spectral hover:text-black transition-all duration-700 ease-in-out group overflow-hidden bg-black/40 backdrop-blur-md"
         >
           <span className="relative z-10 font-black">Enter Gallery</span>

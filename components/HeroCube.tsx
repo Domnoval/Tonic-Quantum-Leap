@@ -115,14 +115,14 @@ function createTypeFaceTexture(faceIndex: number): THREE.CanvasTexture {
   // Unique seed per face
   const seed = faceIndex * 47;
 
-  // Layer 1: Dense background — tiny "TONIC THOUGHT" repeated, rotated
+  // Layer 1: Dense background — tiny "137 STUDIO" repeated, rotated
   ctx.save();
   ctx.translate(cx, cy);
   ctx.rotate(((seed * 0.3) % 6) - 3);
   ctx.translate(-cx, -cy);
   ctx.font = '600 18px "Courier New", Courier, monospace';
   ctx.fillStyle = 'rgba(123,47,190,0.13)';
-  const bgLine = 'TONIC THOUGHT '.repeat(8);
+  const bgLine = '137 STUDIO '.repeat(8);
   for (let y = -20; y < size + 40; y += 22) {
     const offset = ((y + seed * 13) % 80) - 40;
     ctx.fillText(bgLine, -200 + offset, y);
@@ -137,7 +137,7 @@ function createTypeFaceTexture(faceIndex: number): THREE.CanvasTexture {
   ctx.translate(-cx, -cy);
   ctx.font = '700 36px "Courier New", Courier, monospace';
   ctx.fillStyle = 'rgba(201,168,76,0.15)';
-  const words = ['TONIC', 'THOUGHT', 'STUDIOS'];
+  const words = ['137', 'STUDIO', 'α'];
   for (let y = -100; y < size + 200; y += 48) {
     const word = words[(Math.abs(y + seed) >> 5) % words.length];
     const spacing = word.length * 30;
@@ -148,7 +148,7 @@ function createTypeFaceTexture(faceIndex: number): THREE.CanvasTexture {
   ctx.restore();
 
   // Layer 3: Large scattered accent letters
-  const accents = ['T', 'O', 'N', 'I', 'C', 'T', 'H', 'O', 'U', 'G', 'H', 'T'];
+  const accents = ['1', '3', '7', 'α', '1', '3', '7', 'S', 'T', 'U', 'D', 'O'];
   for (let i = 0; i < 10; i++) {
     const ax = ((seed * 73 + i * 137) % size);
     const ay = ((seed * 51 + i * 193) % size);
@@ -176,17 +176,13 @@ function createTypeFaceTexture(faceIndex: number): THREE.CanvasTexture {
     ctx.shadowColor = '#C9A84C';
     ctx.shadowBlur = 40;
     ctx.fillStyle = '#C9A84C';
-    ctx.font = '900 150px "Courier New", Courier, monospace';
-    ctx.fillText('TONIC', cx, cy - 70);
-    ctx.font = '900 95px "Courier New", Courier, monospace';
-    ctx.fillText('THOUGHT', cx, cy + 70);
+    ctx.font = '900 220px "Courier New", Courier, monospace';
+    ctx.fillText('137', cx, cy);
     // Bright core
     ctx.shadowBlur = 15;
     ctx.fillStyle = 'rgba(255,245,210,0.9)';
-    ctx.font = '900 150px "Courier New", Courier, monospace';
-    ctx.fillText('TONIC', cx, cy - 70);
-    ctx.font = '900 95px "Courier New", Courier, monospace';
-    ctx.fillText('THOUGHT', cx, cy + 70);
+    ctx.font = '900 220px "Courier New", Courier, monospace';
+    ctx.fillText('137', cx, cy);
     ctx.shadowBlur = 0;
   } else if (faceIndex === 0 || faceIndex === 1) {
     // Left / right — vertical stacked letters
@@ -194,7 +190,7 @@ function createTypeFaceTexture(faceIndex: number): THREE.CanvasTexture {
     ctx.shadowBlur = 25;
     ctx.fillStyle = 'rgba(201,168,76,0.75)';
     ctx.font = '900 110px "Courier New", Courier, monospace';
-    const word = faceIndex === 0 ? 'TONIC' : 'THINK';
+    const word = faceIndex === 0 ? '1▪3▪7' : 'STUDIO';
     for (let i = 0; i < word.length; i++) {
       ctx.fillText(word[i], cx, 120 + i * 170);
     }
@@ -208,9 +204,9 @@ function createTypeFaceTexture(faceIndex: number): THREE.CanvasTexture {
     ctx.shadowBlur = 20;
     ctx.fillStyle = 'rgba(201,168,76,0.6)';
     ctx.font = '900 90px "Courier New", Courier, monospace';
-    ctx.fillText('TONIC', 0, -40);
+    ctx.fillText('137', 0, -40);
     ctx.font = '900 60px "Courier New", Courier, monospace';
-    ctx.fillText('THOUGHT', 0, 50);
+    ctx.fillText('STUDIO', 0, 50);
     ctx.shadowBlur = 0;
     ctx.restore();
   }

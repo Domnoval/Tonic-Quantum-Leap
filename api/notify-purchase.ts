@@ -118,7 +118,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'Tonic Thought Studios <noreply@tonicthoughtstudios.com>',
+          from: '137 Studio <noreply@tonicthoughtstudios.com>',
           to: [notifyEmail],
           subject: `≡ƒÆ░ Purchase Request: Transmission #${transmissionNumber} - $${(price / 100).toFixed(0)}`,
           html: emailHtml,

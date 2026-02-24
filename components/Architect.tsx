@@ -11,7 +11,7 @@ const Architect: React.FC = () => {
   };
 
   const cssSnippet = `
-/* Tonic Thought Studios - Spectral Iridescent Hover & Absolute Black */
+/* 137 Studio - Spectral Iridescent Hover & Absolute Black */
 :root {
   --color-absolute-black: #000000;
   --color-violet: #6d28d9;
@@ -79,7 +79,7 @@ body {
                 <p className="mono text-sm leading-relaxed opacity-60 max-w-2xl">
                     We exist in the violent, beautiful transition between the psychic waters of <span className="text-white">Cancer</span> and the solar fire of <span className="text-white">Leo</span>. 
                     This is not a static boundary; it is a high-frequency vibration. The internal void meeting the external ego. 
-                    Tonic Thought Studios is the laboratory where this tension is distilled into form.
+                    137 Studio is the laboratory where this tension is distilled into form.
                 </p>
             </div>
         </section>

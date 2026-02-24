@@ -56,7 +56,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ piece, isOpen, onClose }) =
           <div className="w-full h-px mb-5" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent)' }} />
 
           <p className="text-white/50 text-sm leading-relaxed mb-6">
-            This is an original work by Michael of Tonic Thought Studios. Contact the artist directly to purchase.
+            This is an original work by Michael of 137 Studio. Contact the artist directly to purchase.
           </p>
 
           <div className="flex flex-col gap-3">
