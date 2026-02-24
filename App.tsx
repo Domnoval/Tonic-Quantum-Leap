@@ -191,20 +191,20 @@ const App: React.FC = () => {
     const newHash = route ? `#${route}` : '#';
     window.history.pushState(null, '', newHash);
 
-    // Phase 1: Collapse the Quantum State (Decoherence)
+    // Phase 1: Portal zoom — everything rushes toward you
     setTransitionState('COLLAPSING');
 
     setTimeout(() => {
-      // Phase 2: Quantum Leap (Swap View & Rematerialize)
+      // Phase 2: Flash & swap
       setCurrentView(view);
       window.scrollTo(0, 0);
       setTransitionState('LEAPING');
 
       setTimeout(() => {
-        // Phase 3: Stabilization
+        // Phase 3: New page materializes
         setTransitionState('IDLE');
-      }, 250); // Speeded up transition
-    }, 250); // Speeded up transition
+      }, 500);
+    }, 600);
   };
 
   const handleIndexSelection = (artifact: Artifact) => {
@@ -234,10 +234,17 @@ const App: React.FC = () => {
       {/* <HUD currentView={currentView} setView={navigate} themeColor={themeColor} /> */}
       <AuthModal />
       
-      {/* 
-         Quantum Transition Container 
-         - The animation logic is handled via CSS classes applied to this wrapper 
-      */}
+      {/* Golden portal flash overlay */}
+      <div
+        className="fixed inset-0 z-[100] pointer-events-none transition-opacity"
+        style={{
+          background: 'radial-gradient(circle at center, rgba(232,197,71,0.9) 0%, rgba(201,168,76,0.6) 30%, rgba(0,0,0,0.8) 70%, transparent 100%)',
+          opacity: transitionState === 'COLLAPSING' ? 1 : 0,
+          transitionDuration: transitionState === 'COLLAPSING' ? '0.5s' : '0.3s',
+          transitionDelay: transitionState === 'COLLAPSING' ? '0.2s' : '0s',
+        }}
+      />
+
       <div className={containerClasses}>
         {currentView === View.Origin && (
           <div className="flex flex-col items-center justify-center min-h-screen relative overflow-hidden">
