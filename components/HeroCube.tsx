@@ -335,8 +335,8 @@ function SacredCube({ active, setActive }: SceneProps) {
     morphRef.current = THREE.MathUtils.lerp(morphRef.current, active ? 1 : 0, 0.05);
     const m = morphRef.current;
 
-    const rotY = delta * 0.15;
-    const rotX = Math.sin(Date.now() * 0.0003) * 0.1;
+    const rotY = delta * 0.06;
+    const rotX = Math.sin(Date.now() * 0.00015) * 0.06;
     if (meshRef.current) {
       meshRef.current.rotation.y += rotY;
       meshRef.current.rotation.x = rotX;
@@ -440,7 +440,7 @@ const HeroCube: React.FC = () => {
 
         <OrbitControls
           autoRotate
-          autoRotateSpeed={0.3}
+          autoRotateSpeed={0.12}
           enableZoom={false}
           enablePan={false}
           enableRotate={true}
