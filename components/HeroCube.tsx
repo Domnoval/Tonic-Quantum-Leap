@@ -444,9 +444,11 @@ const HeroCube: React.FC = () => {
           enableZoom={false}
           enablePan={false}
           enableRotate={true}
-          rotateSpeed={0.8}
+          rotateSpeed={0.5}
           minPolarAngle={0}
           maxPolarAngle={Math.PI}
+          enableDamping={true}
+          dampingFactor={0.08}
         />
       </Canvas>
     </div>
