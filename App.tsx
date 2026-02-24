@@ -248,26 +248,37 @@ const App: React.FC = () => {
       <div className={containerClasses}>
         {currentView === View.Origin && (
           <div className="flex flex-col items-center justify-center min-h-screen relative overflow-hidden">
-            {/* Video Background — The Vibe IS the Site */}
+            {/* 137 Chalkboard texture — base layer */}
+            <div
+              className="absolute inset-0 z-0"
+              style={{
+                backgroundImage: 'url(/137-logo.jpg)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                filter: 'brightness(0.4)',
+              }}
+            />
+
+            {/* Video Background — layered on top of chalkboard */}
             <video
               autoPlay
               loop
               muted
               playsInline
               poster="/hero-poster.jpg"
-              className="absolute inset-0 w-full h-full object-cover z-0"
-              style={{ filter: 'brightness(0.85) contrast(1.05)' }}
+              className="absolute inset-0 w-full h-full object-cover z-[1]"
+              style={{ filter: 'brightness(0.85) contrast(1.05)', mixBlendMode: 'screen' }}
             >
               <source src="/hero-bg-web.mp4" type="video/mp4" />
             </video>
 
-            {/* Subtle dark gradient overlay for text readability */}
-            <div className="absolute inset-0 z-[1]" style={{
-              background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.6) 100%)'
+            {/* Gradient overlay for text readability */}
+            <div className="absolute inset-0 z-[2]" style={{
+              background: 'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 30%, transparent 60%, rgba(0,0,0,0.6) 100%)'
             }} />
 
             {/* Interactive golden tesseract — layered over video */}
-            <div className="absolute inset-0 z-[2]">
+            <div className="absolute inset-0 z-[3]">
               <HeroCube />
             </div>
             

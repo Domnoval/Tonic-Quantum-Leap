@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { SACRED_GEOMETRY } from '../constants';
+import React, { useState, useRef } from 'react';
 import { ThemeColor } from '../types';
 
 interface FrequencyGateProps {
@@ -7,7 +6,7 @@ interface FrequencyGateProps {
   themeColor: ThemeColor;
 }
 
-const FrequencyGate: React.FC<FrequencyGateProps> = ({ onEnter, themeColor }) => {
+const FrequencyGate: React.FC<FrequencyGateProps> = ({ onEnter }) => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isEntering, setIsEntering] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -15,7 +14,6 @@ const FrequencyGate: React.FC<FrequencyGateProps> = ({ onEnter, themeColor }) =>
   const handleMouseMove = (e: React.MouseEvent) => {
     const { clientX, clientY } = e;
     const { innerWidth, innerHeight } = window;
-    // Normalize coordinates to -1 to 1 range
     const x = (clientX / innerWidth - 0.5) * 2;
     const y = (clientY / innerHeight - 0.5) * 2;
     setMousePos({ x, y });
@@ -23,177 +21,101 @@ const FrequencyGate: React.FC<FrequencyGateProps> = ({ onEnter, themeColor }) =>
 
   const handleEnter = () => {
     setIsEntering(true);
-    // Simulate frequency stabilization
-    setTimeout(onEnter, 1500);
+    setTimeout(onEnter, 1200);
   };
 
-  // Helper to generate 3D cube faces
-  const getFaceTransforms = (translateZ: number) => [
-    `translateZ(${translateZ}px)`,                    // Front
-    `rotateY(180deg) translateZ(${translateZ}px)`,    // Back
-    `rotateY(90deg) translateZ(${translateZ}px)`,     // Right
-    `rotateY(-90deg) translateZ(${translateZ}px)`,    // Left
-    `rotateX(90deg) translateZ(${translateZ}px)`,     // Top
-    `rotateX(-90deg) translateZ(${translateZ}px)`     // Bottom
-  ];
-
   return (
-    <div 
+    <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className={`fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center transition-all duration-1000 overflow-hidden ${isEntering ? 'opacity-0 scale-150 blur-3xl pointer-events-none' : 'opacity-100'}`}
-      style={{ perspective: '1200px' }}
+      onClick={handleEnter}
+      className={`fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center cursor-pointer overflow-hidden transition-all duration-1000 ${isEntering ? 'opacity-0 scale-110 blur-lg pointer-events-none' : 'opacity-100'}`}
     >
-      {/* Background Gradient Field (Purple/Orange Cusp Energy) */}
-      <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] h-[150vw] md:w-[800px] md:h-[800px] rounded-full blur-[120px] opacity-20 pointer-events-none transition-transform duration-1000 ease-out"
+      {/* 137 Chalkboard Background — full bleed */}
+      <div
+        className="absolute inset-0 transition-transform duration-700 ease-out"
         style={{
-             background: 'linear-gradient(135deg, rgba(109, 40, 217, 0.4), rgba(245, 158, 11, 0.2))', // Violet to Amber
-             transform: `translate3d(${mousePos.x * -20}px, ${mousePos.y * -20}px, 0) rotate(${mousePos.x * 10}deg)`
+          backgroundImage: 'url(/137-logo.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          transform: `scale(1.05) translate3d(${mousePos.x * -8}px, ${mousePos.y * -8}px, 0)`,
+          filter: 'brightness(0.6)',
         }}
       />
 
-      {/* Parallax HUD Metadata */}
-      <div 
-        className="absolute top-12 left-12 mono text-[9px] uppercase tracking-[0.5em] opacity-30 flex flex-col gap-1 transition-transform duration-700 ease-out"
-        style={{ transform: `translate3d(${mousePos.x * -15}px, ${mousePos.y * -15}px, 0)` }}
-      >
-        <span>System: Tonic_Nexus_v4.5</span>
-        <span>Frequency: 137.036 OSC</span>
-        <div className={`w-12 h-px bg-${themeColor}-400/50 mt-2`} />
-      </div>
-      
-      <div 
-        className="absolute top-12 right-12 mono text-[9px] uppercase tracking-[0.5em] opacity-30 text-right transition-transform duration-700 ease-out"
-        style={{ transform: `translate3d(${mousePos.x * 15}px, ${mousePos.y * -15}px, 0)` }}
-      >
-        <span>Cusp: July 21st</span>
-        <span>Calibration: Required</span>
-      </div>
+      {/* Vignette overlay */}
+      <div className="absolute inset-0" style={{
+        background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 70%, rgba(0,0,0,0.95) 100%)',
+      }} />
 
-      <div className="absolute bottom-12 left-12 mono text-[9px] uppercase tracking-[0.5em] opacity-10">
-        [ Neural Interface Bridge ]
-      </div>
+      {/* Subtle gold glow behind center */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full pointer-events-none" style={{
+        background: 'radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 60%)',
+        filter: 'blur(40px)',
+      }} />
 
-      {/* Central Interactive 3D Tesseract */}
-      <div 
-        className="relative flex items-center justify-center group/tesseract cursor-pointer" 
-        style={{ transformStyle: 'preserve-3d' }}
-        onClick={handleEnter}
-      >
-        
-        {/* The Tesseract Assembly */}
-        <div 
-            className="relative w-64 h-64 md:w-80 md:h-80 transition-transform duration-100 ease-out"
-            style={{ 
-                transformStyle: 'preserve-3d',
-                transform: `rotateX(${mousePos.y * -25}deg) rotateY(${mousePos.x * 25}deg)`
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center gap-8">
+        {/* 137 — the number itself, large and centered */}
+        <div className="flex flex-col items-center gap-4">
+          <h1
+            className="text-[120px] md:text-[180px] font-thin tracking-[0.15em] leading-none"
+            style={{
+              color: 'rgba(201,168,76,0.9)',
+              textShadow: '0 0 60px rgba(201,168,76,0.3), 0 0 120px rgba(201,168,76,0.1)',
+              fontFamily: "'Playfair Display', serif",
             }}
-        >
-            {/* Outer Cube (Larger) */}
-            <div className="absolute inset-0" style={{ transformStyle: 'preserve-3d' }}>
-                {getFaceTransforms(128).map((transform, i) => (
-                    <div 
-                        key={`outer-${i}`}
-                        className={`
-                            absolute inset-0 
-                            border border-${themeColor}-400/20 
-                            bg-${themeColor}-400/5 backdrop-blur-[1px]
-                            transition-all duration-500
-                            group-hover/tesseract:border-${themeColor}-400/50
-                            group-hover/tesseract:bg-${themeColor}-400/10
-                        `}
-                        style={{ transform }}
-                    />
-                ))}
-            </div>
+          >
+            137
+          </h1>
+          <div className="w-24 h-px" style={{ background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)' }} />
+          <span className="mono text-[9px] uppercase tracking-[0.6em] text-white/30">
+            Studio
+          </span>
+        </div>
 
-            {/* Inner Cube (Smaller, Counter-Rotating) representing the 4th Dimension */}
-            <div 
-                className="absolute top-1/2 left-1/2 w-40 h-40 -ml-20 -mt-20 md:w-48 md:h-48 md:-ml-24 md:-mt-24" 
-                style={{ 
-                    transformStyle: 'preserve-3d',
-                    // This rotation adds the complex "tesseract" motion relative to outer
-                    animation: 'spin-slow 15s linear infinite reverse' 
-                }}
-            >
-                 {getFaceTransforms(80).map((transform, i) => (
-                    <div 
-                        key={`inner-${i}`}
-                        className={`
-                            absolute inset-0 
-                            border border-white/30 
-                            bg-white/5
-                            transition-all duration-500
-                            group-hover/tesseract:border-white/60
-                            group-hover/tesseract:scale-110
-                        `}
-                        style={{ transform }}
-                    />
-                ))}
-            </div>
+        {/* Tagline */}
+        <p className="serif text-lg md:text-xl italic text-white/40 max-w-md text-center tracking-wide mt-4" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>
+          See the pattern. Feel the frequency. Open the door.
+        </p>
 
-            {/* Center: Master Sigil */}
-            <div 
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 md:w-40 md:h-40 text-white pointer-events-none"
-                style={{ 
-                    transformStyle: 'preserve-3d',
-                    // Independent rotation for the core
-                    transform: `rotateX(${mousePos.y * 10}deg) translateZ(0px)`
-                }}
-            >
-                <div className="w-full h-full animate-spin-slow group-hover/tesseract:animate-[spin_2s_linear_infinite]">
-                     {SACRED_GEOMETRY.masterSigil}
-                </div>
-                 {/* Sigil Glow */}
-                <div className="absolute inset-0 bg-white/20 blur-xl rounded-full animate-pulse-slow mix-blend-screen group-hover/tesseract:bg-${themeColor}-400/40" />
-            </div>
+        {/* Enter */}
+        <div className="flex flex-col items-center gap-4 mt-8">
+          <button
+            onClick={(e) => { e.stopPropagation(); handleEnter(); }}
+            className="mono text-[10px] uppercase tracking-[0.5em] px-12 py-4 transition-all duration-500 backdrop-blur-md"
+            style={{
+              border: '1px solid rgba(201,168,76,0.3)',
+              color: 'rgba(201,168,76,0.8)',
+              backgroundColor: 'rgba(0,0,0,0.4)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(201,168,76,0.6)';
+              e.currentTarget.style.backgroundColor = 'rgba(201,168,76,0.1)';
+              e.currentTarget.style.boxShadow = '0 0 30px rgba(201,168,76,0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(201,168,76,0.3)';
+              e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.4)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            Enter
+          </button>
+          <span className="mono text-[8px] uppercase tracking-widest text-white/15">
+            α = 1/137.036
+          </span>
         </div>
       </div>
 
-      {/* CTA Button with subtle parallax */}
-      <div 
-        className="mt-24 relative group pointer-events-auto transition-transform duration-700 ease-out z-[300] flex flex-col items-center gap-6"
-        style={{ transform: `translate3d(${mousePos.x * 15}px, ${mousePos.y * 15}px, 100px)` }}
-      >
-        {/* What this is */}
-        <div className="flex flex-col items-center gap-2 text-center">
-          <span className="mono text-[10px] uppercase tracking-[0.4em] text-white/40">Digital Art Studio</span>
-          <span className="mono text-[9px] uppercase tracking-[0.2em] text-white/25">Gallery • Prints • AI Forge</span>
-        </div>
-        
-        <div className={`absolute -inset-12 bg-${themeColor}-400/5 blur-[100px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000`} />
-        <button
-          onClick={handleEnter}
-          aria-label="Enter the 137 Studio Nexus"
-          className="relative px-24 py-8 border border-white/20 mono text-[13px] uppercase tracking-[1.2em] hover-spectral hover:text-black transition-all duration-700 ease-in-out group overflow-hidden bg-black/40 backdrop-blur-md"
-        >
-          <span className="relative z-10 font-black">Enter Gallery</span>
-          <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
-          
-          {/* Internal Button Glow */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-700 spectral-bg" />
-        </button>
-        
-        {/* Skip for returning visitors */}
-        <button
-          onClick={handleEnter}
-          className="mono text-[8px] uppercase tracking-widest text-white/20 hover:text-white/40 transition-colors"
-        >
-          Skip Intro →
-        </button>
+      {/* Corner metadata */}
+      <div className="absolute bottom-6 left-6 mono text-[8px] uppercase tracking-widest text-white/10 hidden md:block">
+        [ Fine Structure Constant ]<br />
+        [ The Fingerprint of Light ]
       </div>
-
-      {/* Ambient Grid Distortion Ambience */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-5 z-[-1]">
-        <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300vw] h-px bg-white/20 transition-transform duration-1000 ease-out"
-          style={{ transform: `rotate(${45 + mousePos.x * 5}deg) translateY(${mousePos.y * 50}px)` }}
-        />
-        <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300vw] h-px bg-white/20 transition-transform duration-1000 ease-out"
-          style={{ transform: `rotate(${-45 - mousePos.x * 5}deg) translateY(${-mousePos.y * 50}px)` }}
-        />
+      <div className="absolute bottom-6 right-6 mono text-[8px] uppercase tracking-widest text-white/10 hidden md:block text-right">
+        [ Sacred Geometry × Fine Art ]<br />
+        [ Digital Craft ]
       </div>
     </div>
   );
