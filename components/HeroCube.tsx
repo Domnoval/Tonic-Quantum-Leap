@@ -8,6 +8,7 @@ const NEON = {
   cyan: '#00FFD1',
   purple: '#7B2FBE',
   gold: '#C9A84C',
+  warmGold: '#E8C547',
 };
 
 /* ── 4D Tesseract helpers ── */
@@ -93,7 +94,7 @@ function Tesseract({ opacity }: { opacity: number }) {
   return (
     <lineSegments>
       <bufferGeometry ref={geomRef} />
-      <lineBasicMaterial ref={matRef} color={NEON.cyan} transparent opacity={opacity} depthWrite={false} linewidth={1} />
+      <lineBasicMaterial ref={matRef} color={NEON.warmGold} transparent opacity={opacity} depthWrite={false} linewidth={1} />
     </lineSegments>
   );
 }
@@ -309,16 +310,16 @@ function SacredCube({ active, setActive }: SceneProps) {
     const mats = faceTextures.map((tex, i) => {
       const isFront = i === 4 || i === 5;
       return new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(NEON.purple),
-        transmission: 0.5,
-        roughness: 0.15,
-        metalness: 0.05,
+        color: new THREE.Color(NEON.warmGold),
+        transmission: 0.7,
+        roughness: 0.1,
+        metalness: 0.15,
         transparent: true,
-        opacity: 0.75,
+        opacity: 0.6,
         map: tex,
-        emissive: new THREE.Color(NEON.gold),
+        emissive: new THREE.Color(NEON.warmGold),
         emissiveMap: tex,
-        emissiveIntensity: isFront ? 0.45 : 0.2,
+        emissiveIntensity: isFront ? 0.5 : 0.25,
         side: THREE.DoubleSide as THREE.Side,
       });
     });
@@ -368,10 +369,10 @@ function SacredCube({ active, setActive }: SceneProps) {
         <boxGeometry args={[2, 2, 2]} />
         <meshBasicMaterial
           ref={wireMatRef}
-          color={new THREE.Color(NEON.cyan)}
+          color={new THREE.Color(NEON.warmGold)}
           wireframe
           transparent
-          opacity={0.3}
+          opacity={0.35}
         />
       </mesh>
 
@@ -429,14 +430,13 @@ const HeroCube: React.FC = () => {
         style={{ background: 'transparent', cursor: 'pointer' }}
         gl={{ alpha: true, antialias: true }}
       >
-        <ambientLight intensity={0.1} />
-        <pointLight position={[0, 0, 0]} color={NEON.gold} intensity={2} distance={8} />
-        <pointLight position={[0, -2, 0]} color={NEON.magenta} intensity={0.5} distance={6} />
-        <pointLight position={[2, 2, 2]} color={NEON.purple} intensity={0.3} distance={10} />
-        <fog attach="fog" args={[NEON.purple, 5, 15]} />
+        <ambientLight intensity={0.15} />
+        <pointLight position={[0, 0, 0]} color={NEON.warmGold} intensity={3} distance={8} />
+        <pointLight position={[0, -2, 0]} color={NEON.gold} intensity={0.5} distance={6} />
+        <pointLight position={[2, 2, 2]} color={NEON.warmGold} intensity={0.4} distance={10} />
 
         <SacredCube active={active} setActive={setActive} />
-        <NeonGrid active={active} />
+        {/* Grid removed — video background has its own */}
 
         <OrbitControls
           autoRotate

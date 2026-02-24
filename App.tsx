@@ -11,7 +11,7 @@ import Void from './components/Void';
 import FeaturedCollection from './components/FeaturedCollection';
 import About from './components/About';
 import SimplifiedNav from './components/SimplifiedNav';
-// HeroCube and QuantumField replaced by video background
+import HeroCube from './components/HeroCube';
 import AuthModal from './components/AuthModal';
 import { AuthProvider } from './contexts/AuthContext';
 import { fetchShopifyArtifacts } from './services/shopifyService';
@@ -258,6 +258,11 @@ const App: React.FC = () => {
             <div className="absolute inset-0 z-[1]" style={{
               background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.6) 100%)'
             }} />
+
+            {/* Interactive golden tesseract — layered over video */}
+            <div className="absolute inset-0 z-[2]">
+              <HeroCube />
+            </div>
             
             {/* Content overlay */}
             <div className="relative z-10 flex flex-col items-center justify-end min-h-screen pb-24 px-6">
